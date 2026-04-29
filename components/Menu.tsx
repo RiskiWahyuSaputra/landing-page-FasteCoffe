@@ -6,81 +6,92 @@ import { type CartMenuItem, useCart } from "@/components/CartProvider";
 
 const menuItems: CartMenuItem[] = [
   {
-    name: "Espresso",
+    name: "Faste Signature",
     description: "Strong and bold classic shot",
-    price: "$4.20",
-    accent: "from-[#6a3c20] via-[#2f190f] to-[#140b08]"
+    price: "Rp. 13.000",
+    accent: "from-[#6a3c20] via-[#2f190f] to-[#140b08]",
   },
   {
-    name: "Cappuccino",
+    name: "Saka",
     description: "Perfect balance of coffee and milk foam",
-    price: "$5.80",
-    accent: "from-[#c58b56] via-[#5f341f] to-[#160c08]"
+    price: "Rp. 18.000",
+    accent: "from-[#c58b56] via-[#5f341f] to-[#160c08]",
   },
   {
     name: "Latte",
     description: "Smooth and creamy coffee",
-    price: "$5.60",
-    accent: "from-[#dbc0a1] via-[#7b5638] to-[#120a07]"
+    price: "Rp. 18.000",
+    accent: "from-[#dbc0a1] via-[#7b5638] to-[#120a07]",
   },
   {
     name: "Americano",
     description: "Light and rich flavor",
-    price: "$4.90",
-    accent: "from-[#8f5834] via-[#2a1810] to-[#120a07]"
+    price: "Rp. 15.000",
+    accent: "from-[#8f5834] via-[#2a1810] to-[#120a07]",
   },
   {
     name: "Caramel Macchiato",
     description: "Sweet, creamy, and indulgent",
-    price: "$6.40",
-    accent: "from-[#efbc7e] via-[#87502b] to-[#170d08]"
-  }
+    price: "Rp. 20.000",
+    accent: "from-[#efbc7e] via-[#87502b] to-[#170d08]",
+  },
 ];
 
 const brandCards = [
   {
     title: "Coffee Beans",
-    description: "Dense crema, round body, and beans sourced for layered sweetness.",
-    size: "lg:col-span-2"
+    description:
+      "Dense crema, round body, and beans sourced for layered sweetness.",
+    size: "lg:col-span-2",
   },
   {
     title: "Brewing Process",
-    description: "Measured extraction, calibrated heat, and rhythm you can taste.",
-    size: ""
+    description:
+      "Measured extraction, calibrated heat, and rhythm you can taste.",
+    size: "",
   },
   {
     title: "Coffee Shop Vibe",
-    description: "Warm light, tactile materials, and a pace made for everyday rituals.",
-    size: ""
+    description:
+      "Warm light, tactile materials, and a pace made for everyday rituals.",
+    size: "",
   },
   {
     title: "Barista Craft",
-    description: "Fast hands, clean technique, and a finish that still feels personal.",
-    size: "lg:col-span-2"
-  }
+    description:
+      "Fast hands, clean technique, and a finish that still feels personal.",
+    size: "lg:col-span-2",
+  },
 ];
 
 export default function Menu() {
   const { addItem, items } = useCart();
-  const quantitiesByName = items.reduce<Record<string, number>>((accumulator, item) => {
-    accumulator[item.name] = item.quantity;
-    return accumulator;
-  }, {});
+  const quantitiesByName = items.reduce<Record<string, number>>(
+    (accumulator, item) => {
+      accumulator[item.name] = item.quantity;
+      return accumulator;
+    },
+    {},
+  );
 
   return (
-    <section id="menu" className="relative overflow-hidden px-6 py-28 md:px-10 md:py-40">
+    <section
+      id="menu"
+      className="relative overflow-hidden px-6 py-28 md:px-10 md:py-40"
+    >
       <div className="page-shell">
         <div className="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <p className="section-label">Popular Menu</p>
             <h2 className="text-balance text-[clamp(2.5rem,6vw,5.2rem)] font-semibold leading-[0.94] tracking-[-0.05em] text-cream">
-              Signature drinks designed to feel familiar, elevated, and worth the pause.
+              Signature drinks designed to feel familiar, elevated, and worth
+              the pause.
             </h2>
           </div>
 
           <p className="max-w-md text-base leading-7 text-sand/72">
-            A premium menu presented like a design object: warm, tactile, and built to
-            invite exploration.
+            A premium menu presented like a design object: warm, tactile, and
+            built to invite exploration.
           </p>
         </div>
 

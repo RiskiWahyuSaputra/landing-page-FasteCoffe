@@ -60,9 +60,25 @@ export default function Navbar() {
             <button
               type="button"
               onClick={toggleCart}
-              className="group inline-flex items-center gap-3 rounded-full border border-white/10 px-4 py-2 text-xs uppercase tracking-[0.24em] text-sand transition-colors duration-300 hover:border-copper/50 hover:text-white"
+              aria-label="Open cart"
+              className="group inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-2 text-xs uppercase tracking-[0.24em] text-sand transition-colors duration-300 hover:border-copper/50 hover:text-white"
             >
-              <span className="text-sand/72 transition group-hover:text-copper">Cart</span>
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/6 transition-colors duration-300 group-hover:bg-copper/12">
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  className="h-[18px] w-[18px] text-sand/80 transition-colors duration-300 group-hover:text-copper"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="9" cy="20" r="1.25" />
+                  <circle cx="18" cy="20" r="1.25" />
+                  <path d="M3 4h2.2l2.2 10.2a1 1 0 0 0 1 .8h8.9a1 1 0 0 0 1-.76L20 8H7.1" />
+                </svg>
+              </span>
               <span className="inline-flex min-w-8 items-center justify-center rounded-full bg-white/10 px-2 py-1 text-[0.68rem] text-cream">
                 {String(itemCount).padStart(2, "0")}
               </span>

@@ -59,8 +59,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
       return [...currentItems, { ...item, numericPrice, quantity: 1 }];
     });
-
-    setIsCartOpen(true);
   };
 
   const increaseItem = (name: string) => {
