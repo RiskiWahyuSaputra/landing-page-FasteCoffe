@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --page: #120b07;
+  --page-soft: #1a100a;
+  --page-elevated: #24160f;
+  --cream: #f4eadc;
+  --sand: #dcc2a8;
+  --copper: #d4995f;
+  --mocha: #59311c;
+  --line: rgba(244, 234, 220, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background:
+    radial-gradient(circle at top, rgba(96, 53, 25, 0.35), transparent 30%),
+    linear-gradient(180deg, #140c08 0%, #0e0907 100%);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(212, 153, 95, 0.12), transparent 28%),
+    radial-gradient(circle at 90% 10%, rgba(78, 43, 23, 0.2), transparent 25%),
+    linear-gradient(180deg, #150d08 0%, #0c0806 100%);
+  color: var(--cream);
+  font-family: var(--font-outfit), sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+canvas {
+  display: block;
+}
+
+::selection {
+  background: rgba(212, 153, 95, 0.28);
+  color: #fff9f2;
+}
+
+@layer base {
+  * {
+    border-color: var(--line);
+  }
+}
+
+@layer components {
+  .page-shell {
+    @apply mx-auto w-full max-w-[1440px] px-6 md:px-10;
+  }
+
+  .section-label {
+    @apply mb-5 inline-flex items-center gap-3 text-[0.72rem] font-medium uppercase tracking-[0.34em];
+    color: rgba(220, 194, 168, 0.7);
+  }
+
+  .section-label::before {
+    content: "";
+    @apply h-px w-10;
+    background: rgba(220, 194, 168, 0.4);
+  }
+
+  .glass-panel {
+    background: linear-gradient(180deg, rgba(255, 248, 240, 0.06), rgba(255, 248, 240, 0.02));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 30px 80px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(22px);
+  }
+
+  .grain-overlay {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .grain-overlay::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.18;
+    background-image:
+      radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.18) 0, transparent 1.4px),
+      radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.12) 0, transparent 1px);
+    background-size: 24px 24px, 18px 18px;
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
