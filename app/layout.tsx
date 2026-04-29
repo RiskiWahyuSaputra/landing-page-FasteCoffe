@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 
 import "@/app/globals.css";
+import CartDrawer from "@/components/CartDrawer";
+import { CartProvider } from "@/components/CartProvider";
 import SmoothScroll from "@/components/SmoothScroll";
 
 const outfit = Outfit({
@@ -23,8 +25,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-page">
       <body className={`${outfit.variable} font-sans text-cream antialiased`}>
-        <SmoothScroll />
-        {children}
+        <CartProvider>
+          <SmoothScroll />
+          {children}
+          <CartDrawer />
+        </CartProvider>
       </body>
     </html>
   );

@@ -8,12 +8,14 @@ type MagneticButtonProps = {
   href: string;
   children: React.ReactNode;
   className?: string;
+  onClick?: () => void;
 };
 
 export default function MagneticButton({
   href,
   children,
-  className = ""
+  className = "",
+  onClick
 }: MagneticButtonProps) {
   const ref = useRef<HTMLDivElement | null>(null);
   const x = useSpring(0, { stiffness: 220, damping: 18, mass: 0.4 });
@@ -49,6 +51,7 @@ export default function MagneticButton({
     >
       <Link
         href={href}
+        onClick={onClick}
         className={`group relative inline-flex items-center gap-3 overflow-hidden rounded-full border border-white/10 bg-[rgba(244,234,220,0.08)] px-6 py-3 text-sm font-medium uppercase tracking-[0.24em] text-cream transition-colors duration-300 hover:border-copper/60 hover:text-white ${className}`}
       >
         <span className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212,153,95,0.35),transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />

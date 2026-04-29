@@ -2,7 +2,9 @@
 
 import { motion } from "framer-motion";
 
-const menuItems = [
+import { type CartMenuItem, useCart } from "@/components/CartProvider";
+
+const menuItems: CartMenuItem[] = [
   {
     name: "Espresso",
     description: "Strong and bold classic shot",
@@ -59,6 +61,12 @@ const brandCards = [
 ];
 
 export default function Menu() {
+  const { addItem, items } = useCart();
+  const quantitiesByName = items.reduce<Record<string, number>>((accumulator, item) => {
+    accumulator[item.name] = item.quantity;
+    return accumulator;
+  }, {});
+
   return (
     <section id="menu" className="relative overflow-hidden px-6 py-28 md:px-10 md:py-40">
       <div className="page-shell">
@@ -97,6 +105,11 @@ export default function Menu() {
                 <div className="absolute bottom-4 left-4 rounded-full border border-white/10 bg-black/20 px-3 py-1 text-[0.68rem] uppercase tracking-[0.26em] text-sand/80">
                   Drink {index + 1}
                 </div>
+                {quantitiesByName[item.name] ? (
+                  <div className="absolute right-4 top-4 rounded-full border border-copper/30 bg-[rgba(212,153,95,0.16)] px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-copper">
+                    In Cart x{quantitiesByName[item.name]}
+                  </div>
+                ) : null}
               </div>
 
               <div className="relative mt-5 flex items-start justify-between gap-4">
@@ -111,6 +124,20 @@ export default function Menu() {
                 <span className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.22em] text-copper">
                   {item.price}
                 </span>
+              </div>
+
+              <div className="relative mt-6 flex items-center justify-between gap-4">
+                <p className="text-xs uppercase tracking-[0.22em] text-sand/64">
+                  Freshly prepared signature drink
+                </p>
+
+                <button
+                  type="button"
+                  onClick={() => addItem(item)}
+                  className="rounded-full border border-copper/30 bg-[rgba(212,153,95,0.12)] px-4 py-2 text-xs uppercase tracking-[0.22em] text-copper transition hover:border-copper/60 hover:bg-copper hover:text-[#1a0f09]"
+                >
+                  Add to Cart
+                </button>
               </div>
             </motion.article>
           ))}

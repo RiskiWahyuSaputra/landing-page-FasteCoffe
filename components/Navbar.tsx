@@ -3,6 +3,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
+import { useCart } from "@/components/CartProvider";
+
 const links = [
   { label: "Home", href: "#top" },
   { label: "About", href: "#about" },
@@ -13,6 +15,7 @@ const links = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { itemCount, toggleCart, isCartOpen } = useCart();
 
   useEffect(() => {
     const onScroll = () => {
@@ -28,12 +31,12 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    document.documentElement.style.overflow = isOpen ? "hidden" : "";
+    document.documentElement.style.overflow = isOpen || isCartOpen ? "hidden" : "";
 
     return () => {
       document.documentElement.style.overflow = "";
     };
-  }, [isOpen]);
+  }, [isCartOpen, isOpen]);
 
   return (
     <>
@@ -53,18 +56,31 @@ export default function Navbar() {
             Faste.
           </a>
 
-          <button
-            type="button"
-            onClick={() => setIsOpen((value) => !value)}
-            className="group inline-flex items-center gap-3 rounded-full border border-white/10 px-5 py-2 text-xs uppercase tracking-[0.28em] text-sand transition-colors duration-300 hover:border-copper/50 hover:text-white"
-          >
-            <span className="relative flex h-3.5 w-5 flex-col justify-between">
-              <span className="block h-px w-full bg-current" />
-              <span className="block h-px w-full bg-current" />
-              <span className="block h-px w-full bg-current" />
-            </span>
-            {isOpen ? "Close" : "Menu"}
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={toggleCart}
+              className="group inline-flex items-center gap-3 rounded-full border border-white/10 px-4 py-2 text-xs uppercase tracking-[0.24em] text-sand transition-colors duration-300 hover:border-copper/50 hover:text-white"
+            >
+              <span className="text-sand/72 transition group-hover:text-copper">Cart</span>
+              <span className="inline-flex min-w-8 items-center justify-center rounded-full bg-white/10 px-2 py-1 text-[0.68rem] text-cream">
+                {String(itemCount).padStart(2, "0")}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsOpen((value) => !value)}
+              className="group inline-flex items-center gap-3 rounded-full border border-white/10 px-5 py-2 text-xs uppercase tracking-[0.28em] text-sand transition-colors duration-300 hover:border-copper/50 hover:text-white"
+            >
+              <span className="relative flex h-3.5 w-5 flex-col justify-between">
+                <span className="block h-px w-full bg-current" />
+                <span className="block h-px w-full bg-current" />
+                <span className="block h-px w-full bg-current" />
+              </span>
+              {isOpen ? "Close" : "Menu"}
+            </button>
+          </div>
         </div>
       </motion.header>
 
