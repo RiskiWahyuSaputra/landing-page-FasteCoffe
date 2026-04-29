@@ -21,7 +21,7 @@ type StoryScene = {
   title: string;
   subtitle?: string;
   align: Alignment;
-  range: [number, number, number];
+  range: [number, number, number, number];
   cta?: boolean;
 };
 
@@ -30,35 +30,35 @@ const scenes: StoryScene[] = [
     title: "Faste Coffee",
     subtitle: "Brewed for Your Daily Energy",
     align: "center",
-    range: [0, 0.08, 0.19],
+    range: [0, 0.08, 0.17, 0.28],
   },
   {
     title: "Crafted from premium beans",
     subtitle: "Rich flavor, bold aroma",
     align: "center",
-    range: [0.18, 0.25, 0.36],
+    range: [0.18, 0.27, 0.38, 0.49],
   },
   {
     title: "From farm to your cup",
     subtitle: "Freshly roasted every day",
     align: "left",
-    range: [0.36, 0.45, 0.58],
+    range: [0.39, 0.48, 0.59, 0.7],
   },
   {
     title: "Experience modern coffee culture",
     subtitle: "Fast / Fresh / Flavorful",
     align: "right",
-    range: [0.56, 0.65, 0.78],
+    range: [0.6, 0.69, 0.8, 0.89],
   },
   {
     title: "Start your day with Faste Coffee",
     align: "center",
-    range: [0.78, 0.85, 0.92],
+    range: [0.8, 0.87, 0.93, 0.975],
   },
   {
     title: "Order your coffee now",
     align: "center",
-    range: [0.91, 0.96, 1],
+    range: [0.92, 0.965, 1, 1],
     cta: true,
   },
 ];
@@ -74,10 +74,13 @@ function StoryOverlay({
   progress: MotionValue<number>;
   scene: StoryScene;
 }) {
-  const opacity = useTransform(progress, scene.range, [0, 1, 0]);
-  const y = useTransform(progress, scene.range, [48, 0, -32]);
-  const blur = useTransform(progress, scene.range, [16, 0, 16]);
+  const opacity = useTransform(progress, scene.range, [0, 1, 1, 0]);
+  const y = useTransform(progress, scene.range, [72, 0, 0, -40]);
+  const blur = useTransform(progress, scene.range, [18, 0, 0, 18]);
   const filter = useMotionTemplate`blur(${blur}px)`;
+  const titleY = useTransform(progress, scene.range, [92, 0, 0, -48]);
+  const subtitleY = useTransform(progress, scene.range, [112, 16, 0, -36]);
+  const badgeY = useTransform(progress, scene.range, [56, 0, 0, -24]);
 
   const alignmentClass =
     scene.align === "left"
@@ -91,16 +94,25 @@ function StoryOverlay({
       style={{ opacity, y, filter }}
       className={`absolute top-[20vh] flex max-w-[34rem] flex-col gap-4 ${alignmentClass}`}
     >
-      <div className="rounded-full border border-white/10 bg-black/20 px-4 py-2 text-[0.68rem] uppercase tracking-[0.3em] text-sand/82 backdrop-blur-md">
+      <motion.div
+        style={{ y: badgeY }}
+        className="rounded-full border border-white/10 bg-black/20 px-4 py-2 text-[0.68rem] uppercase tracking-[0.3em] text-sand/82 backdrop-blur-md"
+      >
         Premium coffee scrollytelling
-      </div>
-      <h2 className="text-balance text-[clamp(2.6rem,7vw,7rem)] font-semibold leading-[0.9] tracking-[-0.06em] text-cream">
+      </motion.div>
+      <motion.h2
+        style={{ y: titleY }}
+        className="text-balance text-[clamp(2.6rem,7vw,7rem)] font-semibold leading-[0.9] tracking-[-0.06em] text-cream"
+      >
         {scene.title}
-      </h2>
+      </motion.h2>
       {scene.subtitle ? (
-        <p className="max-w-md text-balance text-base leading-7 text-sand/78 md:text-lg">
+        <motion.p
+          style={{ y: subtitleY }}
+          className="max-w-md text-balance text-base leading-7 text-sand/78 md:text-lg"
+        >
           {scene.subtitle}
-        </p>
+        </motion.p>
       ) : null}
 
       {scene.cta ? (

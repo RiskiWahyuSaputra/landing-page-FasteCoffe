@@ -20,10 +20,10 @@ function RevealCharacter({
   total: number;
   progress: MotionValue<number>;
 }) {
-  const start = (index / total) * 0.55;
-  const end = start + 0.24;
-  const opacity = useTransform(progress, [start, end], [0.14, 1]);
-  const y = useTransform(progress, [start, end], [22, 0]);
+  const start = (index / total) * 0.72;
+  const end = start + 0.3;
+  const opacity = useTransform(progress, [start, end], [0.08, 1]);
+  const y = useTransform(progress, [start, end], [28, 0]);
 
   return (
     <span className="relative inline-block">
@@ -41,7 +41,7 @@ export default function TextReveal({ text, className = "" }: TextRevealProps) {
   const ref = useRef<HTMLParagraphElement | null>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start 0.85", "end 0.35"]
+    offset: ["start 0.95", "end 0.2"]
   });
 
   const characters = text.split("");
