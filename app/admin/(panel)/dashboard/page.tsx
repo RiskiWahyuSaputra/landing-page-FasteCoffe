@@ -5,7 +5,7 @@ import { getAdminDashboard, getAdminMenuItems } from "@/lib/laravel-admin-api";
 
 function formatDate(value: string | null) {
   if (!value) {
-    return "-";
+    return "–";
   }
 
   return new Intl.DateTimeFormat("id-ID", {
@@ -13,6 +13,12 @@ function formatDate(value: string | null) {
     timeStyle: "short"
   }).format(new Date(value));
 }
+
+const StatIcon = ({ children }: { children: React.ReactNode }) => (
+  <div className="flex h-10 w-10 items-center justify-center rounded-[0.85rem] bg-white/[0.06] text-sand/60">
+    {children}
+  </div>
+);
 
 export default async function AdminDashboardPage() {
   const { token, user } = await requireAdminSession();
@@ -23,257 +29,277 @@ export default async function AdminDashboardPage() {
 
   const latestMenus = menuItems.slice(-3).reverse();
 
+  const stats = [
+    {
+      label: "Total Users",
+      value: data.stats.total_users,
+      accent: false,
+      icon: (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 00-3-3.87" />
+          <path d="M16 3.13a4 4 0 010 7.75" />
+        </svg>
+      )
+    },
+    {
+      label: "Admin Accounts",
+      value: data.stats.total_admins,
+      accent: false,
+      icon: (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </svg>
+      )
+    },
+    {
+      label: "Menu Items",
+      value: data.stats.total_menu_items,
+      accent: false,
+      icon: (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M18 8h1a4 4 0 010 8h-1" />
+          <path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z" />
+          <line x1="6" y1="1" x2="6" y2="4" />
+          <line x1="10" y1="1" x2="10" y2="4" />
+          <line x1="14" y1="1" x2="14" y2="4" />
+        </svg>
+      )
+    },
+    {
+      label: "Total Orders",
+      value: data.stats.total_orders,
+      accent: false,
+      icon: (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <path d="M16 10a4 4 0 01-8 0" />
+        </svg>
+      )
+    },
+    {
+      label: "Active Sessions",
+      value: data.stats.active_admin_sessions,
+      accent: false,
+      icon: (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+      )
+    },
+    {
+      label: "Backend Status",
+      value: data.stats.backend_status,
+      accent: true,
+      icon: (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+        </svg>
+      )
+    }
+  ];
+
   return (
-    <section className="flex min-h-[calc(100vh-2rem)] flex-col gap-6">
-      <header className="glass-panel grain-overlay rounded-[2rem] border border-white/10 px-6 py-6 md:px-8">
-        <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
-          <div className="max-w-3xl">
+    <section className="flex min-h-[calc(100vh-2rem)] flex-col gap-5">
+      {/* ── Page Header ── */}
+      <header className="glass-panel grain-overlay rounded-[1.8rem] border border-white/10 px-6 py-6 md:px-8">
+        <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
+          <div>
             <p className="section-label">Overview</p>
-            <h1 className="text-[clamp(2.6rem,5vw,4.8rem)] font-semibold leading-[0.92] tracking-[-0.06em] text-cream">
-              A sharper admin cockpit for Faste Coffee operations.
+            <h1 className="text-[clamp(1.9rem,4vw,3.4rem)] font-semibold leading-[1.05] tracking-[-0.05em] text-cream">
+              Admin Cockpit
             </h1>
-            <p className="mt-4 max-w-2xl text-base leading-7 text-sand/70">
-              Selamat datang, {user.name}. Sekarang dashboard admin dipisah
-              menjadi halaman overview dan menu management supaya alurnya lebih
-              rapi dan profesional.
+            <p className="mt-2 text-sm leading-6 text-sand/65">
+              Selamat datang, <span className="font-medium text-cream">{user.name}</span>. Semua operasional Faste Coffee terkontrol dari sini.
             </p>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="flex flex-wrap gap-2.5">
             <Link
               href="/admin/menu"
-              className="rounded-full border border-copper/40 bg-copper px-5 py-3 text-center text-xs uppercase tracking-[0.24em] text-[#1a0f09] transition hover:bg-[#e2a86d]"
+              className="inline-flex items-center gap-2 rounded-full border border-copper/40 bg-copper px-5 py-2.5 text-xs font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d]"
             >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
               Manage Menu
             </Link>
             <Link
               href="/admin/purchases"
-              className="rounded-full border border-white/10 px-5 py-3 text-center text-xs uppercase tracking-[0.24em] text-sand transition hover:border-copper/50 hover:text-white"
+              className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.04] px-5 py-2.5 text-xs font-medium uppercase tracking-[0.22em] text-sand transition hover:border-copper/30 hover:text-white"
             >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+              </svg>
               View Purchases
             </Link>
             <Link
               href="/"
-              className="rounded-full border border-white/10 px-5 py-3 text-center text-xs uppercase tracking-[0.24em] text-sand transition hover:border-copper/50 hover:text-white sm:col-span-2"
+              className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.04] px-5 py-2.5 text-xs font-medium uppercase tracking-[0.22em] text-sand transition hover:border-copper/30 hover:text-white"
             >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
               Open Website
             </Link>
           </div>
         </div>
       </header>
 
-      <section className="grid gap-5 md:grid-cols-2 2xl:grid-cols-6">
-        <article className="glass-panel rounded-[1.8rem] border border-white/10 p-5">
-          <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
-            Total Users
-          </p>
-          <p className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-cream">
-            {data.stats.total_users}
-          </p>
-        </article>
-        <article className="glass-panel rounded-[1.8rem] border border-white/10 p-5">
-          <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
-            Admin Accounts
-          </p>
-          <p className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-cream">
-            {data.stats.total_admins}
-          </p>
-        </article>
-        <article className="glass-panel rounded-[1.8rem] border border-white/10 p-5">
-          <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
-            Menu Items
-          </p>
-          <p className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-cream">
-            {data.stats.total_menu_items}
-          </p>
-        </article>
-        <article className="glass-panel rounded-[1.8rem] border border-white/10 p-5">
-          <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
-            Total Orders
-          </p>
-          <p className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-cream">
-            {data.stats.total_orders}
-          </p>
-        </article>
-        <article className="glass-panel rounded-[1.8rem] border border-white/10 p-5">
-          <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
-            Active Sessions
-          </p>
-          <p className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-cream">
-            {data.stats.active_admin_sessions}
-          </p>
-        </article>
-        <article className="glass-panel rounded-[1.8rem] border border-white/10 p-5">
-          <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
-            Backend Status
-          </p>
-          <p className="mt-4 text-4xl font-semibold capitalize tracking-[-0.05em] text-copper">
-            {data.stats.backend_status}
-          </p>
-        </article>
-      </section>
-
-      <section className="grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
-        <article className="glass-panel rounded-[2rem] border border-white/10 p-6">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
-                Session Overview
-              </p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-cream">
-                Access timeline
-              </h2>
+      {/* ── Stats Grid ── */}
+      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-6">
+        {stats.map((stat) => (
+          <article
+            key={stat.label}
+            className={`glass-panel rounded-[1.5rem] border p-5 ${
+              stat.accent
+                ? "border-copper/25 bg-[rgba(212,153,95,0.07)]"
+                : "border-white/10"
+            }`}
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className={`flex h-10 w-10 items-center justify-center rounded-[0.85rem] ${stat.accent ? "bg-copper/15 text-copper" : "bg-white/[0.06] text-sand/60"}`}>
+                {stat.icon}
+              </div>
             </div>
-            <p className="text-sm leading-6 text-sand/68">
-              Live snapshot from Laravel admin token session.
+            <p className={`mt-4 text-3xl font-semibold capitalize tracking-[-0.05em] ${stat.accent ? "text-copper" : "text-cream"}`}>
+              {stat.value}
             </p>
-          </div>
+            <p className="mt-1.5 text-xs uppercase tracking-[0.24em] text-sand/55">
+              {stat.label}
+            </p>
+          </article>
+        ))}
+      </div>
 
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.03] p-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-sand/55">
-                Issued
-              </p>
-              <p className="mt-3 text-lg font-medium text-cream">
-                {formatDate(data.session.issued_at)}
-              </p>
+      {/* ── Session + Menu Pulse ── */}
+      <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
+        {/* Session Overview */}
+        <article className="glass-panel rounded-[1.8rem] border border-white/10 p-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <p className="text-xs uppercase tracking-[0.28em] text-sand/55">Session Overview</p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-cream">Access timeline</h2>
             </div>
-            <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.03] p-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-sand/55">
-                Last Used
-              </p>
-              <p className="mt-3 text-lg font-medium text-cream">
-                {formatDate(data.session.last_used_at)}
-              </p>
-            </div>
-            <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.03] p-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-sand/55">
-                Expires
-              </p>
-              <p className="mt-3 text-lg font-medium text-cream">
-                {formatDate(data.session.expires_at)}
-              </p>
+            <div className="flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              <p className="text-xs font-medium text-emerald-400">Active</p>
             </div>
           </div>
-        </article>
 
-        <article className="glass-panel rounded-[2rem] border border-white/10 p-6">
-          <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
-            Recently Published
-          </p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-cream">
-            Menu pulse
-          </h2>
-
-          <div className="mt-6 space-y-4">
-            {latestMenus.map((item) => (
-              <div
-                key={item.id}
-                className="rounded-[1.4rem] border border-white/10 bg-white/[0.03] p-4"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-lg font-semibold text-cream">{item.name}</p>
-                    <p className="mt-2 text-sm leading-6 text-sand/68">
-                      {item.description}
-                    </p>
-                  </div>
-                  <div
-                    className={`h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-gradient-to-br ${item.accent}`}
-                  >
-                    {item.image_url ? (
-                      <img
-                        src={item.image_url}
-                        alt={item.name}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : null}
-                  </div>
-                </div>
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            {[
+              { label: "Issued", value: formatDate(data.session.issued_at) },
+              { label: "Last Used", value: formatDate(data.session.last_used_at) },
+              { label: "Expires", value: formatDate(data.session.expires_at) }
+            ].map((item) => (
+              <div key={item.label} className="rounded-[1.2rem] border border-white/10 bg-white/[0.03] p-4">
+                <p className="text-xs uppercase tracking-[0.22em] text-sand/50">{item.label}</p>
+                <p className="mt-2 text-sm font-medium leading-6 text-cream">{item.value}</p>
               </div>
             ))}
           </div>
-
-          <Link
-            href="/admin/menu"
-            className="mt-6 inline-flex rounded-full border border-white/10 px-5 py-3 text-xs uppercase tracking-[0.24em] text-sand transition hover:border-copper/50 hover:text-white"
-          >
-            Open Menu Page
-          </Link>
         </article>
-      </section>
 
-      <section className="grid gap-5 xl:grid-cols-[0.95fr_1.05fr]">
-        <article className="glass-panel rounded-[2rem] border border-white/10 p-6">
-          <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
-            Environment
-          </p>
-          <div className="mt-6 space-y-4">
-            <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.03] p-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-sand/55">
-                App
-              </p>
-              <p className="mt-2 text-xl font-medium text-cream">
-                {data.meta.app_name}
-              </p>
+        {/* Menu Pulse */}
+        <article className="glass-panel rounded-[1.8rem] border border-white/10 p-6">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-xs uppercase tracking-[0.28em] text-sand/55">Recently Published</p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-cream">Menu pulse</h2>
             </div>
-            <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.03] p-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-sand/55">
-                Environment
-              </p>
-              <p className="mt-2 text-xl font-medium uppercase text-cream">
-                {data.meta.environment}
-              </p>
-            </div>
-            <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.03] p-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-sand/55">
-                Server Time
-              </p>
-              <p className="mt-2 text-xl font-medium text-cream">
-                {formatDate(data.meta.server_time)}
-              </p>
-            </div>
+            <Link
+              href="/admin/menu"
+              className="shrink-0 rounded-full border border-white/10 px-3.5 py-1.5 text-xs uppercase tracking-[0.2em] text-sand transition hover:border-copper/40 hover:text-white"
+            >
+              View All
+            </Link>
+          </div>
+
+          <div className="mt-5 space-y-3">
+            {latestMenus.length === 0 ? (
+              <p className="py-4 text-center text-sm text-sand/55">Belum ada menu yang ditambahkan.</p>
+            ) : (
+              latestMenus.map((item) => (
+                <div key={item.id} className="flex items-center gap-3.5 rounded-[1.2rem] border border-white/10 bg-white/[0.02] p-3.5">
+                  <div className={`h-12 w-12 shrink-0 overflow-hidden rounded-[0.85rem] bg-gradient-to-br ${item.accent}`}>
+                    {item.image_url ? (
+                      <img src={item.image_url} alt={item.name} className="h-full w-full object-cover" />
+                    ) : null}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-cream">{item.name}</p>
+                    <p className="mt-0.5 line-clamp-1 text-xs text-sand/60">{item.description}</p>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </article>
+      </div>
+
+      {/* ── Environment + Workflow ── */}
+      <div className="grid gap-5 xl:grid-cols-[0.9fr_1.1fr]">
+        {/* Environment */}
+        <article className="glass-panel rounded-[1.8rem] border border-white/10 p-6">
+          <p className="text-xs uppercase tracking-[0.28em] text-sand/55">Environment</p>
+          <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-cream">System config</h2>
+
+          <div className="mt-5 space-y-3">
+            {[
+              { label: "Application", value: data.meta.app_name },
+              { label: "Environment", value: data.meta.environment, mono: true },
+              { label: "Server Time", value: formatDate(data.meta.server_time) }
+            ].map((item) => (
+              <div key={item.label} className="flex items-center justify-between gap-4 rounded-[1.2rem] border border-white/10 bg-white/[0.03] px-4 py-3.5">
+                <p className="text-xs uppercase tracking-[0.22em] text-sand/50">{item.label}</p>
+                <p className={`text-sm font-medium text-cream ${item.mono ? "font-mono uppercase" : ""}`}>
+                  {item.value}
+                </p>
+              </div>
+            ))}
           </div>
         </article>
 
-        <article className="glass-panel rounded-[2rem] border border-white/10 p-6">
-          <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
-            Workflow
-          </p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-cream">
-            Publishing flow
-          </h2>
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.03] p-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-sand/55">
-                01
-              </p>
-              <p className="mt-3 text-lg font-medium text-cream">Create menu</p>
-              <p className="mt-2 text-sm leading-6 text-sand/68">
-                Tambahkan minuman baru dari halaman menu admin.
-              </p>
-            </div>
-            <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.03] p-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-sand/55">
-                02
-              </p>
-              <p className="mt-3 text-lg font-medium text-cream">Sync landing</p>
-              <p className="mt-2 text-sm leading-6 text-sand/68">
-                Homepage Next.js membaca daftar menu terbaru dari Laravel API.
-              </p>
-            </div>
-            <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.03] p-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-sand/55">
-                03
-              </p>
-              <p className="mt-3 text-lg font-medium text-cream">Ready to sell</p>
-              <p className="mt-2 text-sm leading-6 text-sand/68">
-                Produk baru langsung tampil untuk pembeli di halaman depan.
-              </p>
-            </div>
+        {/* Publishing Workflow */}
+        <article className="glass-panel rounded-[1.8rem] border border-white/10 p-6">
+          <p className="text-xs uppercase tracking-[0.28em] text-sand/55">Workflow</p>
+          <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-cream">Publishing flow</h2>
+
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            {[
+              {
+                step: "01",
+                title: "Create menu",
+                desc: "Tambahkan minuman baru dari halaman menu admin."
+              },
+              {
+                step: "02",
+                title: "Sync landing",
+                desc: "Homepage Next.js membaca daftar menu terbaru dari Laravel API."
+              },
+              {
+                step: "03",
+                title: "Ready to sell",
+                desc: "Produk baru langsung tampil untuk pembeli di halaman depan."
+              }
+            ].map((item) => (
+              <div key={item.step} className="rounded-[1.2rem] border border-white/10 bg-white/[0.03] p-4">
+                <p className="font-mono text-xs text-copper/70">{item.step}</p>
+                <p className="mt-2.5 text-sm font-semibold text-cream">{item.title}</p>
+                <p className="mt-1.5 text-xs leading-5 text-sand/60">{item.desc}</p>
+              </div>
+            ))}
           </div>
         </article>
-      </section>
+      </div>
     </section>
   );
 }

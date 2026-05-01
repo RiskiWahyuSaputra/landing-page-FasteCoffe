@@ -10,42 +10,36 @@ export default async function AdminMenuPage() {
   ]);
 
   return (
-    <section className="flex min-h-[calc(100vh-2rem)] flex-col gap-6">
-      <header className="glass-panel grain-overlay rounded-[2rem] border border-white/10 px-6 py-6 md:px-8">
-        <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
-          <div className="max-w-3xl">
+    <section className="flex min-h-[calc(100vh-2rem)] flex-col gap-5">
+      {/* ── Page Header ── */}
+      <header className="glass-panel grain-overlay rounded-[1.8rem] border border-white/10 px-6 py-6 md:px-8">
+        <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
+          <div>
             <p className="section-label">Menu Management</p>
-            <h1 className="text-[clamp(2.6rem,5vw,4.8rem)] font-semibold leading-[0.92] tracking-[-0.06em] text-cream">
-              Publish, review, and shape the drinks shown on the front page.
+            <h1 className="text-[clamp(1.9rem,4vw,3.2rem)] font-semibold leading-[1.05] tracking-[-0.05em] text-cream">
+              Publish &amp; manage drinks
             </h1>
-            <p className="mt-4 max-w-2xl text-base leading-7 text-sand/70">
-              Halaman ini khusus untuk penambahan menu. Data yang kamu ubah di
-              sini menjadi sumber utama untuk section menu pada landing page.
+            <p className="mt-2 max-w-xl text-sm leading-6 text-sand/65">
+              Data yang kamu ubah di sini menjadi sumber utama untuk section menu pada landing page.
             </p>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-3">
-            <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.03] px-4 py-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-sand/58">
-                Total Menu
-              </p>
-              <p className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-cream">
+          <div className="grid grid-cols-3 gap-3 sm:flex sm:gap-4">
+            <div className="rounded-[1.2rem] border border-white/10 bg-white/[0.03] px-4 py-3.5 text-center">
+              <p className="text-xs uppercase tracking-[0.22em] text-sand/50">Total Menu</p>
+              <p className="mt-1.5 text-2xl font-semibold tracking-[-0.04em] text-cream">
                 {dashboard.stats.total_menu_items}
               </p>
             </div>
-            <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.03] px-4 py-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-sand/58">
-                Sessions
-              </p>
-              <p className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-cream">
+            <div className="rounded-[1.2rem] border border-white/10 bg-white/[0.03] px-4 py-3.5 text-center">
+              <p className="text-xs uppercase tracking-[0.22em] text-sand/50">Sessions</p>
+              <p className="mt-1.5 text-2xl font-semibold tracking-[-0.04em] text-cream">
                 {dashboard.stats.active_admin_sessions}
               </p>
             </div>
-            <div className="rounded-[1.4rem] border border-copper/25 bg-[rgba(212,153,95,0.1)] px-4 py-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-sand/58">
-                Status
-              </p>
-              <p className="mt-3 text-3xl font-semibold capitalize tracking-[-0.04em] text-copper">
+            <div className="rounded-[1.2rem] border border-copper/25 bg-[rgba(212,153,95,0.08)] px-4 py-3.5 text-center">
+              <p className="text-xs uppercase tracking-[0.22em] text-sand/50">Status</p>
+              <p className="mt-1.5 text-2xl font-semibold capitalize tracking-[-0.04em] text-copper">
                 {dashboard.stats.backend_status}
               </p>
             </div>
