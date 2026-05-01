@@ -6,16 +6,14 @@ import { ADMIN_AUTH_COOKIE } from "@/lib/admin-auth";
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const adminToken = request.cookies.get(ADMIN_AUTH_COOKIE)?.value;
+  const isAdminLogin = pathname === "/admin/login";
+  const isAdminArea = pathname.startsWith("/admin") && !isAdminLogin;
 
-  if (pathname === "/admin" && !adminToken) {
+  if (isAdminArea && !adminToken) {
     return NextResponse.redirect(new URL("/admin/login", request.url));
   }
 
-  if (pathname.startsWith("/admin/dashboard") && !adminToken) {
-    return NextResponse.redirect(new URL("/admin/login", request.url));
-  }
-
-  if (pathname === "/admin/login" && adminToken) {
+  if (isAdminLogin && adminToken) {
     return NextResponse.redirect(new URL("/admin/dashboard", request.url));
   }
 
