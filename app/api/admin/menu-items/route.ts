@@ -44,19 +44,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Unauthorized." }, { status: 401 });
   }
 
-  const body = await request.json().catch(() => null);
+  const formData = await request.formData().catch(() => null);
+
+  if (!formData) {
+    return NextResponse.json(
+      { message: "Form menu tidak valid." },
+      { status: 400 }
+    );
+  }
 
   try {
-    const response = await createAdminMenuItem(
-      token,
-      body as {
-        accent: string;
-        description: string;
-        is_active?: boolean;
-        name: string;
-        price: number;
-      }
-    );
+    const response = await createAdminMenuItem(token, formData);
 
     return NextResponse.json(response, { status: 201 });
   } catch (error) {

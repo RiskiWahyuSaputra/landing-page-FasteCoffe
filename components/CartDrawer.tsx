@@ -74,7 +74,15 @@ export default function CartDrawer() {
                       <div className="flex items-start gap-4">
                         <div
                           className={`h-24 w-20 shrink-0 rounded-[1.2rem] bg-gradient-to-br ${item.accent}`}
-                        />
+                        >
+                          {item.imageUrl ? (
+                            <img
+                              src={item.imageUrl}
+                              alt={item.name}
+                              className="h-full w-full rounded-[1.2rem] object-cover"
+                            />
+                          ) : null}
+                        </div>
 
                         <div className="min-w-0 flex-1">
                           <div className="flex items-start justify-between gap-4">

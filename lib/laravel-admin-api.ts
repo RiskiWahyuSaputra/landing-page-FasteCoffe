@@ -63,6 +63,13 @@ export class LaravelApiError extends Error {
   }
 }
 
+function getMultipartHeaders(token?: string) {
+  return {
+    Accept: "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {})
+  };
+}
+
 async function callLaravel<T>(
   path: string,
   {
@@ -70,19 +77,24 @@ async function callLaravel<T>(
     method = "GET",
     token
   }: {
-    body?: unknown;
+    body?: FormData | unknown;
     method?: "DELETE" | "GET" | "POST";
     token?: string;
   } = {}
 ): Promise<T> {
+  const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
   const response = await fetch(`${LARAVEL_API_URL}${path}`, {
     method,
     headers: {
       Accept: "application/json",
-      ...(body ? { "Content-Type": "application/json" } : {}),
+      ...(!isFormData && body ? { "Content-Type": "application/json" } : {}),
       ...(token ? { Authorization: `Bearer ${token}` } : {})
     },
-    ...(body ? { body: JSON.stringify(body) } : {}),
+    ...(body
+      ? {
+          body: isFormData ? body : JSON.stringify(body)
+        }
+      : {}),
     cache: "no-store"
   });
 
@@ -152,13 +164,7 @@ export async function getAdminMenuItems(token: string) {
 
 export function createAdminMenuItem(
   token: string,
-  body: {
-    name: string;
-    description: string;
-    price: number;
-    accent: string;
-    is_active?: boolean;
-  }
+  body: FormData
 ) {
   return callLaravel<{ item: MenuItemPayload; message: string }>(
     "/admin/menu-items",
@@ -168,6 +174,44 @@ export function createAdminMenuItem(
       token
     }
   );
+}
+
+export async function updateAdminMenuItem(
+  token: string,
+  id: number,
+  body: FormData
+) {
+  const response = await fetch(`${LARAVEL_API_URL}/admin/menu-items/${id}`, {
+    method: "POST",
+    headers: getMultipartHeaders(token),
+    body,
+    cache: "no-store"
+  });
+
+  const payload = (await response.json().catch(() => null)) as
+    | LaravelErrorPayload
+    | { item: MenuItemPayload; message: string }
+    | null;
+
+  if (!response.ok) {
+    const message =
+      payload &&
+      typeof payload === "object" &&
+      "errors" in payload &&
+      payload.errors &&
+      Object.values(payload.errors)[0]?.[0]
+        ? Object.values(payload.errors)[0][0]
+        : payload &&
+            typeof payload === "object" &&
+            "message" in payload &&
+            typeof payload.message === "string"
+          ? payload.message
+          : "Laravel API request failed.";
+
+    throw new LaravelApiError(message, response.status);
+  }
+
+  return payload as { item: MenuItemPayload; message: string };
 }
 
 export function deleteAdminMenuItem(token: string, id: number) {

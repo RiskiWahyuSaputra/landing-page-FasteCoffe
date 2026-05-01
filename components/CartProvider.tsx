@@ -12,6 +12,7 @@ export type CartMenuItem = {
   description: string;
   price: string;
   accent: string;
+  imageUrl?: string | null;
 };
 
 export type CartItem = CartMenuItem & {

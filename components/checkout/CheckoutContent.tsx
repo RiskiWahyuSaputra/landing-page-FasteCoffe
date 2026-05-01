@@ -102,7 +102,15 @@ export default function CheckoutContent() {
                       <div className="flex gap-4">
                         <div
                           className={`h-24 w-20 shrink-0 rounded-[1.2rem] bg-gradient-to-br ${item.accent}`}
-                        />
+                        >
+                          {item.imageUrl ? (
+                            <img
+                              src={item.imageUrl}
+                              alt={item.name}
+                              className="h-full w-full rounded-[1.2rem] object-cover"
+                            />
+                          ) : null}
+                        </div>
 
                         <div className="min-w-0 flex-1">
                           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">

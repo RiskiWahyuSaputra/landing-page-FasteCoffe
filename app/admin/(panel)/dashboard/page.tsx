@@ -165,8 +165,16 @@ export default async function AdminDashboardPage() {
                     </p>
                   </div>
                   <div
-                    className={`h-12 w-12 shrink-0 rounded-2xl bg-gradient-to-br ${item.accent}`}
-                  />
+                    className={`h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-gradient-to-br ${item.accent}`}
+                  >
+                    {item.image_url ? (
+                      <img
+                        src={item.image_url}
+                        alt={item.name}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : null}
+                  </div>
                 </div>
               </div>
             ))}

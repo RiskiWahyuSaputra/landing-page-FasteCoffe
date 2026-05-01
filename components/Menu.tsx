@@ -79,11 +79,23 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
                   <div
                     className={`relative aspect-[4/3] overflow-hidden rounded-[1.6rem] bg-gradient-to-br ${item.accent}`}
                   >
-                    <div className="absolute inset-x-8 bottom-6 top-8 rounded-[40%] border border-white/12 bg-white/[0.04] blur-[1px]" />
-                    <div className="absolute left-1/2 top-[18%] h-28 w-28 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
-                    <div className="absolute inset-x-12 bottom-10 h-12 rounded-full border border-white/15 bg-black/20 blur-sm" />
-                    <div className="absolute left-1/2 top-10 h-28 w-28 -translate-x-1/2 rounded-full border border-white/15 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.22),rgba(255,255,255,0.05)_40%,transparent_70%)]" />
-                    <div className="absolute inset-x-[30%] bottom-12 top-[33%] rounded-b-[2.4rem] rounded-t-[1rem] border border-white/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),rgba(255,255,255,0.04))]" />
+                    {item.imageUrl ? (
+                      <img
+                        src={item.imageUrl}
+                        alt={item.name}
+                        className="absolute inset-0 h-full w-full object-cover"
+                      />
+                    ) : null}
+                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,5,3,0.1),rgba(9,5,3,0.34))]" />
+                    {!item.imageUrl ? (
+                      <>
+                        <div className="absolute inset-x-8 bottom-6 top-8 rounded-[40%] border border-white/12 bg-white/[0.04] blur-[1px]" />
+                        <div className="absolute left-1/2 top-[18%] h-28 w-28 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
+                        <div className="absolute inset-x-12 bottom-10 h-12 rounded-full border border-white/15 bg-black/20 blur-sm" />
+                        <div className="absolute left-1/2 top-10 h-28 w-28 -translate-x-1/2 rounded-full border border-white/15 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.22),rgba(255,255,255,0.05)_40%,transparent_70%)]" />
+                        <div className="absolute inset-x-[30%] bottom-12 top-[33%] rounded-b-[2.4rem] rounded-t-[1rem] border border-white/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),rgba(255,255,255,0.04))]" />
+                      </>
+                    ) : null}
                     <div className="absolute bottom-4 left-4 rounded-full border border-white/10 bg-black/20 px-3 py-1 text-[0.68rem] uppercase tracking-[0.26em] text-sand/80">
                       Drink {index + 1}
                     </div>

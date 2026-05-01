@@ -15,6 +15,7 @@ Route::prefix('admin')->group(function (): void {
         Route::post('/logout', [AdminAuthController::class, 'logout']);
         Route::get('/menu-items', [MenuItemController::class, 'adminIndex']);
         Route::post('/menu-items', [MenuItemController::class, 'store']);
+        Route::post('/menu-items/{menuItem}', [MenuItemController::class, 'update']);
         Route::delete('/menu-items/{menuItem}', [MenuItemController::class, 'destroy']);
     });
 });
