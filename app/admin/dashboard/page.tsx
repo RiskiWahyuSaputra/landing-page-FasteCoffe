@@ -1,9 +1,10 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+import AdminMenuManager from "@/components/admin/AdminMenuManager";
 import AdminLogoutButton from "@/components/admin/AdminLogoutButton";
 import { ADMIN_AUTH_COOKIE } from "@/lib/admin-auth";
-import { getAdminDashboard } from "@/lib/laravel-admin-api";
+import { getAdminDashboard, getAdminMenuItems } from "@/lib/laravel-admin-api";
 
 function formatDate(value: string | null) {
   if (!value) {
@@ -24,7 +25,10 @@ export default async function AdminDashboardPage() {
   }
 
   try {
-    const data = await getAdminDashboard(token);
+    const [data, menuItems] = await Promise.all([
+      getAdminDashboard(token),
+      getAdminMenuItems(token)
+    ]);
 
     return (
       <main className="relative min-h-screen overflow-hidden bg-[#120b07] px-6 py-8 md:px-10">
@@ -48,7 +52,7 @@ export default async function AdminDashboardPage() {
             </div>
           </header>
 
-          <section className="grid gap-5 lg:grid-cols-4">
+          <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-5">
             <article className="glass-panel rounded-[1.8rem] border border-white/10 p-5">
               <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
                 Total Users
@@ -63,6 +67,14 @@ export default async function AdminDashboardPage() {
               </p>
               <p className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-cream">
                 {data.stats.total_admins}
+              </p>
+            </article>
+            <article className="glass-panel rounded-[1.8rem] border border-white/10 p-5">
+              <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
+                Menu Items
+              </p>
+              <p className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-cream">
+                {data.stats.total_menu_items}
               </p>
             </article>
             <article className="glass-panel rounded-[1.8rem] border border-white/10 p-5">
@@ -82,6 +94,8 @@ export default async function AdminDashboardPage() {
               </p>
             </article>
           </section>
+
+          <AdminMenuManager initialItems={menuItems} />
 
           <section className="grid gap-5 lg:grid-cols-[1.25fr_0.75fr]">
             <article className="glass-panel rounded-[2rem] border border-white/10 p-6">

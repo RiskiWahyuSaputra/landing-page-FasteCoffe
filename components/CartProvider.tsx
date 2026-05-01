@@ -14,7 +14,7 @@ export type CartMenuItem = {
   accent: string;
 };
 
-type CartItem = CartMenuItem & {
+export type CartItem = CartMenuItem & {
   quantity: number;
   numericPrice: number;
 };

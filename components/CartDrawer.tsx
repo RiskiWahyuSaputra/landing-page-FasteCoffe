@@ -1,16 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 
 import MagneticButton from "@/components/MagneticButton";
 import { useCart } from "@/components/CartProvider";
-
-function formatCurrency(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD"
-  }).format(value);
-}
+import { formatRupiah } from "@/lib/currency";
 
 export default function CartDrawer() {
   const {
@@ -137,7 +132,7 @@ export default function CartDrawer() {
               <div className="mb-5 flex items-center justify-between text-sm uppercase tracking-[0.24em] text-sand/68">
                 <span>Subtotal</span>
                 <span className="text-lg font-semibold tracking-[-0.03em] text-cream">
-                  {formatCurrency(subtotal)}
+                  {formatRupiah(subtotal)}
                 </span>
               </div>
 
@@ -149,12 +144,13 @@ export default function CartDrawer() {
                 >
                   Continue Shopping
                 </MagneticButton>
-                <button
-                  type="button"
-                  className="w-full rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d]"
+                <Link
+                  href="/checkout"
+                  onClick={closeCart}
+                  className="w-full rounded-full border border-copper/40 bg-copper px-6 py-3 text-center text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d]"
                 >
                   Checkout
-                </button>
+                </Link>
               </div>
             </div>
           </motion.aside>

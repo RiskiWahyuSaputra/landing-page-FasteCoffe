@@ -1,5 +1,7 @@
 import "server-only";
 
+import type { MenuItemPayload } from "@/lib/menu-types";
+
 const DEFAULT_LARAVEL_API_URL = "http://127.0.0.1:8000/api";
 const LARAVEL_API_URL = process.env.LARAVEL_API_URL ?? DEFAULT_LARAVEL_API_URL;
 
@@ -16,6 +18,7 @@ export type AdminDashboardPayload = {
   stats: {
     total_users: number;
     total_admins: number;
+    total_menu_items: number;
     active_admin_sessions: number;
     backend_status: string;
   };
@@ -68,7 +71,7 @@ async function callLaravel<T>(
     token
   }: {
     body?: unknown;
-    method?: "GET" | "POST";
+    method?: "DELETE" | "GET" | "POST";
     token?: string;
   } = {}
 ): Promise<T> {
@@ -130,6 +133,46 @@ export function getAdminDashboard(token: string) {
 export function logoutAdmin(token: string) {
   return callLaravel<{ message: string }>("/admin/logout", {
     method: "POST",
+    token
+  });
+}
+
+export async function getPublicMenuItems() {
+  const response = await callLaravel<{ items: MenuItemPayload[] }>("/menu-items");
+  return response.items;
+}
+
+export async function getAdminMenuItems(token: string) {
+  const response = await callLaravel<{ items: MenuItemPayload[] }>(
+    "/admin/menu-items",
+    { token }
+  );
+  return response.items;
+}
+
+export function createAdminMenuItem(
+  token: string,
+  body: {
+    name: string;
+    description: string;
+    price: number;
+    accent: string;
+    is_active?: boolean;
+  }
+) {
+  return callLaravel<{ item: MenuItemPayload; message: string }>(
+    "/admin/menu-items",
+    {
+      method: "POST",
+      body,
+      token
+    }
+  );
+}
+
+export function deleteAdminMenuItem(token: string, id: number) {
+  return callLaravel<{ message: string }>(`/admin/menu-items/${id}`, {
+    method: "DELETE",
     token
   });
 }
