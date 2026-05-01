@@ -65,7 +65,7 @@ const brandCards = [
 ];
 
 export default function Menu() {
-  const { addItem, items } = useCart();
+  const { addItem, decreaseItem, increaseItem, items } = useCart();
   const quantitiesByName = items.reduce<Record<string, number>>(
     (accumulator, item) => {
       accumulator[item.name] = item.quantity;
@@ -97,60 +97,83 @@ export default function Menu() {
 
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {menuItems.map((item, index) => (
-            <motion.article
-              key={item.name}
-              whileHover={{ y: -10, scale: 1.01 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="group glass-panel grain-overlay relative overflow-hidden rounded-[2rem] border border-white/10 p-5 shadow-halo"
-            >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212,153,95,0.18),transparent_55%)] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
+            (() => {
+              const quantity = quantitiesByName[item.name] ?? 0;
 
-              <div
-                className={`relative aspect-[4/3] overflow-hidden rounded-[1.6rem] bg-gradient-to-br ${item.accent}`}
-              >
-                <div className="absolute inset-x-8 bottom-6 top-8 rounded-[40%] border border-white/12 bg-white/[0.04] blur-[1px]" />
-                <div className="absolute left-1/2 top-[18%] h-28 w-28 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
-                <div className="absolute inset-x-12 bottom-10 h-12 rounded-full border border-white/15 bg-black/20 blur-sm" />
-                <div className="absolute left-1/2 top-10 h-28 w-28 -translate-x-1/2 rounded-full border border-white/15 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.22),rgba(255,255,255,0.05)_40%,transparent_70%)]" />
-                <div className="absolute inset-x-[30%] bottom-12 top-[33%] rounded-b-[2.4rem] rounded-t-[1rem] border border-white/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),rgba(255,255,255,0.04))]" />
-                <div className="absolute bottom-4 left-4 rounded-full border border-white/10 bg-black/20 px-3 py-1 text-[0.68rem] uppercase tracking-[0.26em] text-sand/80">
-                  Drink {index + 1}
-                </div>
-                {quantitiesByName[item.name] ? (
-                  <div className="absolute right-4 top-4 rounded-full border border-copper/30 bg-[rgba(212,153,95,0.16)] px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-copper">
-                    In Cart x{quantitiesByName[item.name]}
-                  </div>
-                ) : null}
-              </div>
-
-              <div className="relative mt-5 flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-2xl font-semibold tracking-[-0.03em] text-cream">
-                    {item.name}
-                  </h3>
-                  <p className="mt-2 max-w-xs text-sm leading-6 text-sand/72">
-                    {item.description}
-                  </p>
-                </div>
-                <span className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.22em] text-copper">
-                  {item.price}
-                </span>
-              </div>
-
-              <div className="relative mt-6 flex items-center justify-between gap-4">
-                <p className="text-xs uppercase tracking-[0.22em] text-sand/64">
-                  Freshly prepared signature drink
-                </p>
-
-                <button
-                  type="button"
-                  onClick={() => addItem(item)}
-                  className="rounded-full border border-copper/30 bg-[rgba(212,153,95,0.12)] px-4 py-2 text-xs uppercase tracking-[0.22em] text-copper transition hover:border-copper/60 hover:bg-copper hover:text-[#1a0f09]"
+              return (
+                <motion.article
+                  key={item.name}
+                  whileHover={{ y: -10, scale: 1.01 }}
+                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  className="group glass-panel grain-overlay relative overflow-hidden rounded-[2rem] border border-white/10 p-5 shadow-halo"
                 >
-                  Add to Cart
-                </button>
-              </div>
-            </motion.article>
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212,153,95,0.18),transparent_55%)] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
+
+                  <div
+                    className={`relative aspect-[4/3] overflow-hidden rounded-[1.6rem] bg-gradient-to-br ${item.accent}`}
+                  >
+                    <div className="absolute inset-x-8 bottom-6 top-8 rounded-[40%] border border-white/12 bg-white/[0.04] blur-[1px]" />
+                    <div className="absolute left-1/2 top-[18%] h-28 w-28 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
+                    <div className="absolute inset-x-12 bottom-10 h-12 rounded-full border border-white/15 bg-black/20 blur-sm" />
+                    <div className="absolute left-1/2 top-10 h-28 w-28 -translate-x-1/2 rounded-full border border-white/15 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.22),rgba(255,255,255,0.05)_40%,transparent_70%)]" />
+                    <div className="absolute inset-x-[30%] bottom-12 top-[33%] rounded-b-[2.4rem] rounded-t-[1rem] border border-white/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),rgba(255,255,255,0.04))]" />
+                    <div className="absolute bottom-4 left-4 rounded-full border border-white/10 bg-black/20 px-3 py-1 text-[0.68rem] uppercase tracking-[0.26em] text-sand/80">
+                      Drink {index + 1}
+                    </div>
+                    {quantity ? (
+                      <div className="absolute right-4 top-4 rounded-full border border-copper/30 bg-[rgba(212,153,95,0.16)] px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-copper">
+                        In Cart x{quantity}
+                      </div>
+                    ) : null}
+                  </div>
+
+                  <div className="relative mt-5 flex items-start justify-between gap-4">
+                    <div>
+                      <h3 className="text-2xl font-semibold tracking-[-0.03em] text-cream">
+                        {item.name}
+                      </h3>
+                      <p className="mt-2 max-w-xs text-sm leading-6 text-sand/72">
+                        {item.description}
+                      </p>
+                    </div>
+                    <span className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.22em] text-copper">
+                      {item.price}
+                    </span>
+                  </div>
+
+                  <div className="relative mt-6 flex items-center justify-between gap-4">
+                    <p className="text-xs uppercase tracking-[0.22em] text-sand/64">
+                      Freshly prepared signature drink
+                    </p>
+
+                    <div className="flex items-center gap-2 rounded-full border border-copper/30 bg-[rgba(212,153,95,0.12)] p-1">
+                      <button
+                        type="button"
+                        onClick={() => decreaseItem(item.name)}
+                        disabled={!quantity}
+                        className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-copper transition hover:bg-copper hover:text-[#1a0f09] disabled:cursor-not-allowed disabled:opacity-35"
+                        aria-label={`Kurangi ${item.name}`}
+                      >
+                        -
+                      </button>
+                      <span className="min-w-8 text-center text-sm font-medium text-cream">
+                        {quantity}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          quantity ? increaseItem(item.name) : addItem(item)
+                        }
+                        className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-copper transition hover:bg-copper hover:text-[#1a0f09]"
+                        aria-label={`Tambah ${item.name}`}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </motion.article>
+              );
+            })()
           ))}
         </div>
 
