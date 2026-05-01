@@ -47,8 +47,14 @@ export default async function AdminDashboardPage() {
               Manage Menu
             </Link>
             <Link
-              href="/"
+              href="/admin/purchases"
               className="rounded-full border border-white/10 px-5 py-3 text-center text-xs uppercase tracking-[0.24em] text-sand transition hover:border-copper/50 hover:text-white"
+            >
+              View Purchases
+            </Link>
+            <Link
+              href="/"
+              className="rounded-full border border-white/10 px-5 py-3 text-center text-xs uppercase tracking-[0.24em] text-sand transition hover:border-copper/50 hover:text-white sm:col-span-2"
             >
               Open Website
             </Link>
@@ -56,7 +62,7 @@ export default async function AdminDashboardPage() {
         </div>
       </header>
 
-      <section className="grid gap-5 md:grid-cols-2 2xl:grid-cols-5">
+      <section className="grid gap-5 md:grid-cols-2 2xl:grid-cols-6">
         <article className="glass-panel rounded-[1.8rem] border border-white/10 p-5">
           <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
             Total Users
@@ -79,6 +85,14 @@ export default async function AdminDashboardPage() {
           </p>
           <p className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-cream">
             {data.stats.total_menu_items}
+          </p>
+        </article>
+        <article className="glass-panel rounded-[1.8rem] border border-white/10 p-5">
+          <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
+            Total Orders
+          </p>
+          <p className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-cream">
+            {data.stats.total_orders}
           </p>
         </article>
         <article className="glass-panel rounded-[1.8rem] border border-white/10 p-5">

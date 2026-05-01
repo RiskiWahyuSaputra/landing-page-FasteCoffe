@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 
 import type { CartItem } from "@/components/CartProvider";
 import { useCart } from "@/components/CartProvider";
@@ -17,10 +18,80 @@ export default function CheckoutContent() {
     increaseItem,
     decreaseItem,
     removeItem,
+    clearCart,
     itemCount
   } = useCart();
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [pickupNote, setPickupNote] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [orderNumber, setOrderNumber] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const serviceFee = items.length ? 5000 : 0;
   const total = subtotal + serviceFee;
+
+  const handlePlaceOrder = async () => {
+    setError("");
+    setSuccess("");
+
+    if (!customerName.trim() || !customerPhone.trim()) {
+      setError("Nama dan nomor telepon wajib diisi.");
+      return;
+    }
+
+    if (!items.length) {
+      setError("Cart masih kosong.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          customer_name: customerName.trim(),
+          customer_phone: customerPhone.trim(),
+          pickup_note: pickupNote.trim(),
+          service_fee: serviceFee,
+          items: items.map((item) => ({
+            name: item.name,
+            description: item.description,
+            quantity: item.quantity,
+            numeric_price: item.numericPrice,
+            image_url: item.imageUrl ?? null
+          }))
+        })
+      });
+
+      const payload = (await response.json().catch(() => null)) as
+        | {
+            message?: string;
+            order?: { order_number?: string };
+          }
+        | null;
+
+      if (!response.ok) {
+        setError(payload?.message ?? "Gagal membuat pesanan.");
+        return;
+      }
+
+      setSuccess(payload?.message ?? "Pesanan berhasil dibuat.");
+      setOrderNumber(payload?.order?.order_number ?? "");
+      setCustomerName("");
+      setCustomerPhone("");
+      setPickupNote("");
+      clearCart();
+    } catch {
+      setError("Tidak bisa terhubung ke backend checkout.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-page px-6 py-24 md:px-10">
@@ -34,9 +105,8 @@ export default function CheckoutContent() {
               Finalize your order with a cleaner coffee counter flow.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-sand/72">
-              Review your drinks, adjust quantities, and prepare the order
-              summary before we connect this page to a real backend checkout
-              process.
+              Review your drinks, adjust quantities, and confirm the order.
+              Riwayat pembelian dari checkout ini juga akan masuk ke admin panel.
             </p>
           </div>
 
@@ -56,7 +126,26 @@ export default function CheckoutContent() {
           </div>
         </header>
 
-        {items.length === 0 ? (
+        {success && !items.length ? (
+          <section className="glass-panel mx-auto max-w-3xl rounded-[2rem] border border-white/10 p-8 text-center md:p-10">
+            <p className="text-xs uppercase tracking-[0.32em] text-sand/60">
+              Order Created
+            </p>
+            <h2 className="mt-4 text-[clamp(2rem,5vw,3.6rem)] font-semibold tracking-[-0.05em] text-cream">
+              Pesanan berhasil masuk.
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-sand/72">
+              {success}
+              {orderNumber ? ` Nomor order: ${orderNumber}.` : ""}
+            </p>
+            <Link
+              href="/#menu"
+              className="mt-8 inline-flex rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d]"
+            >
+              Order Again
+            </Link>
+          </section>
+        ) : !items.length ? (
           <section className="glass-panel mx-auto max-w-3xl rounded-[2rem] border border-white/10 p-8 text-center md:p-10">
             <p className="text-xs uppercase tracking-[0.32em] text-sand/60">
               Cart Empty
@@ -89,7 +178,7 @@ export default function CheckoutContent() {
                     </h2>
                   </div>
                   <p className="max-w-sm text-sm leading-6 text-sand/70">
-                    Adjust quantity here before moving into payment integration.
+                    Adjust quantity here before confirming the purchase.
                   </p>
                 </div>
 
@@ -191,6 +280,8 @@ export default function CheckoutContent() {
                     </span>
                     <input
                       type="text"
+                      value={customerName}
+                      onChange={(event) => setCustomerName(event.target.value)}
                       placeholder="Nama pemesan"
                       className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition placeholder:text-sand/35 focus:border-copper/50 focus:bg-white/[0.06]"
                     />
@@ -202,6 +293,8 @@ export default function CheckoutContent() {
                     </span>
                     <input
                       type="tel"
+                      value={customerPhone}
+                      onChange={(event) => setCustomerPhone(event.target.value)}
                       placeholder="08xxxxxxxxxx"
                       className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition placeholder:text-sand/35 focus:border-copper/50 focus:bg-white/[0.06]"
                     />
@@ -213,6 +306,8 @@ export default function CheckoutContent() {
                     </span>
                     <textarea
                       rows={4}
+                      value={pickupNote}
+                      onChange={(event) => setPickupNote(event.target.value)}
                       placeholder="Contoh: tanpa gula, pickup jam 14:00"
                       className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition placeholder:text-sand/35 focus:border-copper/50 focus:bg-white/[0.06]"
                     />
@@ -231,7 +326,7 @@ export default function CheckoutContent() {
                     </h2>
                   </div>
                   <div className="rounded-full border border-white/10 px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-sand/78">
-                    UI only
+                    Live
                   </div>
                 </div>
 
@@ -255,16 +350,31 @@ export default function CheckoutContent() {
                   </div>
                 </div>
 
+                {error ? (
+                  <div className="mt-5 rounded-[1.2rem] border border-[#c86b57]/35 bg-[#5a2018]/20 px-4 py-3 text-sm text-[#ffd8d1]">
+                    {error}
+                  </div>
+                ) : null}
+
+                {success ? (
+                  <div className="mt-5 rounded-[1.2rem] border border-copper/25 bg-[rgba(212,153,95,0.12)] px-4 py-3 text-sm text-cream">
+                    {success}
+                    {orderNumber ? ` Nomor order: ${orderNumber}.` : ""}
+                  </div>
+                ) : null}
+
                 <button
                   type="button"
-                  className="mt-8 w-full rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d]"
+                  onClick={handlePlaceOrder}
+                  disabled={isSubmitting}
+                  className="mt-8 w-full rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d] disabled:cursor-not-allowed disabled:opacity-70"
                 >
-                  Place Order
+                  {isSubmitting ? "Submitting..." : "Place Order"}
                 </button>
 
                 <p className="mt-4 text-sm leading-6 text-sand/62">
-                  Tombol ini baru menyiapkan alur checkout. Integrasi order ke
-                  backend Laravel bisa kita sambungkan di langkah berikutnya.
+                  Setelah checkout berhasil, order ini akan muncul di halaman
+                  history pembelian pada admin panel.
                 </p>
               </article>
             </div>

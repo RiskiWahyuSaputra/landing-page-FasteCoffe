@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { MenuItemPayload } from "@/lib/menu-types";
+import type { OrderHistoryEntry, OrderHistoryFilter } from "@/lib/order-types";
 
 const DEFAULT_LARAVEL_API_URL = "http://127.0.0.1:8000/api";
 const LARAVEL_API_URL = process.env.LARAVEL_API_URL ?? DEFAULT_LARAVEL_API_URL;
@@ -19,6 +20,7 @@ export type AdminDashboardPayload = {
     total_users: number;
     total_admins: number;
     total_menu_items: number;
+    total_orders: number;
     active_admin_sessions: number;
     backend_status: string;
   };
@@ -217,6 +219,41 @@ export async function updateAdminMenuItem(
 export function deleteAdminMenuItem(token: string, id: number) {
   return callLaravel<{ message: string }>(`/admin/menu-items/${id}`, {
     method: "DELETE",
+    token
+  });
+}
+
+export async function createOrder(body: {
+  customer_name: string;
+  customer_phone: string;
+  pickup_note?: string;
+  service_fee: number;
+  items: Array<{
+    name: string;
+    description: string;
+    quantity: number;
+    numeric_price: number;
+    image_url?: string | null;
+  }>;
+}) {
+  return callLaravel<{
+    message: string;
+    order: OrderHistoryEntry;
+  }>("/orders", {
+    method: "POST",
+    body
+  });
+}
+
+export async function getAdminOrders(
+  token: string,
+  filter: OrderHistoryFilter = "today"
+) {
+  return callLaravel<{
+    filter: OrderHistoryFilter;
+    summary: { count: number; revenue: number };
+    orders: OrderHistoryEntry[];
+  }>(`/admin/orders?filter=${filter}`, {
     token
   });
 }

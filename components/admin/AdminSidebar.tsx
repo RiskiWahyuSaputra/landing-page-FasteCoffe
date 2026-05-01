@@ -17,6 +17,11 @@ const navigation = [
     href: "/admin/menu",
     label: "Menu",
     description: "Add and manage drinks"
+  },
+  {
+    href: "/admin/purchases",
+    label: "Purchases",
+    description: "Checkout history"
   }
 ];
 

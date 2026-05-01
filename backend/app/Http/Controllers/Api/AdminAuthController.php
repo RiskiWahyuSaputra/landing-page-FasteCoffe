@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\AdminAccessToken;
 use App\Models\MenuItem;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -80,6 +81,7 @@ class AdminAuthController extends Controller
                 'total_users' => User::query()->count(),
                 'total_admins' => User::query()->where('is_admin', true)->count(),
                 'total_menu_items' => MenuItem::query()->count(),
+                'total_orders' => Order::query()->count(),
                 'active_admin_sessions' => AdminAccessToken::query()
                     ->where(function ($query): void {
                         $query->whereNull('expires_at')

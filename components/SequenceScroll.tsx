@@ -2,7 +2,6 @@
 
 import type { MotionValue } from "framer-motion";
 import {
-  AnimatePresence,
   motion,
   useMotionTemplate,
   useMotionValueEvent,
@@ -132,9 +131,7 @@ export default function SequenceScroll() {
   const currentFrameRef = useRef(0);
   const targetFrameRef = useRef(0);
   const animationFrameRef = useRef(0);
-  const [loadingProgress, setLoadingProgress] = useState(0);
   const [isReady, setIsReady] = useState(false);
-  const [showLoader, setShowLoader] = useState(true);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
@@ -217,10 +214,6 @@ export default function SequenceScroll() {
       const markLoaded = () => {
         loadedCount += 1;
 
-        if (!isCancelled) {
-          setLoadingProgress(Math.round((loadedCount / TOTAL_FRAMES) * 100));
-        }
-
         if (loadedCount === TOTAL_FRAMES && !isCancelled) {
           imagesRef.current = images;
           setIsReady(true);
@@ -285,15 +278,6 @@ export default function SequenceScroll() {
     };
   }, [isReady, resizeCanvas]);
 
-  useEffect(() => {
-    if (!isReady) {
-      return;
-    }
-
-    const timeout = window.setTimeout(() => setShowLoader(false), 450);
-    return () => window.clearTimeout(timeout);
-  }, [isReady]);
-
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     targetFrameRef.current = latest * (TOTAL_FRAMES - 1);
   });
@@ -324,36 +308,6 @@ export default function SequenceScroll() {
             />
           ))}
         </div>
-
-        <AnimatePresence>
-          {showLoader ? (
-            <motion.div
-              initial={{ opacity: 1 }}
-              animate={{ opacity: 1 }}
-              exit={{
-                opacity: 0,
-                transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-              }}
-              className="absolute inset-0 z-20 flex items-center justify-center bg-[linear-gradient(180deg,#140c08_0%,#0e0907_100%)]"
-            >
-              <div className="flex w-full max-w-md flex-col items-center px-6 text-center">
-                <div className="mb-5 text-xs uppercase tracking-[0.42em] text-sand/70">
-                  Loading sequence
-                </div>
-                <div className="text-[clamp(3rem,8vw,6rem)] font-semibold leading-none tracking-[-0.07em] text-cream">
-                  {loadingProgress}%
-                </div>
-                <div className="mt-6 h-px w-full overflow-hidden bg-white/10">
-                  <motion.div
-                    animate={{ width: `${loadingProgress}%` }}
-                    transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.35 }}
-                    className="h-full bg-copper shadow-[0_0_30px_rgba(212,153,95,0.65)]"
-                  />
-                </div>
-              </div>
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
       </div>
     </section>
   );

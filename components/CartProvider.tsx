@@ -32,12 +32,14 @@ type CartContextValue = {
   increaseItem: (name: string) => void;
   decreaseItem: (name: string) => void;
   removeItem: (name: string) => void;
+  clearCart: () => void;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
 
 function parsePrice(price: string) {
-  return Number(price.replace(/[^0-9.]/g, ""));
+  const normalized = price.replace(/[^0-9]/g, "");
+  return Number(normalized || 0);
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
@@ -84,6 +86,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems((currentItems) => currentItems.filter((entry) => entry.name !== name));
   };
 
+  const clearCart = () => {
+    setItems([]);
+    setIsCartOpen(false);
+  };
+
   const value = useMemo(() => {
     const itemCount = items.reduce((total, item) => total + item.quantity, 0);
     const subtotal = items.reduce(
@@ -102,7 +109,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       addItem,
       increaseItem,
       decreaseItem,
-      removeItem
+      removeItem,
+      clearCart
     };
   }, [isCartOpen, items]);
 
