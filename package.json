@@ -9,8 +9,10 @@
   },
   "dependencies": {
     "framer-motion": "^11.11.17",
+    "laravel-echo": "^2.3.4",
     "lenis": "^1.1.20",
     "next": "^14.2.14",
+    "pusher-js": "^8.5.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

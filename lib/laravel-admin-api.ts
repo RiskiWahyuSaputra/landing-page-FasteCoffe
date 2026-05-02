@@ -278,3 +278,13 @@ export function updateAdminOrderStatus(
     body: { status }
   });
 }
+
+export function deleteAdminOrderPaymentProof(token: string, id: number) {
+  return callLaravel<{
+    message: string;
+    order: OrderHistoryEntry;
+  }>(`/admin/orders/${id}/payment-proof`, {
+    method: "DELETE",
+    token
+  });
+}

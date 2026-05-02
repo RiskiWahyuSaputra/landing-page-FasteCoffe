@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import AdminPaymentProofActions from "@/components/admin/AdminPaymentProofActions";
 import AdminOrderStatusManager from "@/components/admin/AdminOrderStatusManager";
 import { formatRupiah } from "@/lib/currency";
 import { requireAdminSession } from "@/lib/admin-session";
@@ -279,16 +280,11 @@ export default async function AdminPurchasesPage({
                       {formatPaymentMethod(order.payment_method)}
                     </p>
                     {order.payment_proof_url ? (
-                      <div className="mt-3 flex items-center gap-3">
-                        <a
-                          href={order.payment_proof_url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex rounded-full border border-copper/30 bg-[rgba(212,153,95,0.08)] px-3.5 py-2 text-[0.68rem] uppercase tracking-[0.18em] text-copper transition hover:border-copper/50 hover:bg-copper hover:text-[#1a0f09]"
-                        >
-                          View Proof
-                        </a>
-                      </div>
+                      <AdminPaymentProofActions
+                        orderId={order.id}
+                        orderNumber={order.order_number}
+                        proofUrl={order.payment_proof_url}
+                      />
                     ) : (
                       <p className="mt-2 text-xs text-sand/55">
                         No proof uploaded.
@@ -296,26 +292,6 @@ export default async function AdminPurchasesPage({
                     )}
                   </div>
                 </div>
-
-                {order.payment_proof_url ? (
-                  <div className="border-t border-white/[0.06] px-5 py-5">
-                    <p className="mb-3 text-xs uppercase tracking-[0.22em] text-sand/45">
-                      Payment Proof Preview
-                    </p>
-                    <a
-                      href={order.payment_proof_url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="block overflow-hidden rounded-[1.2rem] border border-white/10 bg-white/[0.03]"
-                    >
-                      <img
-                        src={order.payment_proof_url}
-                        alt={`Bukti pembayaran ${order.order_number}`}
-                        className="h-56 w-full object-cover sm:h-64"
-                      />
-                    </a>
-                  </div>
-                ) : null}
 
                 <div className="border-t border-white/[0.06] px-5 py-5">
                   <AdminOrderStatusManager

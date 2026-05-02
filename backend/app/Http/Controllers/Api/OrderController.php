@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\OrderStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\MenuItem;
 use App\Models\Order;
@@ -101,8 +102,30 @@ class OrderController extends Controller
             'status' => $data['status'],
         ])->save();
 
+        try {
+            broadcast(new OrderStatusUpdated($order->fresh()));
+        } catch (\Throwable $exception) {
+            report($exception);
+        }
+
         return response()->json([
             'message' => 'Status pesanan berhasil diperbarui.',
+            'order' => $this->serializeOrder($order->fresh('items')),
+        ]);
+    }
+
+    public function destroyPaymentProof(Order $order): JsonResponse
+    {
+        if ($order->payment_proof_path) {
+            Storage::disk('public')->delete($order->payment_proof_path);
+        }
+
+        $order->forceFill([
+            'payment_proof_path' => null,
+        ])->save();
+
+        return response()->json([
+            'message' => 'Bukti pembayaran berhasil dihapus.',
             'order' => $this->serializeOrder($order->fresh('items')),
         ]);
     }

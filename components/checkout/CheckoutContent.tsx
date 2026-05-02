@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { CartItem } from "@/components/CartProvider";
 import { useCart } from "@/components/CartProvider";
 import OrderProgress from "@/components/orders/OrderProgress";
 import { formatRupiah } from "@/lib/currency";
+import { getReverbEcho } from "@/lib/reverb-client";
 import { getOrderStatusLabel, type OrderStatus } from "@/lib/order-status";
 
 function lineTotal(item: CartItem) {
@@ -68,6 +69,7 @@ export default function CheckoutContent() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [orderNumber, setOrderNumber] = useState("");
+  const [submittedOrderId, setSubmittedOrderId] = useState<number | null>(null);
   const [submittedOrderStatus, setSubmittedOrderStatus] =
     useState<OrderStatus>("received");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -132,7 +134,7 @@ export default function CheckoutContent() {
 
       const payload = (await response.json().catch(() => null)) as {
         message?: string;
-        order?: { order_number?: string; status?: OrderStatus };
+        order?: { id?: number; order_number?: string; status?: OrderStatus };
       } | null;
 
       if (!response.ok) {
@@ -141,6 +143,7 @@ export default function CheckoutContent() {
       }
 
       setSuccess(payload?.message ?? "Pesanan berhasil dibuat.");
+      setSubmittedOrderId(payload?.order?.id ?? null);
       setOrderNumber(payload?.order?.order_number ?? "");
       setSubmittedOrderStatus(payload?.order?.status ?? "received");
       setCustomerName("");
@@ -157,6 +160,31 @@ export default function CheckoutContent() {
       setIsSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    if (!submittedOrderId) {
+      return;
+    }
+
+    const echo = getReverbEcho();
+
+    if (!echo) {
+      return;
+    }
+
+    const channelName = `orders.${submittedOrderId}`;
+    const channel = echo.channel(channelName);
+
+    channel.listen(".order.status.updated", (event: { order?: { status?: OrderStatus } }) => {
+      if (event.order?.status) {
+        setSubmittedOrderStatus(event.order.status);
+      }
+    });
+
+    return () => {
+      echo.leaveChannel(channelName);
+    };
+  }, [submittedOrderId]);
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-page px-6 py-24 md:px-10">
