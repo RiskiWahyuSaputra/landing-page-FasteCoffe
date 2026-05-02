@@ -15,6 +15,8 @@ export type OrderHistoryEntry = {
   customer_name: string;
   customer_phone: string;
   pickup_note: string | null;
+  payment_method: string;
+  payment_proof_url: string | null;
   subtotal: number;
   service_fee: number;
   total: number;

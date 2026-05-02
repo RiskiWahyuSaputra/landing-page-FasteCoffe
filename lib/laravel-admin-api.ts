@@ -223,19 +223,24 @@ export function deleteAdminMenuItem(token: string, id: number) {
   });
 }
 
-export async function createOrder(body: {
-  customer_name: string;
-  customer_phone: string;
-  pickup_note?: string;
-  service_fee: number;
-  items: Array<{
-    name: string;
-    description: string;
-    quantity: number;
-    numeric_price: number;
-    image_url?: string | null;
-  }>;
-}) {
+export async function createOrder(
+  body:
+    | FormData
+    | {
+        customer_name: string;
+        customer_phone: string;
+        pickup_note?: string;
+        payment_method: string;
+        service_fee: number;
+        items: Array<{
+          name: string;
+          description: string;
+          quantity: number;
+          numeric_price: number;
+          image_url?: string | null;
+        }>;
+      }
+) {
   return callLaravel<{
     message: string;
     order: OrderHistoryEntry;

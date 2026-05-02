@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -21,6 +22,8 @@ class OrderController extends Controller
             'customer_name' => ['required', 'string', 'max:255'],
             'customer_phone' => ['required', 'string', 'max:32'],
             'pickup_note' => ['nullable', 'string', 'max:1000'],
+            'payment_method' => ['required', 'string', 'in:qris,bank_transfer,cash_on_pickup,e_wallet'],
+            'payment_proof' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'service_fee' => ['nullable', 'integer', 'min:0'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.name' => ['required', 'string', 'max:255'],
@@ -42,12 +45,22 @@ class OrderController extends Controller
             ]);
         }
 
-        $order = DB::transaction(function () use ($data, $serviceFee, $subtotal, $total): Order {
+        if (($data['payment_method'] ?? null) !== 'cash_on_pickup' && !$request->hasFile('payment_proof')) {
+            throw ValidationException::withMessages([
+                'payment_proof' => ['Upload bukti pembayaran untuk metode yang dipilih.'],
+            ]);
+        }
+
+        $paymentProofPath = $request->file('payment_proof')?->store('payment-proofs', 'public');
+
+        $order = DB::transaction(function () use ($data, $serviceFee, $subtotal, $total, $paymentProofPath): Order {
             $order = Order::query()->create([
                 'order_number' => 'FC-' . now()->format('Ymd') . '-' . Str::upper(Str::random(6)),
                 'customer_name' => $data['customer_name'],
                 'customer_phone' => $data['customer_phone'],
                 'pickup_note' => $data['pickup_note'] ?? null,
+                'payment_method' => $data['payment_method'],
+                'payment_proof_path' => $paymentProofPath,
                 'subtotal' => $subtotal,
                 'service_fee' => $serviceFee,
                 'total' => $total,
@@ -117,6 +130,10 @@ class OrderController extends Controller
             'customer_name' => $order->customer_name,
             'customer_phone' => $order->customer_phone,
             'pickup_note' => $order->pickup_note,
+            'payment_method' => $order->payment_method,
+            'payment_proof_url' => $order->payment_proof_path
+                ? url(Storage::disk('public')->url($order->payment_proof_path))
+                : null,
             'subtotal' => $order->subtotal,
             'service_fee' => $order->service_fee,
             'total' => $order->total,

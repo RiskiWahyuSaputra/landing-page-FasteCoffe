@@ -71,11 +71,27 @@ const filters: Array<{
 ];
 
 function formatDate(value: string | null) {
-  if (!value) return "–";
+  if (!value) return "-";
+
   return new Intl.DateTimeFormat("id-ID", {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(value));
+}
+
+function formatPaymentMethod(value: string) {
+  switch (value) {
+    case "qris":
+      return "QRIS";
+    case "bank_transfer":
+      return "Bank Transfer";
+    case "cash_on_pickup":
+      return "Cash on Pickup";
+    case "e_wallet":
+      return "E-Wallet";
+    default:
+      return value;
+  }
 }
 
 export default async function AdminPurchasesPage({
@@ -94,7 +110,6 @@ export default async function AdminPurchasesPage({
 
   return (
     <section className="flex min-h-[calc(100vh-2rem)] flex-col gap-5">
-      {/* ── Page Header ── */}
       <header className="glass-panel grain-overlay rounded-[1.8rem] border border-white/10 px-4 py-5 sm:px-6 md:px-8">
         <div className="flex flex-col gap-4 sm:gap-5 xl:flex-row xl:items-center xl:justify-between">
           <div>
@@ -103,13 +118,12 @@ export default async function AdminPurchasesPage({
               Checkout activity
             </h1>
             <p className="mt-2 max-w-xl text-sm leading-6 text-sand/65">
-              Riwayat pembelian dari checkout frontend. Filter berdasarkan hari
-              ini, bulan lalu, atau tahun lalu.
+              Riwayat checkout frontend, termasuk metode pembayaran dan bukti
+              transfer yang diunggah pembeli.
             </p>
           </div>
 
-          {/* Summary Stats */}
-          <div className="flex gap-2 sm:gap-3">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3">
             <div className="rounded-[1.2rem] border border-white/10 bg-white/[0.03] px-4 py-2.5 text-center sm:px-5 sm:py-3.5">
               <p className="text-xs uppercase tracking-[0.22em] text-sand/50">
                 Total Orders
@@ -130,9 +144,7 @@ export default async function AdminPurchasesPage({
         </div>
       </header>
 
-      {/* ── Filter + Table ── */}
       <article className="glass-panel rounded-[1.8rem] border border-white/10 p-4 sm:p-6">
-        {/* Filter Bar */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.26em] text-sand/55">
@@ -145,6 +157,7 @@ export default async function AdminPurchasesPage({
           <div className="flex flex-wrap gap-2">
             {filters.map((filter) => {
               const isActive = filter.value === selectedFilter;
+
               return (
                 <Link
                   key={filter.value}
@@ -163,10 +176,8 @@ export default async function AdminPurchasesPage({
           </div>
         </div>
 
-        {/* Divider */}
         <div className="my-5 h-px bg-white/[0.06]" />
 
-        {/* Orders List */}
         <div className="space-y-4">
           {data.orders.length === 0 ? (
             <div className="flex flex-col items-center justify-center rounded-[1.4rem] border border-dashed border-white/10 bg-white/[0.02] py-14 text-center">
@@ -200,7 +211,6 @@ export default async function AdminPurchasesPage({
                 key={order.id}
                 className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.02]"
               >
-                {/* Order Header */}
                 <div className="flex flex-col gap-4 border-b border-white/[0.06] p-5 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
                     <div className="flex items-center gap-2.5">
@@ -229,23 +239,18 @@ export default async function AdminPurchasesPage({
                     </p>
                   </div>
 
-                  {/* Total Badge */}
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-wrap items-center gap-3">
                     <span className="rounded-full border border-copper/30 bg-[rgba(212,153,95,0.1)] px-3.5 py-1.5 text-sm font-semibold text-copper">
                       {formatRupiah(order.total)}
                     </span>
                     <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-sand/60">
-                      {order.items.reduce(
-                        (sum, item) => sum + item.quantity,
-                        0,
-                      )}{" "}
+                      {order.items.reduce((sum, item) => sum + item.quantity, 0)}{" "}
                       item
                     </span>
                   </div>
                 </div>
 
-                {/* Customer + Details */}
-                <div className="grid gap-0 divide-y divide-white/[0.05] sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+                <div className="grid gap-0 divide-y divide-white/[0.05] lg:grid-cols-3 lg:divide-x lg:divide-y-0">
                   <div className="p-5">
                     <p className="mb-2 text-xs uppercase tracking-[0.22em] text-sand/45">
                       Customer
@@ -262,12 +267,55 @@ export default async function AdminPurchasesPage({
                       Pickup Note
                     </p>
                     <p className="text-sm text-sand/70">
-                      {order.pickup_note || "–"}
+                      {order.pickup_note || "-"}
                     </p>
+                  </div>
+                  <div className="p-5">
+                    <p className="mb-2 text-xs uppercase tracking-[0.22em] text-sand/45">
+                      Payment
+                    </p>
+                    <p className="text-sm font-medium text-cream">
+                      {formatPaymentMethod(order.payment_method)}
+                    </p>
+                    {order.payment_proof_url ? (
+                      <div className="mt-3 flex items-center gap-3">
+                        <a
+                          href={order.payment_proof_url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex rounded-full border border-copper/30 bg-[rgba(212,153,95,0.08)] px-3.5 py-2 text-[0.68rem] uppercase tracking-[0.18em] text-copper transition hover:border-copper/50 hover:bg-copper hover:text-[#1a0f09]"
+                        >
+                          View Proof
+                        </a>
+                      </div>
+                    ) : (
+                      <p className="mt-2 text-xs text-sand/55">
+                        No proof uploaded.
+                      </p>
+                    )}
                   </div>
                 </div>
 
-                {/* Order Items */}
+                {order.payment_proof_url ? (
+                  <div className="border-t border-white/[0.06] px-5 py-5">
+                    <p className="mb-3 text-xs uppercase tracking-[0.22em] text-sand/45">
+                      Payment Proof Preview
+                    </p>
+                    <a
+                      href={order.payment_proof_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block overflow-hidden rounded-[1.2rem] border border-white/10 bg-white/[0.03]"
+                    >
+                      <img
+                        src={order.payment_proof_url}
+                        alt={`Bukti pembayaran ${order.order_number}`}
+                        className="h-56 w-full object-cover sm:h-64"
+                      />
+                    </a>
+                  </div>
+                ) : null}
+
                 <div className="border-t border-white/[0.06] p-5">
                   <p className="mb-3 text-xs uppercase tracking-[0.22em] text-sand/45">
                     Items Ordered
@@ -308,7 +356,7 @@ export default async function AdminPurchasesPage({
                             {item.name}
                           </p>
                           <p className="mt-0.5 text-xs text-sand/55">
-                            {item.quantity}× {formatRupiah(item.unit_price)}
+                            {item.quantity} x {formatRupiah(item.unit_price)}
                           </p>
                           <p className="mt-0.5 text-xs font-semibold text-copper">
                             {formatRupiah(item.line_total)}
