@@ -15,6 +15,7 @@ export default async function HomePage() {
       items.map((item) => ({
         name: item.name,
         description: item.description,
+        category: item.category,
         price: item.formatted_price,
         accent: item.accent,
         imageUrl: item.image_url

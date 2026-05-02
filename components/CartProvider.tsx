@@ -6,10 +6,12 @@ import {
   useMemo,
   useState
 } from "react";
+import type { MenuCategory } from "@/lib/menu-category";
 
 export type CartMenuItem = {
   name: string;
   description: string;
+  category: MenuCategory;
   price: string;
   accent: string;
   imageUrl?: string | null;

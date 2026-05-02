@@ -17,7 +17,7 @@ export default async function AdminMenuPage() {
           <div>
             <p className="section-label">Menu Management</p>
             <h1 className="text-[clamp(1.5rem,4vw,3.2rem)] font-semibold leading-[1.05] tracking-[-0.05em] text-cream">
-              Publish &amp; manage drinks
+              Publish &amp; manage menu items
             </h1>
             <p className="mt-2 max-w-xl text-sm leading-6 text-sand/65">
               Data yang kamu ubah di sini menjadi sumber utama untuk section
@@ -25,7 +25,7 @@ export default async function AdminMenuPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 sm:flex sm:gap-3">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3 xl:flex">
             <div className="rounded-[1.2rem] border border-white/10 bg-white/[0.03] px-3 py-2.5 text-center sm:px-4 sm:py-3.5">
               <p className="text-xs uppercase tracking-[0.22em] text-sand/50">
                 Total Menu

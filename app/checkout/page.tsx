@@ -2,35 +2,18 @@
 
 import { useEffect, useState } from "react";
 import CheckoutContent from "@/components/checkout/CheckoutContent";
-import type { OrderStatus } from "@/lib/order-status";
-
-type SavedOrder = {
-  id: number;
-  order_number: string;
-  status: OrderStatus;
-};
+import {
+  clearCurrentOrderId,
+  getRestorableOrder,
+  type SavedOrder,
+} from "@/lib/active-order-storage";
 
 export default function CheckoutPage() {
   const [restoredOrder, setRestoredOrder] = useState<SavedOrder | null>(null);
   const [isInitializing, setIsInitializing] = useState(true);
 
   useEffect(() => {
-    // Coba restore pesanan terakhir dari localStorage
-    const currentOrderId = localStorage.getItem("faste_current_order_id");
-    const savedOrders = JSON.parse(
-      localStorage.getItem("faste_orders") || "[]",
-    ) as SavedOrder[];
-
-    if (currentOrderId && savedOrders.length > 0) {
-      // Cari pesanan terakhir
-      const lastOrder = savedOrders.find(
-        (o) => String(o.id) === currentOrderId,
-      );
-      if (lastOrder) {
-        setRestoredOrder(lastOrder);
-      }
-    }
-
+    setRestoredOrder(getRestorableOrder());
     setIsInitializing(false);
   }, []);
 
@@ -57,7 +40,7 @@ export default function CheckoutPage() {
       restoredOrder={restoredOrder}
       onOrderViewed={() => {
         // Clear flag untuk mencegah popup berkali-kali
-        localStorage.removeItem("faste_current_order_id");
+        clearCurrentOrderId();
       }}
     />
   );

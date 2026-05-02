@@ -4,6 +4,10 @@ import { startTransition, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { formatRupiah } from "@/lib/currency";
+import {
+  MENU_CATEGORIES,
+  getMenuCategoryAdminLabel,
+} from "@/lib/menu-category";
 import type { MenuItemPayload } from "@/lib/menu-types";
 
 const accentOptions = [
@@ -35,6 +39,7 @@ export default function AdminMenuManager({
   const [editingItem, setEditingItem] = useState<MenuItemPayload | null>(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState<(typeof MENU_CATEGORIES)[number]>("coffee");
   const [price, setPrice] = useState("");
   const [accent, setAccent] = useState(accentOptions[0]);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -48,6 +53,7 @@ export default function AdminMenuManager({
     setEditingItem(null);
     setName("");
     setDescription("");
+    setCategory("coffee");
     setPrice("");
     setAccent(accentOptions[0]);
     setImageFile(null);
@@ -58,6 +64,7 @@ export default function AdminMenuManager({
     setEditingItem(item);
     setName(item.name);
     setDescription(item.description);
+    setCategory(item.category);
     setPrice(String(item.price));
     setAccent(item.accent);
     setImageFile(null);
@@ -74,6 +81,7 @@ export default function AdminMenuManager({
       const formData = new FormData();
       formData.append("name", name);
       formData.append("description", description);
+      formData.append("category", category);
       formData.append("price", String(Number(price)));
       formData.append("accent", accent);
       formData.append("is_active", "1");
@@ -156,7 +164,7 @@ export default function AdminMenuManager({
     }
   };
 
-  const formHeading = editingItem ? "Edit menu item" : "Publish a new drink";
+  const formHeading = editingItem ? "Edit menu item" : "Publish a new menu item";
   const formDescription = editingItem
     ? "Perbarui nama, harga, deskripsi, atau ganti gambar menu yang sudah tayang."
     : "Menu yang ditambahkan di sini akan langsung dipakai oleh section menu di landing page Next.js.";
@@ -201,7 +209,26 @@ export default function AdminMenuManager({
             />
           </label>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-3">
+            <label className="block">
+              <span className="mb-2 block text-xs uppercase tracking-[0.24em] text-sand/62">
+                Kategori
+              </span>
+              <select
+                value={category}
+                onChange={(event) =>
+                  setCategory(event.target.value as (typeof MENU_CATEGORIES)[number])
+                }
+                className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition focus:border-copper/50 focus:bg-white/[0.06]"
+              >
+                {MENU_CATEGORIES.map((option) => (
+                  <option key={option} value={option} className="bg-[#160e0a]">
+                    {getMenuCategoryAdminLabel(option)}
+                  </option>
+                ))}
+              </select>
+            </label>
+
             <label className="block">
               <span className="mb-2 block text-xs uppercase tracking-[0.24em] text-sand/62">
                 Harga
@@ -370,6 +397,9 @@ export default function AdminMenuManager({
                       <h3 className="text-xl font-semibold text-cream">
                         {item.name}
                       </h3>
+                      <p className="mt-2 text-xs uppercase tracking-[0.22em] text-copper">
+                        {getMenuCategoryAdminLabel(item.category)}
+                      </p>
                       <p className="mt-2 text-sm leading-6 text-sand/72">
                         {item.description}
                       </p>

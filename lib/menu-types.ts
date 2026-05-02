@@ -1,7 +1,10 @@
+import type { MenuCategory } from "@/lib/menu-category";
+
 export type MenuItemPayload = {
   id: number;
   name: string;
   description: string;
+  category: MenuCategory;
   price: number;
   formatted_price: string;
   accent: string;

@@ -86,6 +86,15 @@ const translations: { id: TranslationDict; en: TranslationDict } = {
       "Minuman signature yang terasa familiar, elevated, dan layak untuk berhenti sejenak.",
     menu_description:
       "Menu premium yang presented seperti sebuah design object: warm, tactile, dan built untuk invite exploration.",
+    menu_item: "Item Menu",
+    menu_filter_all: "Semua",
+    menu_category_coffee: "Coffee",
+    menu_category_non_coffee: "Non Coffee",
+    menu_category_main_course: "Makanan Berat",
+    menu_category_snack: "Makanan Ringan",
+    menu_empty_category: "Belum ada menu di kategori ini.",
+    menu_empty_category_desc:
+      "Coba pilih kategori lain atau tambahkan item baru dari admin panel.",
     all_drinks: "Semua Minuman",
     add_to_cart: "Tambah ke Keranjang",
     drink_item: "Minuman",
@@ -278,6 +287,15 @@ const translations: { id: TranslationDict; en: TranslationDict } = {
       "Signature drinks designed to feel familiar, elevated, and worth the pause.",
     menu_description:
       "A premium menu presented like a design object: warm, tactile, and built to invite exploration.",
+    menu_item: "Menu Item",
+    menu_filter_all: "All",
+    menu_category_coffee: "Coffee",
+    menu_category_non_coffee: "Non Coffee",
+    menu_category_main_course: "Main Course",
+    menu_category_snack: "Snack",
+    menu_empty_category: "No menu items in this category yet.",
+    menu_empty_category_desc:
+      "Try another category or add a new item from the admin panel.",
     all_drinks: "All Drinks",
     add_to_cart: "Add to Cart",
     drink_item: "Drink",

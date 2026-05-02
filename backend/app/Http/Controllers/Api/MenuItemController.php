@@ -41,6 +41,7 @@ class MenuItemController extends Controller
         $menuItem = MenuItem::query()->create([
             'name' => $data['name'],
             'description' => $data['description'],
+            'category' => $data['category'],
             'price' => $data['price'],
             'accent' => $data['accent'],
             'image_path' => $request->file('image')?->store('menu-items', 'public'),
@@ -70,6 +71,7 @@ class MenuItemController extends Controller
         $menuItem->update([
             'name' => $data['name'],
             'description' => $data['description'],
+            'category' => $data['category'],
             'price' => $data['price'],
             'accent' => $data['accent'],
             'image_path' => $imagePath,
@@ -108,6 +110,12 @@ class MenuItemController extends Controller
                 Rule::unique('menu_items', 'name')->ignore($menuItemId),
             ],
             'description' => ['required', 'string', 'max:500'],
+            'category' => ['required', 'string', Rule::in([
+                'coffee',
+                'non_coffee',
+                'main_course',
+                'snack',
+            ])],
             'price' => ['required', 'integer', 'min:1000'],
             'accent' => ['required', 'string', 'max:255'],
             'is_active' => ['nullable', 'boolean'],
@@ -124,6 +132,7 @@ class MenuItemController extends Controller
             'id' => $item->id,
             'name' => $item->name,
             'description' => $item->description,
+            'category' => $item->category,
             'price' => $item->price,
             'formatted_price' => 'Rp. ' . number_format($item->price, 0, ',', '.'),
             'accent' => $item->accent,

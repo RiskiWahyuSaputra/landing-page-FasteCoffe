@@ -3,6 +3,14 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import {
+  removeSavedOrder,
+  setCurrentOrderId,
+  shouldHideOrderFromCheckout,
+  syncSavedOrderStatus,
+  upsertSavedOrder,
+  type SavedOrder,
+} from "@/lib/active-order-storage";
 import type { CartItem } from "@/components/CartProvider";
 import { useCart } from "@/components/CartProvider";
 import { useLocale } from "@/components/LocaleProvider";
@@ -10,12 +18,6 @@ import OrderProgress from "@/components/orders/OrderProgress";
 import { formatRupiah } from "@/lib/currency";
 import { getReverbEcho } from "@/lib/reverb-client";
 import { getOrderStatusLabel, type OrderStatus } from "@/lib/order-status";
-
-type SavedOrder = {
-  id: number;
-  order_number: string;
-  status: OrderStatus;
-};
 
 type CheckoutContentProps = {
   restoredOrder?: SavedOrder | null;
@@ -97,10 +99,14 @@ export default function CheckoutContent({
     useState<SavedOrder | null>(null);
 
   useEffect(() => {
-    if (restoredOrder) {
+    if (restoredOrder && !shouldHideOrderFromCheckout(restoredOrder.status)) {
       setRestoredDisplayOrder(restoredOrder);
       setShowRestoredOrder(true);
+      return;
     }
+
+    setRestoredDisplayOrder(null);
+    setShowRestoredOrder(false);
   }, [restoredOrder]);
 
   // Polling untuk update status pesanan yang di-restore
@@ -113,22 +119,21 @@ export default function CheckoutContent({
         if (res.ok) {
           const data = (await res.json()) as { status?: OrderStatus };
           if (data.status && data.status !== restoredDisplayOrder.status) {
+            if (shouldHideOrderFromCheckout(data.status)) {
+              removeSavedOrder(restoredDisplayOrder.id);
+              setRestoredDisplayOrder(null);
+              setShowRestoredOrder(false);
+              onOrderViewed?.();
+              return;
+            }
+
             setRestoredDisplayOrder((prev) =>
               prev ? { ...prev, status: data.status! } : null,
             );
-            // Update localStorage juga
-            const savedOrders = JSON.parse(
-              localStorage.getItem("faste_orders") || "[]",
-            ) as SavedOrder[];
-            const updated = savedOrders.map((o) =>
-              o.id === restoredDisplayOrder.id
-                ? { ...o, status: data.status! }
-                : o,
-            );
-            localStorage.setItem("faste_orders", JSON.stringify(updated));
+            syncSavedOrderStatus(restoredDisplayOrder.id, data.status);
           }
         }
-      } catch (e) {
+      } catch {
         // Silent fail
       }
     };
@@ -140,6 +145,7 @@ export default function CheckoutContent({
 
   const handleDismissRestoredOrder = () => {
     setShowRestoredOrder(false);
+    setRestoredDisplayOrder(null);
     onOrderViewed?.();
   };
 
@@ -221,19 +227,13 @@ export default function CheckoutContent({
 
       // Simpan ke localStorage agar bisa diakses setelah refresh
       if (newOrderId && newOrderNumber) {
-        const existingOrders = JSON.parse(
-          localStorage.getItem("faste_orders") || "[]",
-        );
-        const newOrder = {
+        const newOrder: SavedOrder = {
           id: newOrderId,
           order_number: newOrderNumber,
           status: newOrderStatus,
         };
-        localStorage.setItem(
-          "faste_orders",
-          JSON.stringify([newOrder, ...existingOrders]),
-        );
-        localStorage.setItem("faste_current_order_id", String(newOrderId));
+        upsertSavedOrder(newOrder);
+        setCurrentOrderId(newOrderId);
       }
 
       setSuccess(payload?.message ?? t("pesanan_berhasil"));
@@ -282,6 +282,23 @@ export default function CheckoutContent({
       echo.leaveChannel(channelName);
     };
   }, [submittedOrderId]);
+
+  useEffect(() => {
+    if (!submittedOrderId) {
+      return;
+    }
+
+    if (shouldHideOrderFromCheckout(submittedOrderStatus)) {
+      removeSavedOrder(submittedOrderId);
+      setSubmittedOrderId(null);
+      setOrderNumber("");
+      setSuccess("");
+      return;
+    }
+
+    syncSavedOrderStatus(submittedOrderId, submittedOrderStatus);
+    setCurrentOrderId(submittedOrderId);
+  }, [submittedOrderId, submittedOrderStatus]);
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-page px-6 py-24 md:px-10">

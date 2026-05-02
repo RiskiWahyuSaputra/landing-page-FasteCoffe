@@ -173,10 +173,10 @@ export default async function AdminDashboardPage() {
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap">
             <Link
               href="/admin/menu"
-              className="inline-flex items-center gap-2 rounded-full border border-copper/40 bg-copper px-4 py-2 text-xs font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d] sm:px-5 sm:py-2.5"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-copper/40 bg-copper px-4 py-2 text-xs font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d] sm:px-5 sm:py-2.5"
             >
               <svg
                 width="13"
@@ -195,7 +195,7 @@ export default async function AdminDashboardPage() {
             </Link>
             <Link
               href="/admin/purchases"
-              className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.04] px-4 py-2 text-xs font-medium uppercase tracking-[0.22em] text-sand transition hover:border-copper/30 hover:text-white sm:px-5 sm:py-2.5"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-white/[0.04] px-4 py-2 text-xs font-medium uppercase tracking-[0.22em] text-sand transition hover:border-copper/30 hover:text-white sm:px-5 sm:py-2.5"
             >
               <svg
                 width="13"
@@ -214,7 +214,7 @@ export default async function AdminDashboardPage() {
             </Link>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.04] px-4 py-2 text-xs font-medium uppercase tracking-[0.22em] text-sand transition hover:border-copper/30 hover:text-white sm:px-5 sm:py-2.5"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-white/[0.04] px-4 py-2 text-xs font-medium uppercase tracking-[0.22em] text-sand transition hover:border-copper/30 hover:text-white sm:px-5 sm:py-2.5"
             >
               <svg
                 width="13"

@@ -17,9 +17,9 @@ export default async function AdminPanelLayout({
       <div className="absolute left-[8%] top-20 h-72 w-72 rounded-full bg-copper/8 blur-3xl" />
       <div className="absolute bottom-20 right-[5%] h-80 w-80 rounded-full bg-[#6d3c1f]/15 blur-3xl" />
 
-      <div className="relative mx-auto flex w-full gap-4 px-3 py-3 sm:gap-5 sm:px-4 sm:py-4 md:px-6 lg:px-8 xl:max-w-[1600px]">
+      <div className="relative mx-auto flex w-full flex-col gap-4 px-3 py-3 sm:gap-5 sm:px-4 sm:py-4 md:px-6 lg:flex-row lg:items-start lg:px-8 xl:max-w-[1600px]">
         <AdminSidebar user={user} />
-        <div className="min-w-0 flex-1 pb-4 sm:pb-8">{children}</div>
+        <div className="min-w-0 w-full flex-1 pb-4 sm:pb-8">{children}</div>
       </div>
     </main>
   );

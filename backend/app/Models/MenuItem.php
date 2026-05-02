@@ -13,6 +13,7 @@ class MenuItem extends Model
     protected $fillable = [
         'name',
         'description',
+        'category',
         'price',
         'accent',
         'image_path',

@@ -34,7 +34,7 @@ const navigation = [
   {
     href: "/admin/menu",
     label: "Menu",
-    description: "Add and manage drinks",
+    description: "Add and manage menu items",
     icon: (
       <svg
         width="18"
@@ -257,8 +257,8 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
       </aside>
 
       {/* ── Mobile Top Bar ── */}
-      <div className="lg:hidden">
-        <div className="mb-4 flex items-center justify-between rounded-[1.4rem] border border-white/10 bg-white/[0.04] px-4 py-3 backdrop-blur-xl">
+      <div className="w-full lg:hidden">
+        <div className="sticky top-3 z-30 mb-4 flex items-center justify-between rounded-[1.4rem] border border-white/10 bg-[rgba(22,13,9,0.82)] px-4 py-3 backdrop-blur-xl">
           {/* Brand */}
           <div className="flex items-center gap-2.5">
             <div className="flex h-8 w-8 items-center justify-center rounded-[0.6rem] bg-copper/20">
@@ -283,7 +283,7 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
 
           {/* Mobile Nav Pills */}
           <div className="flex items-center gap-2">
-            <div className="hidden items-center gap-2 sm:flex">
+            <div className="hidden items-center gap-2 overflow-x-auto md:flex">
               {navigation.map((item) => {
                 const isActive = pathname === item.href;
                 return (
@@ -306,7 +306,7 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
-              className="flex h-8 w-8 items-center justify-center rounded-[0.6rem] border border-white/10 bg-white/[0.04] text-sand transition hover:text-cream sm:hidden"
+              className="flex h-8 w-8 items-center justify-center rounded-[0.6rem] border border-white/10 bg-white/[0.04] text-sand transition hover:text-cream md:hidden"
               aria-label="Open menu"
             >
               <svg
