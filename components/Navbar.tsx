@@ -55,21 +55,21 @@ export default function Navbar() {
         }}
         className="fixed inset-x-0 top-0 z-50 border-b backdrop-blur-xl"
       >
-        <div className="page-shell flex h-20 items-center justify-between">
+        <div className="page-shell flex h-16 items-center justify-between gap-2 sm:h-20 sm:gap-4">
           <a
             href="#top"
-            className="text-lg font-semibold uppercase tracking-[0.38em] text-cream"
+            className="shrink-0 text-sm font-semibold uppercase tracking-[0.3em] text-cream sm:text-lg sm:tracking-[0.38em]"
           >
             Faste.
           </a>
 
-          <div className="flex items-center gap-3">
+          <div className="flex min-w-0 items-center justify-end gap-1.5 sm:gap-3">
             {/* Language Switcher */}
-            <div className="flex items-center gap-1 rounded-full border border-white/10 p-1">
+            <div className="flex shrink-0 items-center gap-0.5 rounded-full border border-white/10 p-0.5 sm:gap-1 sm:p-1">
               <button
                 type="button"
                 onClick={() => setLocale("id")}
-                className={`rounded-full px-2.5 py-1.5 text-[0.65rem] font-medium uppercase tracking-[0.2em] transition hover:bg-white/10 hover:text-white ${
+                className={`rounded-full px-2 py-1.5 text-[0.62rem] font-medium uppercase tracking-[0.16em] transition hover:bg-white/10 hover:text-white sm:px-2.5 sm:text-[0.65rem] sm:tracking-[0.2em] ${
                   locale === "id" ? "bg-copper text-[#1a0f09]" : "text-sand"
                 }`}
               >
@@ -78,7 +78,7 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => setLocale("en")}
-                className={`rounded-full px-2.5 py-1.5 text-[0.65rem] font-medium uppercase tracking-[0.2em] transition hover:bg-white/10 hover:text-white ${
+                className={`rounded-full px-2 py-1.5 text-[0.62rem] font-medium uppercase tracking-[0.16em] transition hover:bg-white/10 hover:text-white sm:px-2.5 sm:text-[0.65rem] sm:tracking-[0.2em] ${
                   locale === "en" ? "bg-copper text-[#1a0f09]" : "text-sand"
                 }`}
               >
@@ -90,13 +90,13 @@ export default function Navbar() {
               type="button"
               onClick={toggleCart}
               aria-label={t("open_cart")}
-              className="group inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-2 text-xs uppercase tracking-[0.24em] text-sand transition-colors duration-300 hover:border-copper/50 hover:text-white"
+              className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/10 px-2 py-1.5 text-xs uppercase tracking-[0.2em] text-sand transition-colors duration-300 hover:border-copper/50 hover:text-white sm:gap-2 sm:px-3 sm:py-2 sm:tracking-[0.24em]"
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/6 transition-colors duration-300 group-hover:bg-copper/12">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/6 transition-colors duration-300 group-hover:bg-copper/12 sm:h-9 sm:w-9">
                 <svg
                   aria-hidden="true"
                   viewBox="0 0 24 24"
-                  className="h-[18px] w-[18px] text-sand/80 transition-colors duration-300 group-hover:text-copper"
+                  className="h-4 w-4 text-sand/80 transition-colors duration-300 group-hover:text-copper sm:h-[18px] sm:w-[18px]"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="1.8"
@@ -108,7 +108,7 @@ export default function Navbar() {
                   <path d="M3 4h2.2l2.2 10.2a1 1 0 0 0 1 .8h8.9a1 1 0 0 0 1-.76L20 8H7.1" />
                 </svg>
               </span>
-              <span className="inline-flex min-w-8 items-center justify-center rounded-full bg-white/10 px-2 py-1 text-[0.68rem] text-cream">
+              <span className="inline-flex min-w-7 items-center justify-center rounded-full bg-white/10 px-1.5 py-1 text-[0.64rem] text-cream sm:min-w-8 sm:px-2 sm:text-[0.68rem]">
                 {String(itemCount).padStart(2, "0")}
               </span>
             </button>
@@ -116,14 +116,16 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setIsOpen((value) => !value)}
-              className="group inline-flex items-center gap-3 rounded-full border border-white/10 px-5 py-2 text-xs uppercase tracking-[0.28em] text-sand transition-colors duration-300 hover:border-copper/50 hover:text-white"
+              className="group inline-flex shrink-0 items-center gap-0 rounded-full border border-white/10 px-3 py-2 text-xs uppercase tracking-[0.2em] text-sand transition-colors duration-300 hover:border-copper/50 hover:text-white sm:gap-3 sm:px-5 sm:tracking-[0.28em]"
             >
-              <span className="relative flex h-3.5 w-5 flex-col justify-between">
+              <span className="relative flex h-3.5 w-5 flex-col justify-between sm:mr-0">
                 <span className="block h-px w-full bg-current" />
                 <span className="block h-px w-full bg-current" />
                 <span className="block h-px w-full bg-current" />
               </span>
-              {isOpen ? t("close") : t("menu")}
+              <span className="hidden sm:inline">
+                {isOpen ? t("close") : t("menu")}
+              </span>
             </button>
           </div>
         </div>
