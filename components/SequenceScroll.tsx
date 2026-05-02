@@ -11,14 +11,15 @@ import {
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import MagneticButton from "@/components/MagneticButton";
+import { useLocale } from "@/components/LocaleProvider";
 
 const TOTAL_FRAMES = 240;
 
 type Alignment = "left" | "center" | "right";
 
 type StoryScene = {
-  title: string;
-  subtitle?: string;
+  titleKey: string;
+  subtitleKey?: string;
   align: Alignment;
   range: [number, number, number, number];
   cta?: boolean;
@@ -26,36 +27,36 @@ type StoryScene = {
 
 const scenes: StoryScene[] = [
   {
-    title: "Faste Coffee",
-    subtitle: "Brewed for Your Daily Energy",
+    titleKey: "hero_title_1",
+    subtitleKey: "hero_subtitle_1",
     align: "center",
     range: [0, 0.08, 0.17, 0.28],
   },
   {
-    title: "Crafted from premium beans",
-    subtitle: "Rich flavor, bold aroma",
+    titleKey: "hero_title_2",
+    subtitleKey: "hero_subtitle_2",
     align: "center",
     range: [0.18, 0.27, 0.38, 0.49],
   },
   {
-    title: "From farm to your cup",
-    subtitle: "Freshly roasted every day",
+    titleKey: "hero_title_3",
+    subtitleKey: "hero_subtitle_3",
     align: "left",
     range: [0.39, 0.48, 0.59, 0.7],
   },
   {
-    title: "Experience modern coffee culture",
-    subtitle: "Fast / Fresh / Flavorful",
+    titleKey: "hero_title_4",
+    subtitleKey: "hero_subtitle_4",
     align: "right",
     range: [0.6, 0.69, 0.8, 0.89],
   },
   {
-    title: "Start your day with Faste Coffee",
+    titleKey: "hero_title_5",
     align: "center",
     range: [0.8, 0.87, 0.93, 0.975],
   },
   {
-    title: "Order your coffee now",
+    titleKey: "hero_title_6",
     align: "center",
     range: [0.92, 0.965, 1, 1],
     cta: true,
@@ -73,6 +74,7 @@ function StoryOverlay({
   progress: MotionValue<number>;
   scene: StoryScene;
 }) {
+  const { t } = useLocale();
   const opacity = useTransform(progress, scene.range, [0, 1, 1, 0]);
   const y = useTransform(progress, scene.range, [72, 0, 0, -40]);
   const blur = useTransform(progress, scene.range, [18, 0, 0, 18]);
@@ -97,26 +99,26 @@ function StoryOverlay({
         style={{ y: badgeY }}
         className="rounded-full border border-white/10 bg-black/20 px-4 py-2 text-[0.68rem] uppercase tracking-[0.3em] text-sand/82 backdrop-blur-md"
       >
-        Premium coffee scrollytelling
+        {t("scrollytelling_badge")}
       </motion.div>
       <motion.h2
         style={{ y: titleY }}
         className="text-balance text-[clamp(2.6rem,7vw,7rem)] font-semibold leading-[0.9] tracking-[-0.06em] text-cream"
       >
-        {scene.title}
+        {t(scene.titleKey)}
       </motion.h2>
-      {scene.subtitle ? (
+      {scene.subtitleKey ? (
         <motion.p
           style={{ y: subtitleY }}
           className="max-w-md text-balance text-base leading-7 text-sand/78 md:text-lg"
         >
-          {scene.subtitle}
+          {t(scene.subtitleKey)}
         </motion.p>
       ) : null}
 
       {scene.cta ? (
         <div className="pointer-events-auto mt-4">
-          <MagneticButton href="#menu">Explore Menu</MagneticButton>
+          <MagneticButton href="#menu">{t("explore_menu")}</MagneticButton>
         </div>
       ) : null}
     </motion.div>
@@ -302,7 +304,7 @@ export default function SequenceScroll() {
 
           {scenes.map((scene) => (
             <StoryOverlay
-              key={scene.title}
+              key={scene.titleKey}
               progress={scrollYProgress}
               scene={scene}
             />

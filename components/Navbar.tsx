@@ -4,18 +4,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 import { useCart } from "@/components/CartProvider";
-
-const links = [
-  { label: "Home", href: "#top" },
-  { label: "About", href: "#about" },
-  { label: "Menu", href: "#menu" },
-  { label: "Contact", href: "#contact" }
-];
+import { useLocale } from "@/components/LocaleProvider";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { itemCount, toggleCart, isCartOpen } = useCart();
+  const { locale, t, setLocale } = useLocale();
 
   useEffect(() => {
     const onScroll = () => {
@@ -31,20 +26,32 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    document.documentElement.style.overflow = isOpen || isCartOpen ? "hidden" : "";
+    document.documentElement.style.overflow =
+      isOpen || isCartOpen ? "hidden" : "";
 
     return () => {
       document.documentElement.style.overflow = "";
     };
   }, [isCartOpen, isOpen]);
 
+  const links = [
+    { label: t("home"), href: "#top" },
+    { label: t("about"), href: "#about" },
+    { label: t("menu"), href: "#menu" },
+    { label: t("contact"), href: "#contact" },
+  ];
+
   return (
     <>
       <motion.header
         initial={false}
         animate={{
-          backgroundColor: isScrolled ? "rgba(16, 10, 7, 0.72)" : "rgba(16, 10, 7, 0)",
-          borderColor: isScrolled ? "rgba(244, 234, 220, 0.12)" : "rgba(244, 234, 220, 0)"
+          backgroundColor: isScrolled
+            ? "rgba(16, 10, 7, 0.72)"
+            : "rgba(16, 10, 7, 0)",
+          borderColor: isScrolled
+            ? "rgba(244, 234, 220, 0.12)"
+            : "rgba(244, 234, 220, 0)",
         }}
         className="fixed inset-x-0 top-0 z-50 border-b backdrop-blur-xl"
       >
@@ -57,10 +64,32 @@ export default function Navbar() {
           </a>
 
           <div className="flex items-center gap-3">
+            {/* Language Switcher */}
+            <div className="flex items-center gap-1 rounded-full border border-white/10 p-1">
+              <button
+                type="button"
+                onClick={() => setLocale("id")}
+                className={`rounded-full px-2.5 py-1.5 text-[0.65rem] font-medium uppercase tracking-[0.2em] transition hover:bg-white/10 hover:text-white ${
+                  locale === "id" ? "bg-copper text-[#1a0f09]" : "text-sand"
+                }`}
+              >
+                ID
+              </button>
+              <button
+                type="button"
+                onClick={() => setLocale("en")}
+                className={`rounded-full px-2.5 py-1.5 text-[0.65rem] font-medium uppercase tracking-[0.2em] transition hover:bg-white/10 hover:text-white ${
+                  locale === "en" ? "bg-copper text-[#1a0f09]" : "text-sand"
+                }`}
+              >
+                EN
+              </button>
+            </div>
+
             <button
               type="button"
               onClick={toggleCart}
-              aria-label="Open cart"
+              aria-label={t("open_cart")}
               className="group inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-2 text-xs uppercase tracking-[0.24em] text-sand transition-colors duration-300 hover:border-copper/50 hover:text-white"
             >
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/6 transition-colors duration-300 group-hover:bg-copper/12">
@@ -94,7 +123,7 @@ export default function Navbar() {
                 <span className="block h-px w-full bg-current" />
                 <span className="block h-px w-full bg-current" />
               </span>
-              {isOpen ? "Close" : "Menu"}
+              {isOpen ? t("close") : t("menu")}
             </button>
           </div>
         </div>
@@ -119,7 +148,7 @@ export default function Navbar() {
                   onClick={() => setIsOpen(false)}
                   className="rounded-full border border-white/10 px-5 py-2 text-xs uppercase tracking-[0.28em] text-sand transition hover:border-copper/50 hover:text-white"
                 >
-                  Close
+                  {t("close")}
                 </button>
               </div>
 
@@ -136,7 +165,7 @@ export default function Navbar() {
                       transition={{
                         delay: 0.08 * index,
                         duration: 0.6,
-                        ease: [0.22, 1, 0.36, 1]
+                        ease: [0.22, 1, 0.36, 1],
                       }}
                       className="block text-[clamp(2.6rem,10vw,7rem)] font-semibold leading-[0.9] tracking-[-0.05em] text-cream/88 transition hover:text-white"
                     >
@@ -149,16 +178,28 @@ export default function Navbar() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 20 }}
-                  transition={{ delay: 0.24, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{
+                    delay: 0.24,
+                    duration: 0.6,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
                   className="grid gap-10 text-sand/78 sm:grid-cols-2 lg:grid-cols-1"
                 >
                   <div>
-                    <p className="section-label">Social</p>
+                    <p className="section-label">{t("social")}</p>
                     <div className="space-y-3 text-sm uppercase tracking-[0.2em]">
-                      <a href="https://instagram.com" target="_blank" rel="noreferrer">
+                      <a
+                        href="https://instagram.com"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         Instagram
                       </a>
-                      <a href="https://tiktok.com" target="_blank" rel="noreferrer">
+                      <a
+                        href="https://tiktok.com"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         TikTok
                       </a>
                       <a href="https://x.com" target="_blank" rel="noreferrer">
@@ -168,11 +209,11 @@ export default function Navbar() {
                   </div>
 
                   <div>
-                    <p className="section-label">Contact</p>
+                    <p className="section-label">{t("contact")}</p>
                     <div className="space-y-3 text-sm leading-relaxed">
                       <p>hello@fastecoffee.com</p>
                       <p>+62 21 555 2400</p>
-                      <p>Jakarta - Brew Bar &amp; Daily Roastery</p>
+                      <p>{t("location_jakarta")}</p>
                     </div>
                   </div>
                 </motion.div>

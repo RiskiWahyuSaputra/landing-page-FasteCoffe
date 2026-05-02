@@ -3,36 +3,35 @@
 import { motion } from "framer-motion";
 
 import { type CartMenuItem, useCart } from "@/components/CartProvider";
-
-const brandCards = [
-  {
-    title: "Coffee Beans",
-    description:
-      "Dense crema, round body, and beans sourced for layered sweetness.",
-    size: "lg:col-span-2",
-  },
-  {
-    title: "Brewing Process",
-    description:
-      "Measured extraction, calibrated heat, and rhythm you can taste.",
-    size: "",
-  },
-  {
-    title: "Coffee Shop Vibe",
-    description:
-      "Warm light, tactile materials, and a pace made for everyday rituals.",
-    size: "",
-  },
-  {
-    title: "Barista Craft",
-    description:
-      "Fast hands, clean technique, and a finish that still feels personal.",
-    size: "lg:col-span-2",
-  },
-];
+import { useLocale } from "@/components/LocaleProvider";
 
 export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
   const { addItem, decreaseItem, increaseItem, items } = useCart();
+  const { t } = useLocale();
+
+  const brandCards = [
+    {
+      title: t("brand_card_title_1"),
+      description: t("brand_card_desc_1"),
+      size: "lg:col-span-2",
+    },
+    {
+      title: t("brand_card_title_2"),
+      description: t("brand_card_desc_2"),
+      size: "",
+    },
+    {
+      title: t("brand_card_title_3"),
+      description: t("brand_card_desc_3"),
+      size: "",
+    },
+    {
+      title: t("brand_card_title_4"),
+      description: t("brand_card_desc_4"),
+      size: "lg:col-span-2",
+    },
+  ];
+
   const quantitiesByName = items.reduce<Record<string, number>>(
     (accumulator, item) => {
       accumulator[item.name] = item.quantity;
@@ -49,16 +48,14 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
       <div className="page-shell">
         <div className="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
-            <p className="section-label">Popular Menu</p>
+            <p className="section-label">{t("popular_menu")}</p>
             <h2 className="text-balance text-[clamp(2.5rem,6vw,5.2rem)] font-semibold leading-[0.94] tracking-[-0.05em] text-cream">
-              Signature drinks designed to feel familiar, elevated, and worth
-              the pause.
+              {t("menu_subtitle")}
             </h2>
           </div>
 
           <p className="max-w-md text-base leading-7 text-sand/72">
-            A premium menu presented like a design object: warm, tactile, and
-            built to invite exploration.
+            {t("menu_description")}
           </p>
         </div>
 
@@ -97,11 +94,11 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
                       </>
                     ) : null}
                     <div className="absolute bottom-4 left-4 rounded-full border border-white/10 bg-black/20 px-3 py-1 text-[0.68rem] uppercase tracking-[0.26em] text-sand/80">
-                      Drink {index + 1}
+                      {t("drink_item")} {index + 1}
                     </div>
                     {quantity ? (
                       <div className="absolute right-4 top-4 rounded-full border border-copper/30 bg-[rgba(212,153,95,0.16)] px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-copper">
-                        In Cart x{quantity}
+                        {t("in_cart")} x{quantity}
                       </div>
                     ) : null}
                   </div>
@@ -122,7 +119,7 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
 
                   <div className="relative mt-6 flex items-center justify-between gap-4">
                     <p className="text-xs uppercase tracking-[0.22em] text-sand/64">
-                      Freshly prepared signature drink
+                      {t("fresh_drink")}
                     </p>
 
                     <div className="flex items-center gap-2 rounded-full border border-copper/30 bg-[rgba(212,153,95,0.12)] p-1">
@@ -131,7 +128,7 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
                         onClick={() => decreaseItem(item.name)}
                         disabled={!quantity}
                         className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-copper transition hover:bg-copper hover:text-[#1a0f09] disabled:cursor-not-allowed disabled:opacity-35"
-                        aria-label={`Kurangi ${item.name}`}
+                        aria-label={t("decrease")}
                       >
                         -
                       </button>
@@ -144,7 +141,7 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
                           quantity ? increaseItem(item.name) : addItem(item)
                         }
                         className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-copper transition hover:bg-copper hover:text-[#1a0f09]"
-                        aria-label={`Tambah ${item.name}`}
+                        aria-label={t("increase")}
                       >
                         +
                       </button>
@@ -152,21 +149,21 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
                   </div>
                 </motion.article>
               );
-            })()
+            })(),
           )}
         </div>
 
         <div className="mt-28">
           <div className="mb-10 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="section-label">Brand Layers</p>
+              <p className="section-label">{t("brand_layers")}</p>
               <h3 className="text-balance text-[clamp(2rem,5vw,4rem)] font-semibold leading-[0.96] tracking-[-0.05em] text-cream">
-                Lifestyle cues that turn a cup into a culture.
+                {t("brand_layers_title")}
               </h3>
             </div>
 
             <p className="max-w-md text-sm leading-6 text-sand/70">
-              Four editorial cards carrying the visual world around the product.
+              {t("brand_layers_desc")}
             </p>
           </div>
 

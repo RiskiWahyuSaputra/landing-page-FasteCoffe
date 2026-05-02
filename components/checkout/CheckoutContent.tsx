@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 import type { CartItem } from "@/components/CartProvider";
 import { useCart } from "@/components/CartProvider";
+import { useLocale } from "@/components/LocaleProvider";
 import OrderProgress from "@/components/orders/OrderProgress";
 import { formatRupiah } from "@/lib/currency";
 import { getReverbEcho } from "@/lib/reverb-client";
@@ -25,41 +26,6 @@ function lineTotal(item: CartItem) {
   return item.numericPrice * item.quantity;
 }
 
-const paymentMethods = [
-  {
-    id: "qris",
-    label: "QRIS",
-    description: "Scan QR untuk pembayaran instan.",
-  },
-  {
-    id: "bank_transfer",
-    label: "Bank Transfer",
-    description: "Transfer ke rekening admin Faste Coffee.",
-  },
-  {
-    id: "cash_on_pickup",
-    label: "Cash",
-    description: "Bayar langsung saat pesanan diambil.",
-  },
-  {
-    id: "e_wallet",
-    label: "E-Wallet",
-    description: "Konfirmasi lewat dompet digital.",
-  },
-] as const;
-
-type PaymentMethod = (typeof paymentMethods)[number]["id"];
-const MAX_PAYMENT_PROOF_SIZE_BYTES = 4 * 1024 * 1024;
-const allowedPaymentProofMimeTypes = new Set([
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-]);
-
-function getPaymentMethodLabel(value: PaymentMethod | "") {
-  return paymentMethods.find((method) => method.id === value)?.label ?? "-";
-}
-
 export default function CheckoutContent({
   restoredOrder,
   onOrderViewed,
@@ -73,6 +39,43 @@ export default function CheckoutContent({
     clearCart,
     itemCount,
   } = useCart();
+  const { t } = useLocale();
+
+  const paymentMethods = [
+    {
+      id: "qris",
+      label: t("qris"),
+      description: t("qris_desc"),
+    },
+    {
+      id: "bank_transfer",
+      label: t("bank_transfer"),
+      description: t("bank_transfer_desc"),
+    },
+    {
+      id: "cash_on_pickup",
+      label: t("cash"),
+      description: t("cash_desc"),
+    },
+    {
+      id: "e_wallet",
+      label: t("e_wallet"),
+      description: t("e_wallet_desc"),
+    },
+  ] as const;
+
+  type PaymentMethod = (typeof paymentMethods)[number]["id"];
+  const MAX_PAYMENT_PROOF_SIZE_BYTES = 4 * 1024 * 1024;
+  const allowedPaymentProofMimeTypes = new Set([
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+  ]);
+
+  function getPaymentMethodLabel(value: PaymentMethod | "") {
+    return paymentMethods.find((method) => method.id === value)?.label ?? "-";
+  }
+
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [pickupNote, setPickupNote] = useState("");
@@ -150,22 +153,22 @@ export default function CheckoutContent({
     setSuccess("");
 
     if (!customerName.trim() || !customerPhone.trim()) {
-      setError("Nama dan nomor telepon wajib diisi.");
+      setError(t("error_name_phone"));
       return;
     }
 
     if (!items.length) {
-      setError("Cart masih kosong.");
+      setError(t("error_empty_cart"));
       return;
     }
 
     if (!paymentMethod) {
-      setError("Pilih metode pembayaran terlebih dahulu.");
+      setError(t("error_payment_method"));
       return;
     }
 
     if (requiresPaymentProof && !paymentProofFile) {
-      setError("Upload bukti pembayaran untuk metode yang dipilih.");
+      setError(t("error_payment_proof"));
       return;
     }
 
@@ -208,7 +211,7 @@ export default function CheckoutContent({
       } | null;
 
       if (!response.ok) {
-        setError(payload?.message ?? "Gagal membuat pesanan.");
+        setError(payload?.message ?? t("error_generic"));
         return;
       }
 
@@ -233,7 +236,7 @@ export default function CheckoutContent({
         localStorage.setItem("faste_current_order_id", String(newOrderId));
       }
 
-      setSuccess(payload?.message ?? "Pesanan berhasil dibuat.");
+      setSuccess(payload?.message ?? t("pesanan_berhasil"));
       setSubmittedOrderId(newOrderId);
       setOrderNumber(newOrderNumber);
       setSubmittedOrderStatus(newOrderStatus);
@@ -246,7 +249,7 @@ export default function CheckoutContent({
       setShowQrisModal(false);
       clearCart();
     } catch {
-      setError("Tidak bisa terhubung ke backend checkout.");
+      setError(t("error_backend"));
     } finally {
       setIsSubmitting(false);
     }
@@ -296,10 +299,10 @@ export default function CheckoutContent({
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs uppercase tracking-[0.28em] text-sand/55">
-                  QRIS Payment
+                  {t("qris_payment")}
                 </p>
                 <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-cream">
-                  Scan to pay
+                  {t("scan_to_pay")}
                 </h3>
               </div>
               <button
@@ -328,7 +331,7 @@ export default function CheckoutContent({
                   <p className="text-xs uppercase tracking-[0.24em] text-[#7f6148]">
                     Faste Coffee
                   </p>
-                  <p className="mt-1 text-lg font-semibold">Demo QRIS</p>
+                  <p className="mt-1 text-lg font-semibold">{t("qris_payment")}</p>
                 </div>
                 <div className="rounded-full border border-[#d3c2b4] px-3 py-1 text-[0.65rem] uppercase tracking-[0.2em] text-[#7f6148]">
                   Amount
@@ -630,7 +633,7 @@ export default function CheckoutContent({
               <div className="mt-5 flex items-end justify-between gap-3">
                 <div>
                   <p className="text-xs uppercase tracking-[0.22em] text-[#7f6148]">
-                    Total pembayaran
+                    {t("total_payment")}
                   </p>
                   <p className="mt-1 text-2xl font-semibold">
                     {formatRupiah(total)}
@@ -638,16 +641,15 @@ export default function CheckoutContent({
                 </div>
                 <div className="rounded-[1rem] border border-[#d3c2b4] px-3 py-2 text-right">
                   <p className="text-[0.65rem] uppercase tracking-[0.18em] text-[#7f6148]">
-                    Status
+                    {t("status_saat_ini")}
                   </p>
-                  <p className="mt-1 text-sm font-medium">Menunggu scan</p>
+                  <p className="mt-1 text-sm font-medium">{t("waiting_scan")}</p>
                 </div>
               </div>
             </div>
 
             <p className="mt-4 text-sm leading-6 text-sand/70">
-              Popup ini bisa dipakai untuk simulasi QRIS. Saat merchant QR resmi
-              sudah ada, kita tinggal ganti visual QR di sini.
+              {t("qris_simulation")}
             </p>
 
             <button
@@ -655,7 +657,7 @@ export default function CheckoutContent({
               onClick={() => setShowQrisModal(false)}
               className="mt-6 w-full rounded-full border border-copper/40 bg-copper px-5 py-3 text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d]"
             >
-              Tutup QRIS
+              {t("close")}
             </button>
           </div>
         </div>
@@ -664,14 +666,12 @@ export default function CheckoutContent({
       <div className="page-shell relative">
         <header className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <p className="section-label">Checkout</p>
+            <p className="section-label">{t("checkout")}</p>
             <h1 className="text-balance text-[clamp(2.8rem,7vw,5.6rem)] font-semibold leading-[0.92] tracking-[-0.06em] text-cream">
-              Finalize your order with a cleaner coffee counter flow.
+              {t("finalize_order")}
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-sand/72">
-              Review your drinks, adjust quantities, and confirm the order.
-              Riwayat pembelian dari checkout ini juga akan masuk ke admin
-              panel.
+              {t("review_drinks")}
             </p>
           </div>
 
@@ -680,13 +680,13 @@ export default function CheckoutContent({
               href="/#menu"
               className="rounded-full border border-white/10 px-5 py-3 text-xs uppercase tracking-[0.24em] text-sand transition hover:border-copper/50 hover:text-white"
             >
-              Back to Menu
+              {t("back_to_menu")}
             </Link>
             <Link
               href="/"
               className="rounded-full border border-copper/30 bg-[rgba(212,153,95,0.12)] px-5 py-3 text-xs uppercase tracking-[0.24em] text-copper transition hover:border-copper/60 hover:bg-copper hover:text-[#1a0f09]"
             >
-              Home
+              {t("home")}
             </Link>
           </div>
         </header>
@@ -694,22 +694,22 @@ export default function CheckoutContent({
         {success && !items.length ? (
           <section className="glass-panel mx-auto max-w-3xl rounded-[2rem] border border-white/10 p-8 text-center md:p-10">
             <p className="text-xs uppercase tracking-[0.32em] text-sand/60">
-              Order Created
+              {t("order_created")}
             </p>
             <h2 className="mt-4 text-[clamp(2rem,5vw,3.6rem)] font-semibold tracking-[-0.05em] text-cream">
-              Pesanan berhasil masuk.
+              {t("pesanan_berhasil")}
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-sand/72">
               {success}
-              {orderNumber ? ` Nomor order: ${orderNumber}.` : ""}
+              {orderNumber ? ` ${t("nomor_order")}: ${orderNumber}.` : ""}
             </p>
             <div className="mt-8 text-left">
               <div className="mb-4 rounded-[1.4rem] border border-copper/25 bg-[rgba(212,153,95,0.08)] px-5 py-4">
                 <p className="text-xs uppercase tracking-[0.24em] text-sand/58">
-                  Status Saat Ini
+                  {t("status_saat_ini")}
                 </p>
                 <p className="mt-2 text-lg font-semibold text-copper">
-                  {getOrderStatusLabel(submittedOrderStatus)}
+                  {getOrderStatusLabel(submittedOrderStatus, t)}
                 </p>
               </div>
               <OrderProgress status={submittedOrderStatus} />
@@ -718,20 +718,20 @@ export default function CheckoutContent({
               href="/#menu"
               className="mt-8 inline-flex rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d]"
             >
-              Order Again
+              {t("pesan_lagi")}
             </Link>
           </section>
         ) : showRestoredOrder && !items.length && restoredDisplayOrder ? (
           /* Tampilkan pesanan yang di-restore (dari localStorage) */
           <section className="glass-panel mx-auto max-w-3xl rounded-[2rem] border border-white/10 p-8 text-center md:p-10">
             <p className="text-xs uppercase tracking-[0.32em] text-sand/60">
-              Pesanan Saya
+              {t("my_order")}
             </p>
             <h2 className="mt-4 text-[clamp(2rem,5vw,3.6rem)] font-semibold tracking-[-0.05em] text-cream">
-              Lihat pesananmu yang lalu
+              {t("view_past_order")}
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-sand/72">
-              Kamu punya pesanan sebelumnya dengan nomor{" "}
+              {t("have_previous_order")}{" "}
               <span className="font-mono text-copper">
                 {restoredDisplayOrder.order_number}
               </span>
@@ -739,10 +739,10 @@ export default function CheckoutContent({
             <div className="mt-8 text-left">
               <div className="mb-4 rounded-[1.4rem] border border-copper/25 bg-[rgba(212,153,95,0.08)] px-5 py-4">
                 <p className="text-xs uppercase tracking-[0.24em] text-sand/58">
-                  Status Saat Ini
+                  {t("status_saat_ini")}
                 </p>
                 <p className="mt-2 text-lg font-semibold text-copper">
-                  {getOrderStatusLabel(restoredDisplayOrder.status)}
+                  {getOrderStatusLabel(restoredDisplayOrder.status, t)}
                 </p>
               </div>
               <OrderProgress status={restoredDisplayOrder.status} />
@@ -752,20 +752,20 @@ export default function CheckoutContent({
                 onClick={handleDismissRestoredOrder}
                 className="mt-4 inline-flex rounded-full border border-white/10 px-5 py-3 text-sm font-medium uppercase tracking-[0.22em] text-sand transition hover:border-copper/30 hover:text-white"
               >
-                Buat Pesanan Baru
+                {t("buat_pesanan_baru")}
               </button>
               <Link
                 href="/#menu"
                 className="mt-4 inline-flex rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d]"
               >
-                Pesan Lagi
+                {t("pesan_lagi")}
               </Link>
             </div>
           </section>
         ) : !items.length ? (
           <section className="glass-panel mx-auto max-w-3xl rounded-[2rem] border border-white/10 p-8 text-center md:p-10">
             <p className="text-xs uppercase tracking-[0.32em] text-sand/60">
-              Cart Empty
+              {t("empty_cart")}
             </p>
             <h2 className="mt-4 text-[clamp(2rem,5vw,3.6rem)] font-semibold tracking-[-0.05em] text-cream">
               Your checkout page is ready, but there is no order yet.
@@ -778,7 +778,7 @@ export default function CheckoutContent({
               href="/#menu"
               className="mt-8 inline-flex rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d]"
             >
-              Explore Menu
+              {t("explore_menu")}
             </Link>
           </section>
         ) : (
@@ -788,14 +788,14 @@ export default function CheckoutContent({
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                   <div>
                     <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
-                      Order Items
+                      {t("order_items")}
                     </p>
                     <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-cream">
-                      {String(itemCount).padStart(2, "0")} cups in your order
+                      {String(itemCount).padStart(2, "0")} {t("cups_in_order")}
                     </h2>
                   </div>
                   <p className="max-w-sm text-sm leading-6 text-sand/70">
-                    Adjust quantity here before confirming the purchase.
+                    {t("adjust_quantity")}
                   </p>
                 </div>
 
@@ -831,7 +831,7 @@ export default function CheckoutContent({
 
                             <div className="text-left sm:text-right">
                               <p className="text-xs uppercase tracking-[0.22em] text-sand/58">
-                                Line Total
+                                {t("line_total")}
                               </p>
                               <p className="mt-2 text-lg font-semibold text-copper">
                                 {formatRupiah(lineTotal(item))}
@@ -862,14 +862,14 @@ export default function CheckoutContent({
 
                             <div className="flex items-center gap-4">
                               <p className="text-sm text-sand/70">
-                                {item.price} per cup
+                                {item.price} {t("per_cup")}
                               </p>
                               <button
                                 type="button"
                                 onClick={() => removeItem(item.name)}
                                 className="text-xs uppercase tracking-[0.24em] text-sand/64 transition hover:text-white"
                               >
-                                Remove
+                                {t("remove")}
                               </button>
                             </div>
                           </div>
@@ -884,55 +884,55 @@ export default function CheckoutContent({
             <div className="space-y-5">
               <article className="glass-panel rounded-[2rem] border border-white/10 p-6 md:p-7">
                 <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
-                  Customer Details
+                  {t("customer_details")}
                 </p>
                 <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-cream">
-                  Checkout form
+                  {t("checkout_form")}
                 </h2>
 
                 <div className="mt-7 space-y-4">
                   <label className="block">
                     <span className="mb-2 block text-xs uppercase tracking-[0.24em] text-sand/62">
-                      Full Name
+                      {t("full_name")}
                     </span>
                     <input
                       type="text"
                       value={customerName}
                       onChange={(event) => setCustomerName(event.target.value)}
-                      placeholder="Nama pemesan"
+                      placeholder={t("name_placeholder")}
                       className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition placeholder:text-sand/35 focus:border-copper/50 focus:bg-white/[0.06]"
                     />
                   </label>
 
                   <label className="block">
                     <span className="mb-2 block text-xs uppercase tracking-[0.24em] text-sand/62">
-                      Phone Number
+                      {t("phone_number")}
                     </span>
                     <input
                       type="tel"
                       value={customerPhone}
                       onChange={(event) => setCustomerPhone(event.target.value)}
-                      placeholder="08xxxxxxxxxx"
+                      placeholder={t("phone_placeholder")}
                       className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition placeholder:text-sand/35 focus:border-copper/50 focus:bg-white/[0.06]"
                     />
                   </label>
 
                   <label className="block">
                     <span className="mb-2 block text-xs uppercase tracking-[0.24em] text-sand/62">
-                      Pickup Note
+                      {t("pickup_note")}
                     </span>
                     <textarea
                       rows={4}
                       value={pickupNote}
                       onChange={(event) => setPickupNote(event.target.value)}
-                      placeholder="Contoh: tanpa gula, pickup jam 14:00"
+                      placeholder={t("pickup_placeholder")}
                       className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition placeholder:text-sand/35 focus:border-copper/50 focus:bg-white/[0.06]"
                     />
                   </label>
 
                   <div>
                     <span className="mb-3 block text-xs uppercase tracking-[0.24em] text-sand/62">
-                      Payment Method
+                      {t("payment_method")}
                     </span>
                     <div className="grid gap-3 sm:grid-cols-2">
                       {paymentMethods.map((method) => {
@@ -1063,7 +1063,7 @@ export default function CheckoutContent({
 
                     <label className="mt-4 block">
                       <span className="mb-2 block text-xs uppercase tracking-[0.24em] text-sand/62">
-                        Bukti Pembayaran
+                        {t("payment_proof_label")}
                       </span>
                       <input
                         type="file"
@@ -1126,10 +1126,10 @@ export default function CheckoutContent({
                 <div className="flex items-end justify-between gap-4">
                   <div>
                     <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
-                      Payment Summary
+                      {t("payment_summary")}
                     </p>
                     <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-cream">
-                      Order recap
+                      {t("order_recap")}
                     </h2>
                   </div>
                   <div className="rounded-full border border-white/10 px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-sand/78">
@@ -1139,19 +1139,19 @@ export default function CheckoutContent({
 
                 <div className="mt-7 space-y-4">
                   <div className="flex items-center justify-between text-sm text-sand/70">
-                    <span>Subtotal</span>
+                    <span>{t("subtotal")}</span>
                     <span>{formatRupiah(subtotal)}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm text-sand/70">
-                    <span>Service Fee</span>
+                    <span>{t("service_fee")}</span>
                     <span>{formatRupiah(serviceFee)}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm text-sand/70">
-                    <span>Payment Method</span>
+                    <span>{t("payment_method")}</span>
                     <span>{getPaymentMethodLabel(paymentMethod)}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm text-sand/70">
-                    <span>Payment Proof</span>
+                    <span>{t("payment_proof")}</span>
                     <span>
                       {paymentProofFile ? paymentProofFile.name : "-"}
                     </span>
@@ -1159,7 +1159,7 @@ export default function CheckoutContent({
                   <div className="h-px bg-white/10" />
                   <div className="flex items-center justify-between">
                     <span className="text-xs uppercase tracking-[0.24em] text-sand/65">
-                      Total
+                      {t("total")}
                     </span>
                     <span className="text-2xl font-semibold tracking-[-0.04em] text-cream">
                       {formatRupiah(total)}
@@ -1186,12 +1186,11 @@ export default function CheckoutContent({
                   disabled={isSubmitting}
                   className="mt-8 w-full rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d] disabled:cursor-not-allowed disabled:opacity-70"
                 >
-                  {isSubmitting ? "Submitting..." : "Place Order"}
+                  {isSubmitting ? t("submitting") : t("place_order")}
                 </button>
 
                 <p className="mt-4 text-sm leading-6 text-sand/62">
-                  Setelah checkout berhasil, order ini akan muncul di halaman
-                  history pembelian pada admin panel.
+                  {t("checkout_post_info")}
                 </p>
               </article>
             </div>

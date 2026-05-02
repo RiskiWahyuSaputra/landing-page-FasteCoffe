@@ -4,6 +4,7 @@ import { startTransition, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import OrderProgress from "@/components/orders/OrderProgress";
+import { useLocale } from "@/components/LocaleProvider";
 import {
   ORDER_STATUS_STEPS,
   getOrderStatusDescription,
@@ -19,6 +20,7 @@ export default function AdminOrderStatusManager({
   orderId: number;
 }) {
   const router = useRouter();
+  const { t } = useLocale();
   const [status, setStatus] = useState<OrderStatus>(initialStatus);
   const [error, setError] = useState("");
   const [loadingStatus, setLoadingStatus] = useState<OrderStatus | null>(null);
@@ -66,10 +68,10 @@ export default function AdminOrderStatusManager({
             Order Progress
           </p>
           <h4 className="mt-2 text-lg font-semibold text-cream">
-            {getOrderStatusLabel(status)}
+            {getOrderStatusLabel(status, t)}
           </h4>
           <p className="mt-1 text-sm leading-6 text-sand/65">
-            {getOrderStatusDescription(status)}
+            {getOrderStatusDescription(status, t)}
           </p>
         </div>
       </div>
@@ -95,7 +97,7 @@ export default function AdminOrderStatusManager({
                   : "border-white/10 bg-white/[0.03] text-sand hover:border-copper/25 hover:text-white"
               } disabled:cursor-not-allowed disabled:opacity-70`}
             >
-              {isLoading ? "Updating..." : step.label}
+              {isLoading ? "Updating..." : t(step.labelKey)}
             </button>
           );
         })}

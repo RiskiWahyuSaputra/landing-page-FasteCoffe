@@ -3,8 +3,11 @@
 import { motion } from "framer-motion";
 
 import MagneticButton from "@/components/MagneticButton";
+import { useLocale } from "@/components/LocaleProvider";
 
 export default function CTA() {
+  const { t } = useLocale();
+
   return (
     <section id="contact" className="relative overflow-hidden px-6 py-24 md:px-10 md:py-32">
       <div className="page-shell">
@@ -19,18 +22,17 @@ export default function CTA() {
           <div className="absolute -right-10 top-0 h-72 w-72 rounded-full bg-[#6b3c20]/20 blur-3xl" />
 
           <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center text-center">
-            <p className="section-label !justify-center !text-center">Next Cup</p>
+            <p className="section-label !justify-center !text-center">{t("next_cup")}</p>
             <h2 className="text-balance text-[clamp(2.6rem,6vw,5rem)] font-semibold leading-[0.94] tracking-[-0.05em] text-cream">
-              Ready for your next coffee?
+              {t("cta_heading")}
             </h2>
             <p className="mt-5 max-w-xl text-base leading-7 text-sand/76">
-              Experience Faste Coffee today and turn your everyday run into something
-              richer, warmer, and more cinematic.
+              {t("cta_description")}
             </p>
 
             <div className="mt-10">
               <MagneticButton href="#top" className="bg-white/10">
-                Order Now
+                {t("cta_button")}
               </MagneticButton>
             </div>
           </div>

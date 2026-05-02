@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import MagneticButton from "@/components/MagneticButton";
 import { useCart } from "@/components/CartProvider";
+import { useLocale } from "@/components/LocaleProvider";
 import { formatRupiah } from "@/lib/currency";
 
 export default function CartDrawer() {
@@ -17,6 +18,7 @@ export default function CartDrawer() {
     decreaseItem,
     removeItem
   } = useCart();
+  const { t } = useLocale();
 
   return (
     <AnimatePresence>
@@ -41,9 +43,9 @@ export default function CartDrawer() {
           >
             <div className="flex items-center justify-between border-b border-white/10 px-6 py-5 md:px-8">
               <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-sand/68">Cart</p>
+                <p className="text-xs uppercase tracking-[0.3em] text-sand/68">{t("cart")}</p>
                 <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-cream">
-                  Your Coffee Order
+                  {t("your_cart")}
                 </h3>
               </div>
 
@@ -52,16 +54,16 @@ export default function CartDrawer() {
                 onClick={closeCart}
                 className="rounded-full border border-white/10 px-4 py-2 text-xs uppercase tracking-[0.24em] text-sand transition hover:border-copper/50 hover:text-white"
               >
-                Close
+                {t("close")}
               </button>
             </div>
 
             <div className="flex-1 overflow-y-auto px-6 py-6 md:px-8">
               {items.length === 0 ? (
                 <div className="glass-panel rounded-[2rem] border border-white/10 p-8 text-center">
-                  <p className="text-lg font-medium text-cream">Cart is still empty.</p>
+                  <p className="text-lg font-medium text-cream">{t("empty_cart")}</p>
                   <p className="mt-3 text-sm leading-6 text-sand/72">
-                    Add your favorite coffee from the menu and it will appear here.
+                    {t("add_items")}
                   </p>
                 </div>
               ) : (
@@ -125,7 +127,7 @@ export default function CartDrawer() {
                               onClick={() => removeItem(item.name)}
                               className="text-xs uppercase tracking-[0.24em] text-sand/68 transition hover:text-white"
                             >
-                              Remove
+                              {t("remove")}
                             </button>
                           </div>
                         </div>
@@ -138,7 +140,7 @@ export default function CartDrawer() {
 
             <div className="border-t border-white/10 px-6 py-6 md:px-8">
               <div className="mb-5 flex items-center justify-between text-sm uppercase tracking-[0.24em] text-sand/68">
-                <span>Subtotal</span>
+                <span>{t("subtotal")}</span>
                 <span className="text-lg font-semibold tracking-[-0.03em] text-cream">
                   {formatRupiah(subtotal)}
                 </span>
@@ -150,14 +152,14 @@ export default function CartDrawer() {
                   onClick={closeCart}
                   className="w-full justify-center"
                 >
-                  Continue Shopping
+                  {t("back_to_menu")}
                 </MagneticButton>
                 <Link
                   href="/checkout"
                   onClick={closeCart}
                   className="w-full rounded-full border border-copper/40 bg-copper px-6 py-3 text-center text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d]"
                 >
-                  Checkout
+                  {t("checkout")}
                 </Link>
               </div>
             </div>

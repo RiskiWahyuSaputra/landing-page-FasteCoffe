@@ -8,5 +8,6 @@ export type MenuItemPayload = {
   image_url: string | null;
   is_active: boolean;
   sort_order: number;
+  stock: number;
   created_at: string | null;
 };

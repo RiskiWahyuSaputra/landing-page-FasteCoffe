@@ -1,3 +1,4 @@
+import { useLocale } from "@/components/LocaleProvider";
 import { ORDER_STATUS_STEPS, getOrderStatusIndex, type OrderStatus } from "@/lib/order-status";
 
 export default function OrderProgress({
@@ -7,6 +8,7 @@ export default function OrderProgress({
   status: OrderStatus;
   compact?: boolean;
 }) {
+  const { t } = useLocale();
   const activeIndex = getOrderStatusIndex(status);
 
   return (
@@ -40,10 +42,10 @@ export default function OrderProgress({
               </span>
               <div className="min-w-0">
                 <p className={`text-sm font-semibold ${isCurrent ? "text-copper" : "text-cream"}`}>
-                  {step.label}
+                  {t(step.labelKey)}
                 </p>
                 <p className="mt-1 text-xs leading-5 text-sand/62">
-                  {step.description}
+                  {t(step.descriptionKey)}
                 </p>
               </div>
             </div>

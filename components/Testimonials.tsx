@@ -2,29 +2,29 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-
-const testimonials = [
-  {
-    quote:
-      "Faste Coffee feels like someone designed my morning for me. Quick service, beautiful cups, and the flavor always lands.",
-    author: "Nadia Putri",
-    role: "Creative Strategist"
-  },
-  {
-    quote:
-      "The espresso is clean, the cappuccino is balanced, and the whole brand experience feels premium without trying too hard.",
-    author: "Raka Aditya",
-    role: "Product Designer"
-  },
-  {
-    quote:
-      "It has the speed of a grab-and-go cafe, but the detail of a specialty bar. That combination is why I keep coming back.",
-    author: "Maya Santoso",
-    role: "Daily Customer"
-  }
-];
+import { useLocale } from "@/components/LocaleProvider";
 
 export default function Testimonials() {
+  const { t } = useLocale();
+
+  const testimonials = [
+    {
+      quote: t("testi_quote_1"),
+      author: "Nadia Putri",
+      role: t("testi_role_1"),
+    },
+    {
+      quote: t("testi_quote_2"),
+      author: "Raka Aditya",
+      role: t("testi_role_2"),
+    },
+    {
+      quote: t("testi_quote_3"),
+      author: "Maya Santoso",
+      role: t("testi_role_3"),
+    },
+  ];
+
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function Testimonials() {
     return () => {
       window.clearInterval(interval);
     };
-  }, []);
+  }, [testimonials.length]);
 
   const active = testimonials[activeIndex];
 
@@ -45,9 +45,9 @@ export default function Testimonials() {
 
       <div className="page-shell relative grid gap-10 lg:grid-cols-[0.38fr_0.62fr] lg:items-end">
         <div className="max-w-sm">
-          <p className="section-label">Testimonials</p>
+          <p className="section-label">{t("testimonials")}</p>
           <h2 className="text-balance text-[clamp(2.3rem,5vw,4rem)] font-semibold leading-[0.96] tracking-[-0.05em] text-cream">
-            What the ritual feels like when it lands exactly right.
+            {t("testimonials_heading")}
           </h2>
 
           <div className="mt-12 flex gap-2">
@@ -59,7 +59,7 @@ export default function Testimonials() {
                 className={`h-1.5 rounded-full transition-all duration-300 ${
                   index === activeIndex ? "w-14 bg-copper" : "w-8 bg-white/12"
                 }`}
-                aria-label={`Show testimonial ${index + 1}`}
+                aria-label={`${t("show_testimonial")} ${index + 1}`}
               />
             ))}
           </div>

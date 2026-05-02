@@ -1,4 +1,10 @@
+"use client";
+
+import { useLocale } from "@/components/LocaleProvider";
+
 export default function Footer() {
+  const { t } = useLocale();
+
   return (
     <footer className="border-t border-white/10 px-6 py-10 md:px-10">
       <div className="page-shell flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
@@ -7,8 +13,7 @@ export default function Footer() {
             Faste Coffee
           </p>
           <p className="mt-3 max-w-md text-sm leading-6 text-sand/68">
-            Brewed for your daily energy. Crafted for modern routines, premium taste,
-            and a pace that still feels human.
+            {t("footer_description")}
           </p>
         </div>
 
@@ -22,7 +27,7 @@ export default function Footer() {
           <a href="https://x.com" target="_blank" rel="noreferrer">
             X
           </a>
-          <span>Copyright 2026 Faste Coffee</span>
+          <span className="md:ml-4">{t("copyright")}</span>
         </div>
       </div>
     </footer>

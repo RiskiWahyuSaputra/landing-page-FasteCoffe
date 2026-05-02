@@ -306,3 +306,64 @@ export async function getOrderById(id: string) {
     placed_at: response.placed_at,
   };
 }
+
+export function updateAdminMenuItemStock(
+  token: string,
+  id: number,
+  stock: number,
+) {
+  return callLaravel<{ item: MenuItemPayload; message: string }>(
+    `/admin/menu-items/${id}/stock`,
+    {
+      method: "POST",
+      token,
+      body: { stock },
+    },
+  );
+}
+
+/**
+ * Updates a product's image using a multipart/form-data request.
+ * Treated as a PUT request by Laravel via _method spoofing.
+ */
+export async function updateProductImage(
+  token: string,
+  id: number,
+  imageFile: File,
+) {
+  const formData = new FormData();
+  formData.append("image", imageFile);
+  formData.append("_method", "PUT");
+
+  const response = await fetch(`${LARAVEL_API_URL}/admin/products/${id}/image`, {
+    method: "POST",
+    headers: getMultipartHeaders(token),
+    body: formData,
+    cache: "no-store",
+  });
+
+  const payload = (await response.json().catch(() => null)) as
+    | LaravelErrorPayload
+    | { message: string; image_url: string }
+    | null;
+
+  if (!response.ok) {
+    const message =
+      payload &&
+      typeof payload === "object" &&
+      "errors" in payload &&
+      payload.errors &&
+      Object.values(payload.errors)[0]?.[0]
+        ? Object.values(payload.errors)[0][0]
+        : payload &&
+            typeof payload === "object" &&
+            "message" in payload &&
+            typeof payload.message === "string"
+          ? payload.message
+          : "Gagal memperbarui gambar produk.";
+
+    throw new LaravelApiError(message, response.status);
+  }
+
+  return payload as { message: string; image_url: string };
+}

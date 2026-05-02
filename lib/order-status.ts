@@ -7,24 +7,24 @@ export const ORDER_STATUSES = [
 export type OrderStatus = (typeof ORDER_STATUSES)[number];
 
 export const ORDER_STATUS_STEPS: Array<{
-  description: string;
-  label: string;
+  descriptionKey: string;
+  labelKey: string;
   value: OrderStatus;
 }> = [
   {
     value: "received",
-    label: "Pesanan Diterima",
-    description: "Order sudah masuk ke sistem dan menunggu diproses.",
+    labelKey: "order_received",
+    descriptionKey: "order_received_desc",
   },
   {
     value: "brewing",
-    label: "Pesanan Sedang Dibuat",
-    description: "Barista sedang menyiapkan minuman pesananmu.",
+    labelKey: "order_brewing",
+    descriptionKey: "order_brewing_desc",
   },
   {
     value: "ready_for_pickup",
-    label: "Pesanan Siap Diambil",
-    description: "Pesanan selesai dan sudah siap diambil di counter.",
+    labelKey: "order_ready_for_pickup",
+    descriptionKey: "order_ready_for_pickup_desc",
   },
 ];
 
@@ -32,14 +32,20 @@ export function getOrderStatusIndex(status: OrderStatus) {
   return ORDER_STATUS_STEPS.findIndex((step) => step.value === status);
 }
 
-export function getOrderStatusLabel(status: OrderStatus) {
-  return (
-    ORDER_STATUS_STEPS.find((step) => step.value === status)?.label ?? status
-  );
+export function getOrderStatusLabel(
+  status: OrderStatus,
+  t?: (key: string) => string,
+) {
+  const step = ORDER_STATUS_STEPS.find((s) => s.value === status);
+  if (!step) return status;
+  return t ? t(step.labelKey) : step.labelKey;
 }
 
-export function getOrderStatusDescription(status: OrderStatus) {
-  return (
-    ORDER_STATUS_STEPS.find((step) => step.value === status)?.description ?? ""
-  );
+export function getOrderStatusDescription(
+  status: OrderStatus,
+  t?: (key: string) => string,
+) {
+  const step = ORDER_STATUS_STEPS.find((s) => s.value === status);
+  if (!step) return "";
+  return t ? t(step.descriptionKey) : step.descriptionKey;
 }
