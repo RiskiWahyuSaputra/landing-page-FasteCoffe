@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class OrderStatusUpdated implements ShouldBroadcastNow
+class OrderCreated implements ShouldBroadcastNow
 {
     use Dispatchable;
     use InteractsWithSockets;
@@ -24,14 +24,13 @@ class OrderStatusUpdated implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('orders.'.$this->order->id),
             new Channel('admin.orders'),
         ];
     }
 
     public function broadcastAs(): string
     {
-        return 'order.status.updated';
+        return 'order.created';
     }
 
     /**

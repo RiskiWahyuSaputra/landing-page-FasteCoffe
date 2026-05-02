@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\OrderCreated;
 use App\Events\OrderStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\MenuItem;
@@ -86,6 +87,12 @@ class OrderController extends Controller
             return $order->load('items');
         });
 
+        try {
+            broadcast(new OrderCreated($order->fresh('items')));
+        } catch (\Throwable $exception) {
+            report($exception);
+        }
+
         return response()->json([
             'message' => 'Pesanan berhasil dibuat.',
             'order' => $this->serializeOrder($order),
@@ -103,7 +110,7 @@ class OrderController extends Controller
         ])->save();
 
         try {
-            broadcast(new OrderStatusUpdated($order->fresh()));
+            broadcast(new OrderStatusUpdated($order->fresh('items')));
         } catch (\Throwable $exception) {
             report($exception);
         }
@@ -140,7 +147,9 @@ public function destroyPaymentProof(Order $order): JsonResponse
         $filter = $request->query('filter', 'today');
         $ordersQuery = Order::query()->with('items')->latest('placed_at');
 
-        if ($filter === 'today') {
+        if ($filter === 'all') {
+            // Show every order without date restriction.
+        } elseif ($filter === 'today') {
             $ordersQuery->whereDate('placed_at', today());
         } elseif ($filter === 'last_month') {
             $start = now()->subMonthNoOverflow()->startOfMonth();

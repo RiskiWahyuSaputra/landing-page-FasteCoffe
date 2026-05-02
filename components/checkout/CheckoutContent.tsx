@@ -785,11 +785,10 @@ export default function CheckoutContent({
               {t("empty_cart")}
             </p>
             <h2 className="mt-4 text-[clamp(2rem,5vw,3.6rem)] font-semibold tracking-[-0.05em] text-cream">
-              Your checkout page is ready, but there is no order yet.
+              {t("ready_no_order")}
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-sand/72">
-              Add a few drinks from the menu first, then return here to see the
-              order summary and customer form.
+              {t("add_first")}
             </p>
             <Link
               href="/#menu"

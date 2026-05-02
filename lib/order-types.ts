@@ -1,6 +1,6 @@
 import type { OrderStatus } from "@/lib/order-status";
 
-export type OrderHistoryFilter = "last_month" | "last_year" | "today";
+export type OrderHistoryFilter = "all" | "last_month" | "last_year" | "today";
 
 export type OrderHistoryItem = {
   id: number;
