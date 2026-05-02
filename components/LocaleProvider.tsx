@@ -205,6 +205,34 @@ const translations: { id: TranslationDict; en: TranslationDict } = {
     status_saat_ini: "Status Saat Ini",
     buat_pesanan_baru: "Buat Pesanan Baru",
     pesan_lagi: "Pesan Lagi",
+    thank_you_badge: "Terima Kasih Sudah Memesan",
+    thank_you_title: "Pesananmu siap diambil. Terima kasih sudah memesan di Faste Coffee.",
+    thank_you_desc:
+      "Sebelum menutup halaman ini, beri rating singkat untuk membantu kami menjaga rasa, kecepatan, dan pengalaman pickup tetap konsisten.",
+    thank_you_order_label: "Nomor Order",
+    thank_you_rating_prompt: "Bagaimana pengalamanmu hari ini?",
+    thank_you_rating_desc:
+      "Pilih rating yang paling menggambarkan kopi, pelayanan, dan proses pickup yang baru saja kamu rasakan.",
+    thank_you_note_label: "Catatan Singkat",
+    thank_you_note_placeholder:
+      "Ceritakan kesanmu tentang rasa kopi, pelayanan, atau proses pengambilan pesanan.",
+    thank_you_submit: "Kirim Rating",
+    thank_you_skip: "Nanti Saja",
+    thank_you_home: "Kembali ke Beranda",
+    thank_you_order_again: "Pesan Lagi",
+    thank_you_saved: "Ratingmu sudah kami terima.",
+    thank_you_saved_desc:
+      "Masukanmu membantu kami menjaga kualitas dari cangkir pertama sampai pickup terakhir.",
+    rating_1_label: "Kurang",
+    rating_1_desc: "Perlu banyak perbaikan",
+    rating_2_label: "Cukup",
+    rating_2_desc: "Masih bisa ditingkatkan",
+    rating_3_label: "Baik",
+    rating_3_desc: "Sudah oke dan cukup memuaskan",
+    rating_4_label: "Sangat Baik",
+    rating_4_desc: "Rapi, cepat, dan enak",
+    rating_5_label: "Istimewa",
+    rating_5_desc: "Bikin ingin pesan lagi",
 
     // Footer
     copyright: "Hak Cipta 2026 Faste Coffee",
@@ -406,6 +434,34 @@ const translations: { id: TranslationDict; en: TranslationDict } = {
     status_saat_ini: "Current Status",
     buat_pesanan_baru: "Make New Order",
     pesan_lagi: "Order Again",
+    thank_you_badge: "Thanks For Ordering",
+    thank_you_title: "Your order is ready for pickup. Thank you for ordering from Faste Coffee.",
+    thank_you_desc:
+      "Before you close this page, leave a quick rating to help us keep the taste, speed, and pickup experience consistent.",
+    thank_you_order_label: "Order Number",
+    thank_you_rating_prompt: "How was your experience today?",
+    thank_you_rating_desc:
+      "Choose the rating that best reflects the coffee, service, and pickup flow you just experienced.",
+    thank_you_note_label: "Short Note",
+    thank_you_note_placeholder:
+      "Tell us what you thought about the coffee, service, or pickup process.",
+    thank_you_submit: "Send Rating",
+    thank_you_skip: "Maybe Later",
+    thank_you_home: "Back to Home",
+    thank_you_order_again: "Order Again",
+    thank_you_saved: "Your rating has been received.",
+    thank_you_saved_desc:
+      "Your feedback helps us protect the quality from the first cup to the final pickup.",
+    rating_1_label: "Poor",
+    rating_1_desc: "Needs major improvement",
+    rating_2_label: "Fair",
+    rating_2_desc: "Could be better",
+    rating_3_label: "Good",
+    rating_3_desc: "Solid and satisfying",
+    rating_4_label: "Very Good",
+    rating_4_desc: "Fast, neat, and tasty",
+    rating_5_label: "Excellent",
+    rating_5_desc: "Makes me want to order again",
 
     // Footer
     copyright: "Copyright 2026 Faste Coffee",

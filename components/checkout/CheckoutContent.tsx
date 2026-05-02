@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import {
@@ -32,6 +33,7 @@ export default function CheckoutContent({
   restoredOrder,
   onOrderViewed,
 }: CheckoutContentProps) {
+  const router = useRouter();
   const {
     items,
     subtotal,
@@ -98,7 +100,37 @@ export default function CheckoutContent({
   const [restoredDisplayOrder, setRestoredDisplayOrder] =
     useState<SavedOrder | null>(null);
 
+  const redirectToThankYou = (order?: {
+    id?: number | null;
+    order_number?: string | null;
+  }) => {
+    if (typeof order?.id === "number") {
+      removeSavedOrder(order.id);
+    }
+
+    setSubmittedOrderId(null);
+    setOrderNumber("");
+    setSuccess("");
+    setRestoredDisplayOrder(null);
+    setShowRestoredOrder(false);
+    onOrderViewed?.();
+
+    const params = new URLSearchParams();
+    if (order?.order_number) {
+      params.set("order", order.order_number);
+    }
+
+    router.replace(
+      params.size ? `/thank-you?${params.toString()}` : "/thank-you",
+    );
+  };
+
   useEffect(() => {
+    if (restoredOrder && shouldHideOrderFromCheckout(restoredOrder.status)) {
+      redirectToThankYou(restoredOrder);
+      return;
+    }
+
     if (restoredOrder && !shouldHideOrderFromCheckout(restoredOrder.status)) {
       setRestoredDisplayOrder(restoredOrder);
       setShowRestoredOrder(true);
@@ -120,10 +152,7 @@ export default function CheckoutContent({
           const data = (await res.json()) as { status?: OrderStatus };
           if (data.status && data.status !== restoredDisplayOrder.status) {
             if (shouldHideOrderFromCheckout(data.status)) {
-              removeSavedOrder(restoredDisplayOrder.id);
-              setRestoredDisplayOrder(null);
-              setShowRestoredOrder(false);
-              onOrderViewed?.();
+              redirectToThankYou(restoredDisplayOrder);
               return;
             }
 
@@ -289,10 +318,10 @@ export default function CheckoutContent({
     }
 
     if (shouldHideOrderFromCheckout(submittedOrderStatus)) {
-      removeSavedOrder(submittedOrderId);
-      setSubmittedOrderId(null);
-      setOrderNumber("");
-      setSuccess("");
+      redirectToThankYou({
+        id: submittedOrderId,
+        order_number: orderNumber,
+      });
       return;
     }
 
