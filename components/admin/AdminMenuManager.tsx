@@ -12,7 +12,7 @@ const accentOptions = [
   "from-[#dbc0a1] via-[#7b5638] to-[#120a07]",
   "from-[#8f5834] via-[#2a1810] to-[#120a07]",
   "from-[#efbc7e] via-[#87502b] to-[#170d08]",
-  "from-[#c06a3e] via-[#492616] to-[#120807]"
+  "from-[#c06a3e] via-[#492616] to-[#120807]",
 ];
 
 const MAX_IMAGE_SIZE_BYTES = 4 * 1024 * 1024;
@@ -22,11 +22,11 @@ const allowedMimeTypes = new Set([
   "image/bmp",
   "image/gif",
   "image/svg+xml",
-  "image/webp"
+  "image/webp",
 ]);
 
 export default function AdminMenuManager({
-  initialItems
+  initialItems,
 }: {
   initialItems: MenuItemPayload[];
 }) {
@@ -88,13 +88,14 @@ export default function AdminMenuManager({
           : "/api/admin/menu-items",
         {
           method: "POST",
-          body: formData
-        }
+          body: formData,
+        },
       );
 
-      const payload = (await response.json().catch(() => null)) as
-        | { item?: MenuItemPayload; message?: string }
-        | null;
+      const payload = (await response.json().catch(() => null)) as {
+        item?: MenuItemPayload;
+        message?: string;
+      } | null;
 
       if (!response.ok || !payload?.item) {
         setError(payload?.message ?? "Gagal menambahkan menu.");
@@ -105,13 +106,17 @@ export default function AdminMenuManager({
 
       setItems((current) =>
         (editingItem
-          ? current.map((item) => (item.id === createdItem.id ? createdItem : item))
+          ? current.map((item) =>
+              item.id === createdItem.id ? createdItem : item,
+            )
           : [...current, createdItem]
-        ).sort((left, right) => left.sort_order - right.sort_order)
+        ).sort((left, right) => left.sort_order - right.sort_order),
       );
       setSuccess(
         payload.message ??
-          (editingItem ? "Menu berhasil diperbarui." : "Menu berhasil ditambahkan.")
+          (editingItem
+            ? "Menu berhasil diperbarui."
+            : "Menu berhasil ditambahkan."),
       );
       resetForm();
       startTransition(() => router.refresh());
@@ -129,12 +134,12 @@ export default function AdminMenuManager({
 
     try {
       const response = await fetch(`/api/admin/menu-items/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
       });
 
-      const payload = (await response.json().catch(() => null)) as
-        | { message?: string }
-        | null;
+      const payload = (await response.json().catch(() => null)) as {
+        message?: string;
+      } | null;
 
       if (!response.ok) {
         setError(payload?.message ?? "Gagal menghapus menu.");
@@ -158,18 +163,16 @@ export default function AdminMenuManager({
 
   return (
     <section className="grid gap-5 xl:grid-cols-[0.9fr_1.1fr]">
-      <article className="glass-panel rounded-[2rem] border border-white/10 p-6">
+      <article className="glass-panel rounded-[2rem] border border-white/10 p-4 sm:p-6">
         <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
           {editingItem ? "Edit Menu" : "Add Menu"}
         </p>
-        <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-cream">
+        <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-cream sm:text-3xl">
           {formHeading}
         </h2>
-        <p className="mt-3 text-sm leading-6 text-sand/70">
-          {formDescription}
-        </p>
+        <p className="mt-3 text-sm leading-6 text-sand/70">{formDescription}</p>
 
-        <form className="mt-7 space-y-4" onSubmit={handleSubmit}>
+        <form className="mt-5 space-y-4 sm:mt-7" onSubmit={handleSubmit}>
           <label className="block">
             <span className="mb-2 block text-xs uppercase tracking-[0.24em] text-sand/62">
               Nama Menu
@@ -254,7 +257,7 @@ export default function AdminMenuManager({
                   setImageFile(null);
                   setImagePreview(editingItem?.image_url ?? "");
                   setError(
-                    "Format gambar tidak didukung. Gunakan JPG, JPEG, PNG, BMP, GIF, SVG, atau WEBP."
+                    "Format gambar tidak didukung. Gunakan JPG, JPEG, PNG, BMP, GIF, SVG, atau WEBP.",
                   );
                   event.currentTarget.value = "";
                   return;
@@ -328,13 +331,13 @@ export default function AdminMenuManager({
         </form>
       </article>
 
-      <article className="glass-panel rounded-[2rem] border border-white/10 p-6">
+      <article className="glass-panel rounded-[2rem] border border-white/10 p-4 sm:p-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
               Current Menu
             </p>
-            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-cream">
+            <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-cream sm:text-3xl">
               Landing page menu source
             </h2>
           </div>

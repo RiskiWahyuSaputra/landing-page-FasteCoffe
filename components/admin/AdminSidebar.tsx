@@ -14,40 +14,87 @@ const navigation = [
     label: "Overview",
     description: "Operational snapshot",
     icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <rect x="3" y="3" width="7" height="7" rx="1.5" />
         <rect x="14" y="3" width="7" height="7" rx="1.5" />
         <rect x="3" y="14" width="7" height="7" rx="1.5" />
         <rect x="14" y="14" width="7" height="7" rx="1.5" />
       </svg>
-    )
+    ),
   },
   {
     href: "/admin/menu",
     label: "Menu",
     description: "Add and manage drinks",
     icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
         <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
         <line x1="6" y1="1" x2="6" y2="4" />
         <line x1="10" y1="1" x2="10" y2="4" />
         <line x1="14" y1="1" x2="14" y2="4" />
       </svg>
-    )
+    ),
   },
   {
     href: "/admin/purchases",
     label: "Purchases",
     description: "Checkout history",
     icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
         <line x1="3" y1="6" x2="21" y2="6" />
         <path d="M16 10a4 4 0 01-8 0" />
       </svg>
-    )
-  }
+    ),
+  },
+  {
+    href: "/admin/reports",
+    label: "Reports",
+    description: "Financial reports",
+    icon: (
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <line x1="12" y1="1" x2="12" y2="23" />
+        <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+      </svg>
+    ),
+  },
 ];
 
 export default function AdminSidebar({ user }: { user: AdminUser }) {
@@ -64,12 +111,28 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
   return (
     <>
       {/* ── Desktop Sidebar ── */}
-      <aside className="glass-panel hidden w-[270px] shrink-0 flex-col rounded-[2rem] border border-white/10 p-5 shadow-halo lg:flex" style={{ height: "calc(100vh - 2rem)", position: "sticky", top: "1rem" }}>
+      <aside
+        className="glass-panel hidden w-[270px] shrink-0 flex-col rounded-[2rem] border border-white/10 p-5 shadow-halo lg:flex"
+        style={{
+          height: "calc(100vh - 2rem)",
+          position: "sticky",
+          top: "1rem",
+        }}
+      >
         {/* Brand */}
         <div className="rounded-[1.6rem] border border-white/10 bg-[linear-gradient(135deg,rgba(212,153,95,0.16),rgba(255,255,255,0.03))] p-5">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-[0.75rem] bg-copper/20">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d4995f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#d4995f"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
                 <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
                 <line x1="6" y1="1" x2="6" y2="4" />
@@ -78,15 +141,21 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
               </svg>
             </div>
             <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-sand/55">Admin Suite</p>
-              <h2 className="text-lg font-semibold tracking-[-0.04em] text-cream">Faste Coffee</h2>
+              <p className="text-xs uppercase tracking-[0.28em] text-sand/55">
+                Admin Suite
+              </p>
+              <h2 className="text-lg font-semibold tracking-[-0.04em] text-cream">
+                Faste Coffee
+              </h2>
             </div>
           </div>
         </div>
 
         {/* Navigation */}
         <nav className="mt-5 space-y-2">
-          <p className="mb-3 px-1 text-[0.65rem] uppercase tracking-[0.32em] text-sand/40">Navigation</p>
+          <p className="mb-3 px-1 text-[0.65rem] uppercase tracking-[0.32em] text-sand/40">
+            Navigation
+          </p>
           {navigation.map((item) => {
             const isActive = pathname === item.href;
             return (
@@ -99,14 +168,22 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
                     : "border-transparent text-sand/70 hover:border-white/10 hover:bg-white/[0.04] hover:text-cream"
                 }`}
               >
-                <span className={`shrink-0 transition-colors ${isActive ? "text-copper" : "text-sand/50 group-hover:text-sand"}`}>
+                <span
+                  className={`shrink-0 transition-colors ${isActive ? "text-copper" : "text-sand/50 group-hover:text-sand"}`}
+                >
                   {item.icon}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium leading-none">{item.label}</p>
-                  <p className="mt-1 text-xs text-sand/50">{item.description}</p>
+                  <p className="text-sm font-medium leading-none">
+                    {item.label}
+                  </p>
+                  <p className="mt-1 text-xs text-sand/50">
+                    {item.description}
+                  </p>
                 </div>
-                {isActive && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-copper" />}
+                {isActive && (
+                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-copper" />
+                )}
               </Link>
             );
           })}
@@ -117,13 +194,17 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
 
         {/* User card */}
         <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.03] p-4">
-          <p className="mb-3 text-[0.65rem] uppercase tracking-[0.28em] text-sand/40">Signed in as</p>
+          <p className="mb-3 text-[0.65rem] uppercase tracking-[0.28em] text-sand/40">
+            Signed in as
+          </p>
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-copper/20 text-xs font-semibold text-copper">
               {initials}
             </div>
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-cream">{user.name}</p>
+              <p className="truncate text-sm font-semibold text-cream">
+                {user.name}
+              </p>
               <p className="truncate text-xs text-sand/55">{user.email}</p>
             </div>
           </div>
@@ -135,7 +216,16 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
             href="/"
             className="flex items-center justify-center gap-2 rounded-full border border-white/10 px-5 py-2.5 text-xs uppercase tracking-[0.22em] text-sand transition hover:border-copper/40 hover:text-white"
           >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
               <polyline points="15 3 21 3 21 9" />
               <line x1="10" y1="14" x2="21" y2="3" />
@@ -152,12 +242,23 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
           {/* Brand */}
           <div className="flex items-center gap-2.5">
             <div className="flex h-8 w-8 items-center justify-center rounded-[0.6rem] bg-copper/20">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d4995f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#d4995f"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
                 <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
               </svg>
             </div>
-            <span className="text-sm font-semibold tracking-[-0.03em] text-cream">Faste Admin</span>
+            <span className="text-sm font-semibold tracking-[-0.03em] text-cream">
+              Faste Admin
+            </span>
           </div>
 
           {/* Mobile Nav Pills */}
@@ -188,7 +289,15 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
               className="flex h-8 w-8 items-center justify-center rounded-[0.6rem] border border-white/10 bg-white/[0.04] text-sand transition hover:text-cream sm:hidden"
               aria-label="Open menu"
             >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              >
                 <line x1="3" y1="6" x2="21" y2="6" />
                 <line x1="3" y1="12" x2="21" y2="12" />
                 <line x1="3" y1="18" x2="21" y2="18" />
@@ -211,14 +320,24 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
             {/* Drawer */}
             <div className="relative ml-auto flex h-full w-[280px] flex-col bg-[#160d09] shadow-[−20px_0_60px_rgba(0,0,0,0.5)]">
               <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-4">
-                <span className="text-sm font-semibold text-cream">Faste Admin</span>
+                <span className="text-sm font-semibold text-cream">
+                  Faste Admin
+                </span>
                 <button
                   type="button"
                   onClick={() => setMobileOpen(false)}
                   className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 text-sand hover:text-cream"
                   aria-label="Close menu"
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  >
                     <line x1="18" y1="6" x2="6" y2="18" />
                     <line x1="6" y1="6" x2="18" y2="18" />
                   </svg>
@@ -239,10 +358,16 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
                           : "border-transparent text-sand/70 hover:border-white/10 hover:bg-white/[0.04] hover:text-cream"
                       }`}
                     >
-                      <span className={isActive ? "text-copper" : "text-sand/50"}>{item.icon}</span>
+                      <span
+                        className={isActive ? "text-copper" : "text-sand/50"}
+                      >
+                        {item.icon}
+                      </span>
                       <div>
                         <p className="text-sm font-medium">{item.label}</p>
-                        <p className="mt-0.5 text-xs text-sand/50">{item.description}</p>
+                        <p className="mt-0.5 text-xs text-sand/50">
+                          {item.description}
+                        </p>
                       </div>
                     </Link>
                   );
@@ -255,8 +380,12 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
                     {initials}
                   </div>
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-cream">{user.name}</p>
-                    <p className="truncate text-xs text-sand/55">{user.email}</p>
+                    <p className="truncate text-sm font-medium text-cream">
+                      {user.name}
+                    </p>
+                    <p className="truncate text-xs text-sand/55">
+                      {user.email}
+                    </p>
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">
