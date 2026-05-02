@@ -10,6 +10,17 @@ import { formatRupiah } from "@/lib/currency";
 import { getReverbEcho } from "@/lib/reverb-client";
 import { getOrderStatusLabel, type OrderStatus } from "@/lib/order-status";
 
+type SavedOrder = {
+  id: number;
+  order_number: string;
+  status: OrderStatus;
+};
+
+type CheckoutContentProps = {
+  restoredOrder?: SavedOrder | null;
+  onOrderViewed?: () => void;
+};
+
 function lineTotal(item: CartItem) {
   return item.numericPrice * item.quantity;
 }
@@ -42,14 +53,17 @@ const MAX_PAYMENT_PROOF_SIZE_BYTES = 4 * 1024 * 1024;
 const allowedPaymentProofMimeTypes = new Set([
   "image/jpeg",
   "image/png",
-  "image/webp"
+  "image/webp",
 ]);
 
 function getPaymentMethodLabel(value: PaymentMethod | "") {
   return paymentMethods.find((method) => method.id === value)?.label ?? "-";
 }
 
-export default function CheckoutContent() {
+export default function CheckoutContent({
+  restoredOrder,
+  onOrderViewed,
+}: CheckoutContentProps) {
   const {
     items,
     subtotal,
@@ -73,6 +87,59 @@ export default function CheckoutContent() {
   const [submittedOrderStatus, setSubmittedOrderStatus] =
     useState<OrderStatus>("received");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // State untuk menampilkan pesanan yang di-restore dari localStorage
+  const [showRestoredOrder, setShowRestoredOrder] = useState(false);
+  const [restoredDisplayOrder, setRestoredDisplayOrder] =
+    useState<SavedOrder | null>(null);
+
+  useEffect(() => {
+    if (restoredOrder) {
+      setRestoredDisplayOrder(restoredOrder);
+      setShowRestoredOrder(true);
+    }
+  }, [restoredOrder]);
+
+  // Polling untuk update status pesanan yang di-restore
+  useEffect(() => {
+    if (!restoredDisplayOrder || items.length > 0) return;
+
+    const fetchOrderStatus = async () => {
+      try {
+        const res = await fetch(`/api/orders?id=${restoredDisplayOrder.id}`);
+        if (res.ok) {
+          const data = (await res.json()) as { status?: OrderStatus };
+          if (data.status && data.status !== restoredDisplayOrder.status) {
+            setRestoredDisplayOrder((prev) =>
+              prev ? { ...prev, status: data.status! } : null,
+            );
+            // Update localStorage juga
+            const savedOrders = JSON.parse(
+              localStorage.getItem("faste_orders") || "[]",
+            ) as SavedOrder[];
+            const updated = savedOrders.map((o) =>
+              o.id === restoredDisplayOrder.id
+                ? { ...o, status: data.status! }
+                : o,
+            );
+            localStorage.setItem("faste_orders", JSON.stringify(updated));
+          }
+        }
+      } catch (e) {
+        // Silent fail
+      }
+    };
+
+    // Poll every 10 seconds
+    const interval = setInterval(fetchOrderStatus, 10000);
+    return () => clearInterval(interval);
+  }, [restoredDisplayOrder, items.length]);
+
+  const handleDismissRestoredOrder = () => {
+    setShowRestoredOrder(false);
+    onOrderViewed?.();
+  };
+
   const serviceFee = items.length ? 5000 : 0;
   const total = subtotal + serviceFee;
   const requiresPaymentProof =
@@ -120,7 +187,10 @@ export default function CheckoutContent() {
         formData.append(`items[${index}][name]`, item.name);
         formData.append(`items[${index}][description]`, item.description);
         formData.append(`items[${index}][quantity]`, String(item.quantity));
-        formData.append(`items[${index}][numeric_price]`, String(item.numericPrice));
+        formData.append(
+          `items[${index}][numeric_price]`,
+          String(item.numericPrice),
+        );
 
         if (item.imageUrl) {
           formData.append(`items[${index}][image_url]`, item.imageUrl);
@@ -142,10 +212,31 @@ export default function CheckoutContent() {
         return;
       }
 
+      const newOrderId = payload?.order?.id ?? null;
+      const newOrderNumber = payload?.order?.order_number ?? "";
+      const newOrderStatus = payload?.order?.status ?? "received";
+
+      // Simpan ke localStorage agar bisa diakses setelah refresh
+      if (newOrderId && newOrderNumber) {
+        const existingOrders = JSON.parse(
+          localStorage.getItem("faste_orders") || "[]",
+        );
+        const newOrder = {
+          id: newOrderId,
+          order_number: newOrderNumber,
+          status: newOrderStatus,
+        };
+        localStorage.setItem(
+          "faste_orders",
+          JSON.stringify([newOrder, ...existingOrders]),
+        );
+        localStorage.setItem("faste_current_order_id", String(newOrderId));
+      }
+
       setSuccess(payload?.message ?? "Pesanan berhasil dibuat.");
-      setSubmittedOrderId(payload?.order?.id ?? null);
-      setOrderNumber(payload?.order?.order_number ?? "");
-      setSubmittedOrderStatus(payload?.order?.status ?? "received");
+      setSubmittedOrderId(newOrderId);
+      setOrderNumber(newOrderNumber);
+      setSubmittedOrderStatus(newOrderStatus);
       setCustomerName("");
       setCustomerPhone("");
       setPickupNote("");
@@ -175,11 +266,14 @@ export default function CheckoutContent() {
     const channelName = `orders.${submittedOrderId}`;
     const channel = echo.channel(channelName);
 
-    channel.listen(".order.status.updated", (event: { order?: { status?: OrderStatus } }) => {
-      if (event.order?.status) {
-        setSubmittedOrderStatus(event.order.status);
-      }
-    });
+    channel.listen(
+      ".order.status.updated",
+      (event: { order?: { status?: OrderStatus } }) => {
+        if (event.order?.status) {
+          setSubmittedOrderStatus(event.order.status);
+        }
+      },
+    );
 
     return () => {
       echo.leaveChannel(channelName);
@@ -627,6 +721,47 @@ export default function CheckoutContent() {
               Order Again
             </Link>
           </section>
+        ) : showRestoredOrder && !items.length && restoredDisplayOrder ? (
+          /* Tampilkan pesanan yang di-restore (dari localStorage) */
+          <section className="glass-panel mx-auto max-w-3xl rounded-[2rem] border border-white/10 p-8 text-center md:p-10">
+            <p className="text-xs uppercase tracking-[0.32em] text-sand/60">
+              Pesanan Saya
+            </p>
+            <h2 className="mt-4 text-[clamp(2rem,5vw,3.6rem)] font-semibold tracking-[-0.05em] text-cream">
+              Lihat pesananmu yang lalu
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-sand/72">
+              Kamu punya pesanan sebelumnya dengan nomor{" "}
+              <span className="font-mono text-copper">
+                {restoredDisplayOrder.order_number}
+              </span>
+            </p>
+            <div className="mt-8 text-left">
+              <div className="mb-4 rounded-[1.4rem] border border-copper/25 bg-[rgba(212,153,95,0.08)] px-5 py-4">
+                <p className="text-xs uppercase tracking-[0.24em] text-sand/58">
+                  Status Saat Ini
+                </p>
+                <p className="mt-2 text-lg font-semibold text-copper">
+                  {getOrderStatusLabel(restoredDisplayOrder.status)}
+                </p>
+              </div>
+              <OrderProgress status={restoredDisplayOrder.status} />
+            </div>
+            <div className="flex flex-wrap justify-center gap-3">
+              <button
+                onClick={handleDismissRestoredOrder}
+                className="mt-4 inline-flex rounded-full border border-white/10 px-5 py-3 text-sm font-medium uppercase tracking-[0.22em] text-sand transition hover:border-copper/30 hover:text-white"
+              >
+                Buat Pesanan Baru
+              </button>
+              <Link
+                href="/#menu"
+                className="mt-4 inline-flex rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d]"
+              >
+                Pesan Lagi
+              </Link>
+            </div>
+          </section>
         ) : !items.length ? (
           <section className="glass-panel mx-auto max-w-3xl rounded-[2rem] border border-white/10 p-8 text-center md:p-10">
             <p className="text-xs uppercase tracking-[0.32em] text-sand/60">
@@ -946,7 +1081,9 @@ export default function CheckoutContent() {
                           if (!allowedPaymentProofMimeTypes.has(file.type)) {
                             setPaymentProofFile(null);
                             setPaymentProofPreview("");
-                            setError("Format bukti pembayaran harus JPG, PNG, atau WEBP.");
+                            setError(
+                              "Format bukti pembayaran harus JPG, PNG, atau WEBP.",
+                            );
                             event.currentTarget.value = "";
                             return;
                           }
@@ -1015,7 +1152,9 @@ export default function CheckoutContent() {
                   </div>
                   <div className="flex items-center justify-between text-sm text-sand/70">
                     <span>Payment Proof</span>
-                    <span>{paymentProofFile ? paymentProofFile.name : "-"}</span>
+                    <span>
+                      {paymentProofFile ? paymentProofFile.name : "-"}
+                    </span>
                   </div>
                   <div className="h-px bg-white/10" />
                   <div className="flex items-center justify-between">

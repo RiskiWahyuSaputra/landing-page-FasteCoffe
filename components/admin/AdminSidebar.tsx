@@ -55,9 +55,9 @@ const navigation = [
     ),
   },
   {
-    href: "/admin/purchases",
-    label: "Purchases",
-    description: "Checkout history",
+    href: "/admin/orders",
+    label: "Orders",
+    description: "Manage all orders",
     icon: (
       <svg
         width="18"
@@ -72,6 +72,26 @@ const navigation = [
         <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
         <line x1="3" y1="6" x2="21" y2="6" />
         <path d="M16 10a4 4 0 01-8 0" />
+      </svg>
+    ),
+  },
+  {
+    href: "/admin/purchases",
+    label: "Purchases",
+    description: "Completed orders (Done/Ready)",
+    icon: (
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+        <polyline points="22 4 12 14.01 9 11.01" />
       </svg>
     ),
   },

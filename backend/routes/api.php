@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/menu-items', [MenuItemController::class, 'index']);
 Route::post('/orders', [OrderController::class, 'store']);
+Route::get('/orders/{order}', [OrderController::class, 'show']);
 
 Route::prefix('admin')->group(function (): void {
     Route::post('/login', [AdminAuthController::class, 'login']);

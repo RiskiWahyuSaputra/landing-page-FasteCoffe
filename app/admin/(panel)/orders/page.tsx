@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import AdminPaymentProofActions from "@/components/admin/AdminPaymentProofActions";
+import AdminOrderStatusManager from "@/components/admin/AdminOrderStatusManager";
 import { formatRupiah } from "@/lib/currency";
 import { requireAdminSession } from "@/lib/admin-session";
 import { getAdminOrders } from "@/lib/laravel-admin-api";
@@ -95,7 +96,7 @@ function formatPaymentMethod(value: string) {
   }
 }
 
-export default async function AdminPurchasesPage({
+export default async function AdminOrdersPage({
   searchParams,
 }: {
   searchParams?: { filter?: string };
@@ -109,29 +110,17 @@ export default async function AdminPurchasesPage({
   const { token } = await requireAdminSession();
   const data = await getAdminOrders(token, selectedFilter);
 
-  // Filter orders to only show completed ones (ready_for_pickup)
-  const completedStatus = "ready_for_pickup";
-  const filteredOrders = data.orders.filter(
-    (order) => order.status === completedStatus,
-  );
-
-  // Calculate summary for filtered orders
-  const filteredSummary = {
-    count: filteredOrders.length,
-    revenue: filteredOrders.reduce((sum, order) => sum + order.total, 0),
-  };
-
   return (
     <section className="flex min-h-[calc(100vh-2rem)] flex-col gap-5">
       <header className="glass-panel grain-overlay rounded-[1.8rem] border border-white/10 px-4 py-5 sm:px-6 md:px-8">
         <div className="flex flex-col gap-4 sm:gap-5 xl:flex-row xl:items-center xl:justify-between">
           <div>
-            <p className="section-label">Purchase History</p>
+            <p className="section-label">Orders</p>
             <h1 className="text-[clamp(1.5rem,4vw,3.2rem)] font-semibold leading-[1.05] tracking-[-0.05em] text-cream">
-              Pesanan Selesai
+              Daftar Pesanan
             </h1>
             <p className="mt-2 max-w-xl text-sm leading-6 text-sand/65">
-              Menampilkan pesanan yang sudah selesai (Siap Diambil / Selesai).
+              Kelola semua pesanan yang masuk, dari baru hingga selesai.
             </p>
           </div>
 
@@ -141,7 +130,7 @@ export default async function AdminPurchasesPage({
                 Total Pesanan
               </p>
               <p className="mt-1 text-xl font-semibold tracking-[-0.04em] text-cream sm:mt-1.5 sm:text-2xl">
-                {filteredSummary.count}
+                {data.summary.count}
               </p>
             </div>
             <div className="rounded-[1.2rem] border border-copper/25 bg-[rgba(212,153,95,0.08)] px-4 py-2.5 text-center sm:px-5 sm:py-3.5">
@@ -149,7 +138,7 @@ export default async function AdminPurchasesPage({
                 Pendapatan
               </p>
               <p className="mt-1 text-xl font-semibold tracking-[-0.04em] text-copper sm:mt-1.5 sm:text-2xl">
-                {formatRupiah(filteredSummary.revenue)}
+                {formatRupiah(data.summary.revenue)}
               </p>
             </div>
           </div>
@@ -163,7 +152,7 @@ export default async function AdminPurchasesPage({
               Filter Range
             </p>
             <h2 className="mt-1.5 text-xl font-semibold tracking-[-0.03em] text-cream">
-              Select purchase window
+              Pilih periode pesanan
             </h2>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -173,7 +162,7 @@ export default async function AdminPurchasesPage({
               return (
                 <Link
                   key={filter.value}
-                  href={`/admin/purchases?filter=${filter.value}`}
+                  href={`/admin/orders?filter=${filter.value}`}
                   className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] transition ${
                     isActive
                       ? "border-copper/40 bg-[rgba(212,153,95,0.12)] text-copper"
@@ -191,7 +180,7 @@ export default async function AdminPurchasesPage({
         <div className="my-5 h-px bg-white/[0.06]" />
 
         <div className="space-y-4">
-          {filteredOrders.length === 0 ? (
+          {data.orders.length === 0 ? (
             <div className="flex flex-col items-center justify-center rounded-[1.4rem] border border-dashed border-white/10 bg-white/[0.02] py-14 text-center">
               <div className="flex h-14 w-14 items-center justify-center rounded-[1rem] border border-white/10 bg-white/[0.04] text-sand/40">
                 <svg
@@ -210,14 +199,15 @@ export default async function AdminPurchasesPage({
                 </svg>
               </div>
               <p className="mt-4 text-base font-medium text-cream">
-                Belum ada pesanan selesai
+                Belum ada pesanan
               </p>
               <p className="mt-2 max-w-xs text-sm text-sand/55">
-                Coba ganti filter waktu atau tunggu pesanan selesai.
+                Coba ganti filter waktu atau lakukan checkout dari halaman
+                frontend.
               </p>
             </div>
           ) : (
-            filteredOrders.map((order) => (
+            data.orders.map((order) => (
               <article
                 key={order.id}
                 className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.02]"
@@ -278,7 +268,7 @@ export default async function AdminPurchasesPage({
                   </div>
                   <div className="p-5">
                     <p className="mb-2 text-xs uppercase tracking-[0.22em] text-sand/45">
-                      Pickup Note
+                      Catatan Pickup
                     </p>
                     <p className="text-sm text-sand/70">
                       {order.pickup_note || "-"}
@@ -286,7 +276,7 @@ export default async function AdminPurchasesPage({
                   </div>
                   <div className="p-5">
                     <p className="mb-2 text-xs uppercase tracking-[0.22em] text-sand/45">
-                      Payment
+                      Pembayaran
                     </p>
                     <p className="text-sm font-medium text-cream">
                       {formatPaymentMethod(order.payment_method)}
@@ -303,6 +293,13 @@ export default async function AdminPurchasesPage({
                       </p>
                     )}
                   </div>
+                </div>
+
+                <div className="border-t border-white/[0.06] px-5 py-5">
+                  <AdminOrderStatusManager
+                    orderId={order.id}
+                    initialStatus={order.status}
+                  />
                 </div>
 
                 <div className="border-t border-white/[0.06] p-5">

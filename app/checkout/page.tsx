@@ -1,5 +1,64 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import CheckoutContent from "@/components/checkout/CheckoutContent";
+import type { OrderStatus } from "@/lib/order-status";
+
+type SavedOrder = {
+  id: number;
+  order_number: string;
+  status: OrderStatus;
+};
 
 export default function CheckoutPage() {
-  return <CheckoutContent />;
+  const [restoredOrder, setRestoredOrder] = useState<SavedOrder | null>(null);
+  const [isInitializing, setIsInitializing] = useState(true);
+
+  useEffect(() => {
+    // Coba restore pesanan terakhir dari localStorage
+    const currentOrderId = localStorage.getItem("faste_current_order_id");
+    const savedOrders = JSON.parse(
+      localStorage.getItem("faste_orders") || "[]",
+    ) as SavedOrder[];
+
+    if (currentOrderId && savedOrders.length > 0) {
+      // Cari pesanan terakhir
+      const lastOrder = savedOrders.find(
+        (o) => String(o.id) === currentOrderId,
+      );
+      if (lastOrder) {
+        setRestoredOrder(lastOrder);
+      }
+    }
+
+    setIsInitializing(false);
+  }, []);
+
+  // Tampilkan loading saat inisialisasi
+  if (isInitializing) {
+    return (
+      <main className="relative min-h-screen overflow-hidden bg-page px-6 py-24 md:px-10">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,153,95,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(89,49,28,0.28),transparent_34%),linear-gradient(180deg,#140c08_0%,#0d0806_100%)]" />
+        <div className="page-shell relative flex min-h-[60vh] items-center justify-center">
+          <div className="text-center">
+            <div className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-copper/20 border-t-copper" />
+            <p className="mt-4 text-sm uppercase tracking-[0.2em] text-sand/60">
+              Memuat...
+            </p>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  // Render CheckoutContent dengan props untuk pesanan yang di-restore
+  return (
+    <CheckoutContent
+      restoredOrder={restoredOrder}
+      onOrderViewed={() => {
+        // Clear flag untuk mencegah popup berkali-kali
+        localStorage.removeItem("faste_current_order_id");
+      }}
+    />
+  );
 }

@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 
-import { createOrder, LaravelApiError } from "@/lib/laravel-admin-api";
+import {
+  createOrder,
+  getOrderById,
+  LaravelApiError,
+} from "@/lib/laravel-admin-api";
 
 export async function POST(request: Request) {
   const contentType = request.headers.get("content-type") ?? "";
@@ -11,7 +15,7 @@ export async function POST(request: Request) {
   if (!body) {
     return NextResponse.json(
       { message: "Payload checkout tidak valid." },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -31,7 +35,7 @@ export async function POST(request: Request) {
           numeric_price: number;
           quantity: number;
         }>;
-      }
+      },
     );
 
     return NextResponse.json(response, { status: 201 });
@@ -39,13 +43,42 @@ export async function POST(request: Request) {
     if (error instanceof LaravelApiError) {
       return NextResponse.json(
         { message: error.message },
-        { status: error.status }
+        { status: error.status },
       );
     }
 
     return NextResponse.json(
       { message: "Gagal menyimpan order checkout." },
-      { status: 500 }
+      { status: 500 },
+    );
+  }
+}
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get("id");
+
+  if (!id) {
+    return NextResponse.json(
+      { message: "ID pesanan diperlukan." },
+      { status: 400 },
+    );
+  }
+
+  try {
+    const order = await getOrderById(id);
+    return NextResponse.json(order);
+  } catch (error) {
+    if (error instanceof LaravelApiError) {
+      return NextResponse.json(
+        { message: error.message },
+        { status: error.status },
+      );
+    }
+
+    return NextResponse.json(
+      { message: "Gagal mengambil data pesanan." },
+      { status: 500 },
     );
   }
 }

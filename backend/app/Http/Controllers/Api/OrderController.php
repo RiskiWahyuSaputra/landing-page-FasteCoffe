@@ -114,7 +114,7 @@ class OrderController extends Controller
         ]);
     }
 
-    public function destroyPaymentProof(Order $order): JsonResponse
+public function destroyPaymentProof(Order $order): JsonResponse
     {
         if ($order->payment_proof_path) {
             Storage::disk('public')->delete($order->payment_proof_path);
@@ -128,6 +128,11 @@ class OrderController extends Controller
             'message' => 'Bukti pembayaran berhasil dihapus.',
             'order' => $this->serializeOrder($order->fresh('items')),
         ]);
+    }
+
+    public function show(Order $order): JsonResponse
+    {
+        return response()->json($this->serializeOrder($order->load('items')));
     }
 
     public function adminIndex(Request $request): JsonResponse
