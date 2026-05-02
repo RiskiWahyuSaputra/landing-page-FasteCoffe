@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import AdminOrderStatusManager from "@/components/admin/AdminOrderStatusManager";
 import { formatRupiah } from "@/lib/currency";
 import { requireAdminSession } from "@/lib/admin-session";
 import { getAdminOrders } from "@/lib/laravel-admin-api";
@@ -315,6 +316,13 @@ export default async function AdminPurchasesPage({
                     </a>
                   </div>
                 ) : null}
+
+                <div className="border-t border-white/[0.06] px-5 py-5">
+                  <AdminOrderStatusManager
+                    orderId={order.id}
+                    initialStatus={order.status}
+                  />
+                </div>
 
                 <div className="border-t border-white/[0.06] p-5">
                   <p className="mb-3 text-xs uppercase tracking-[0.22em] text-sand/45">

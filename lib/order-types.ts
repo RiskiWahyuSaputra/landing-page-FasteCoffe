@@ -1,3 +1,5 @@
+import type { OrderStatus } from "@/lib/order-status";
+
 export type OrderHistoryFilter = "last_month" | "last_year" | "today";
 
 export type OrderHistoryItem = {
@@ -17,6 +19,7 @@ export type OrderHistoryEntry = {
   pickup_note: string | null;
   payment_method: string;
   payment_proof_url: string | null;
+  status: OrderStatus;
   subtotal: number;
   service_fee: number;
   total: number;

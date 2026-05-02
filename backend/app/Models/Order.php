@@ -17,6 +17,7 @@ class Order extends Model
         'pickup_note',
         'payment_method',
         'payment_proof_path',
+        'status',
         'subtotal',
         'service_fee',
         'total',

@@ -2,6 +2,7 @@ import "server-only";
 
 import type { MenuItemPayload } from "@/lib/menu-types";
 import type { OrderHistoryEntry, OrderHistoryFilter } from "@/lib/order-types";
+import type { OrderStatus } from "@/lib/order-status";
 
 const DEFAULT_LARAVEL_API_URL = "http://127.0.0.1:8000/api";
 const LARAVEL_API_URL = process.env.LARAVEL_API_URL ?? DEFAULT_LARAVEL_API_URL;
@@ -260,5 +261,20 @@ export async function getAdminOrders(
     orders: OrderHistoryEntry[];
   }>(`/admin/orders?filter=${filter}`, {
     token
+  });
+}
+
+export function updateAdminOrderStatus(
+  token: string,
+  id: number,
+  status: OrderStatus
+) {
+  return callLaravel<{
+    message: string;
+    order: OrderHistoryEntry;
+  }>(`/admin/orders/${id}/status`, {
+    method: "POST",
+    token,
+    body: { status }
   });
 }

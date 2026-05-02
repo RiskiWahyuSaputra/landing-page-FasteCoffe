@@ -61,6 +61,7 @@ class OrderController extends Controller
                 'pickup_note' => $data['pickup_note'] ?? null,
                 'payment_method' => $data['payment_method'],
                 'payment_proof_path' => $paymentProofPath,
+                'status' => 'received',
                 'subtotal' => $subtotal,
                 'service_fee' => $serviceFee,
                 'total' => $total,
@@ -88,6 +89,22 @@ class OrderController extends Controller
             'message' => 'Pesanan berhasil dibuat.',
             'order' => $this->serializeOrder($order),
         ], 201);
+    }
+
+    public function updateStatus(Request $request, Order $order): JsonResponse
+    {
+        $data = $request->validate([
+            'status' => ['required', 'string', 'in:received,brewing,ready_for_pickup'],
+        ]);
+
+        $order->forceFill([
+            'status' => $data['status'],
+        ])->save();
+
+        return response()->json([
+            'message' => 'Status pesanan berhasil diperbarui.',
+            'order' => $this->serializeOrder($order->fresh('items')),
+        ]);
     }
 
     public function adminIndex(Request $request): JsonResponse
@@ -134,6 +151,7 @@ class OrderController extends Controller
             'payment_proof_url' => $order->payment_proof_path
                 ? url(Storage::disk('public')->url($order->payment_proof_path))
                 : null,
+            'status' => $order->status ?? 'received',
             'subtotal' => $order->subtotal,
             'service_fee' => $order->service_fee,
             'total' => $order->total,

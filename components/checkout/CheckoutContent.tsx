@@ -5,7 +5,9 @@ import { useState } from "react";
 
 import type { CartItem } from "@/components/CartProvider";
 import { useCart } from "@/components/CartProvider";
+import OrderProgress from "@/components/orders/OrderProgress";
 import { formatRupiah } from "@/lib/currency";
+import { getOrderStatusLabel, type OrderStatus } from "@/lib/order-status";
 
 function lineTotal(item: CartItem) {
   return item.numericPrice * item.quantity;
@@ -66,6 +68,8 @@ export default function CheckoutContent() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [orderNumber, setOrderNumber] = useState("");
+  const [submittedOrderStatus, setSubmittedOrderStatus] =
+    useState<OrderStatus>("received");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const serviceFee = items.length ? 5000 : 0;
   const total = subtotal + serviceFee;
@@ -128,7 +132,7 @@ export default function CheckoutContent() {
 
       const payload = (await response.json().catch(() => null)) as {
         message?: string;
-        order?: { order_number?: string };
+        order?: { order_number?: string; status?: OrderStatus };
       } | null;
 
       if (!response.ok) {
@@ -138,6 +142,7 @@ export default function CheckoutContent() {
 
       setSuccess(payload?.message ?? "Pesanan berhasil dibuat.");
       setOrderNumber(payload?.order?.order_number ?? "");
+      setSubmittedOrderStatus(payload?.order?.status ?? "received");
       setCustomerName("");
       setCustomerPhone("");
       setPickupNote("");
@@ -576,6 +581,17 @@ export default function CheckoutContent() {
               {success}
               {orderNumber ? ` Nomor order: ${orderNumber}.` : ""}
             </p>
+            <div className="mt-8 text-left">
+              <div className="mb-4 rounded-[1.4rem] border border-copper/25 bg-[rgba(212,153,95,0.08)] px-5 py-4">
+                <p className="text-xs uppercase tracking-[0.24em] text-sand/58">
+                  Status Saat Ini
+                </p>
+                <p className="mt-2 text-lg font-semibold text-copper">
+                  {getOrderStatusLabel(submittedOrderStatus)}
+                </p>
+              </div>
+              <OrderProgress status={submittedOrderStatus} />
+            </div>
             <Link
               href="/#menu"
               className="mt-8 inline-flex rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d]"
