@@ -50,9 +50,9 @@ export default function AdminPaymentProofActions({
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="inline-flex rounded-full border border-copper/30 bg-[rgba(212,153,95,0.08)] px-3.5 py-2 text-[0.68rem] uppercase tracking-[0.18em] text-copper transition hover:border-copper/50 hover:bg-copper hover:text-[#1a0f09]"
+          className="inline-flex rounded-full border border-copper/30 bg-copper/10 px-3.5 py-2 text-[0.68rem] uppercase tracking-[0.18em] text-copper transition hover:border-copper/50 hover:bg-copper hover:text-ink"
         >
-          View Proof
+          Lihat Bukti
         </button>
         <button
           type="button"
@@ -60,7 +60,7 @@ export default function AdminPaymentProofActions({
           disabled={isDeleting}
           className="inline-flex rounded-full border border-white/10 px-3.5 py-2 text-[0.68rem] uppercase tracking-[0.18em] text-sand transition hover:border-[#c86b57]/40 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {isDeleting ? "Deleting..." : "Hapus"}
+          {isDeleting ? "Menghapus..." : "Hapus"}
         </button>
       </div>
 
@@ -82,7 +82,7 @@ export default function AdminPaymentProofActions({
             <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-4">
               <div>
                 <p className="text-xs uppercase tracking-[0.22em] text-sand/50">
-                  Payment Proof
+                  Bukti Pembayaran
                 </p>
                 <h3 className="mt-1 text-lg font-semibold text-cream">
                   {orderNumber}

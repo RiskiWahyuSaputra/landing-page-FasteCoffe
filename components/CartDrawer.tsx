@@ -39,7 +39,7 @@ export default function CartDrawer() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed right-0 top-0 z-[80] flex h-screen w-full max-w-xl flex-col overflow-hidden border-l border-white/10 bg-[linear-gradient(180deg,#140c08_0%,#0d0806_100%)] shadow-[0_0_60px_rgba(0,0,0,0.45)]"
+            className="fixed right-0 top-0 z-[80] flex h-screen w-full max-w-xl flex-col overflow-hidden border-l border-white/10 bg-[linear-gradient(180deg,#18130f_0%,#100c09_100%)] shadow-[0_0_60px_rgba(0,0,0,0.45)]"
           >
             <div className="flex items-center justify-between border-b border-white/10 px-6 py-5 md:px-8">
               <div>
@@ -157,7 +157,7 @@ export default function CartDrawer() {
                 <Link
                   href="/checkout"
                   onClick={closeCart}
-                  className="w-full rounded-full border border-copper/40 bg-copper px-6 py-3 text-center text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d]"
+                  className="w-full rounded-full border border-copper/40 bg-copper px-6 py-3 text-center text-sm font-medium uppercase tracking-[0.22em] text-ink transition hover:brightness-110"
                 >
                   {t("checkout")}
                 </Link>

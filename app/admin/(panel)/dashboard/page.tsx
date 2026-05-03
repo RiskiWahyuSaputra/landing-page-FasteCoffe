@@ -31,7 +31,7 @@ export default async function AdminDashboardPage() {
 
   const stats = [
     {
-      label: "Total Users",
+      label: "Total Pengguna",
       value: data.stats.total_users,
       accent: false,
       icon: (
@@ -53,7 +53,7 @@ export default async function AdminDashboardPage() {
       ),
     },
     {
-      label: "Admin Accounts",
+      label: "Akun Admin",
       value: data.stats.total_admins,
       accent: false,
       icon: (
@@ -72,7 +72,7 @@ export default async function AdminDashboardPage() {
       ),
     },
     {
-      label: "Menu Items",
+      label: "Item Menu",
       value: data.stats.total_menu_items,
       accent: false,
       icon: (
@@ -95,7 +95,7 @@ export default async function AdminDashboardPage() {
       ),
     },
     {
-      label: "Total Orders",
+      label: "Total Pesanan",
       value: data.stats.total_orders,
       accent: false,
       icon: (
@@ -116,7 +116,7 @@ export default async function AdminDashboardPage() {
       ),
     },
     {
-      label: "Active Sessions",
+      label: "Sesi Aktif",
       value: data.stats.active_admin_sessions,
       accent: false,
       icon: (
@@ -136,7 +136,7 @@ export default async function AdminDashboardPage() {
       ),
     },
     {
-      label: "Backend Status",
+      label: "Status Backend",
       value: data.stats.backend_status,
       accent: true,
       icon: (
@@ -162,9 +162,9 @@ export default async function AdminDashboardPage() {
       <header className="glass-panel grain-overlay rounded-[1.8rem] border border-white/10 px-4 py-5 sm:px-6 md:px-8">
         <div className="flex flex-col gap-4 sm:gap-5 xl:flex-row xl:items-center xl:justify-between">
           <div>
-            <p className="section-label">Overview</p>
+            <p className="section-label">Ringkasan</p>
             <h1 className="text-[clamp(1.5rem,4vw,3.4rem)] font-semibold leading-[1.05] tracking-[-0.05em] text-cream">
-              Admin Cockpit
+              Pusat Kontrol Admin
             </h1>
             <p className="mt-2 text-sm leading-6 text-sand/65">
               Selamat datang,{" "}
@@ -176,7 +176,7 @@ export default async function AdminDashboardPage() {
           <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap">
             <Link
               href="/admin/menu"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-copper/40 bg-copper px-4 py-2 text-xs font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d] sm:px-5 sm:py-2.5"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-copper/40 bg-copper px-4 py-2 text-xs font-medium uppercase tracking-[0.22em] text-ink transition hover:brightness-110 sm:px-5 sm:py-2.5"
             >
               <svg
                 width="13"
@@ -191,7 +191,7 @@ export default async function AdminDashboardPage() {
                 <line x1="12" y1="5" x2="12" y2="19" />
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
-              Manage Menu
+              Kelola Menu
             </Link>
             <Link
               href="/admin/purchases"
@@ -210,7 +210,7 @@ export default async function AdminDashboardPage() {
                 <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
                 <line x1="3" y1="6" x2="21" y2="6" />
               </svg>
-              View Purchases
+              Lihat Pembelian
             </Link>
             <Link
               href="/"
@@ -230,7 +230,7 @@ export default async function AdminDashboardPage() {
                 <polyline points="15 3 21 3 21 9" />
                 <line x1="10" y1="14" x2="21" y2="3" />
               </svg>
-              Open Website
+              Buka Website
             </Link>
           </div>
         </div>
@@ -243,7 +243,7 @@ export default async function AdminDashboardPage() {
             key={stat.label}
             className={`glass-panel rounded-[1.5rem] border p-5 ${
               stat.accent
-                ? "border-copper/25 bg-[rgba(212,153,95,0.07)]"
+                ? "border-copper/25 bg-copper/10"
                 : "border-white/10"
             }`}
           >
@@ -273,26 +273,26 @@ export default async function AdminDashboardPage() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <p className="text-xs uppercase tracking-[0.28em] text-sand/55">
-                Session Overview
+                Ringkasan Sesi
               </p>
               <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-cream">
-                Access timeline
+                Riwayat Akses
               </h2>
             </div>
             <div className="flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              <p className="text-xs font-medium text-emerald-400">Active</p>
+              <p className="text-xs font-medium text-emerald-400">Aktif</p>
             </div>
           </div>
 
           <div className="mt-5 grid gap-3 sm:grid-cols-3">
             {[
-              { label: "Issued", value: formatDate(data.session.issued_at) },
+              { label: "Dibuat", value: formatDate(data.session.issued_at) },
               {
-                label: "Last Used",
+                label: "Terakhir Dipakai",
                 value: formatDate(data.session.last_used_at),
               },
-              { label: "Expires", value: formatDate(data.session.expires_at) },
+              { label: "Berakhir", value: formatDate(data.session.expires_at) },
             ].map((item) => (
               <div
                 key={item.label}
@@ -314,17 +314,17 @@ export default async function AdminDashboardPage() {
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-xs uppercase tracking-[0.28em] text-sand/55">
-                Recently Published
+                Baru Dipublikasikan
               </p>
               <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-cream">
-                Menu pulse
+                Update Menu
               </h2>
             </div>
             <Link
               href="/admin/menu"
               className="shrink-0 rounded-full border border-white/10 px-3.5 py-1.5 text-xs uppercase tracking-[0.2em] text-sand transition hover:border-copper/40 hover:text-white"
             >
-              View All
+              Lihat Semua
             </Link>
           </div>
 
@@ -370,22 +370,22 @@ export default async function AdminDashboardPage() {
         {/* Environment */}
         <article className="glass-panel rounded-[1.8rem] border border-white/10 p-6">
           <p className="text-xs uppercase tracking-[0.28em] text-sand/55">
-            Environment
+            Lingkungan
           </p>
           <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-cream">
-            System config
+            Konfigurasi sistem
           </h2>
 
           <div className="mt-5 space-y-3">
             {[
-              { label: "Application", value: data.meta.app_name },
+              { label: "Aplikasi", value: data.meta.app_name },
               {
-                label: "Environment",
+                label: "Lingkungan",
                 value: data.meta.environment,
                 mono: true,
               },
               {
-                label: "Server Time",
+                label: "Waktu Server",
                 value: formatDate(data.meta.server_time),
               },
             ].map((item) => (
@@ -409,27 +409,27 @@ export default async function AdminDashboardPage() {
         {/* Publishing Workflow */}
         <article className="glass-panel rounded-[1.8rem] border border-white/10 p-6">
           <p className="text-xs uppercase tracking-[0.28em] text-sand/55">
-            Workflow
+            Alur Kerja
           </p>
           <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-cream">
-            Publishing flow
+            Alur Publikasi
           </h2>
 
           <div className="mt-5 grid gap-3 sm:grid-cols-3">
             {[
               {
                 step: "01",
-                title: "Create menu",
+                title: "Buat menu",
                 desc: "Tambahkan minuman baru dari halaman menu admin.",
               },
               {
                 step: "02",
-                title: "Sync landing",
+                title: "Sinkron ke landing",
                 desc: "Homepage Next.js membaca daftar menu terbaru dari Laravel API.",
               },
               {
                 step: "03",
-                title: "Ready to sell",
+                title: "Siap dijual",
                 desc: "Produk baru langsung tampil untuk pembeli di halaman depan.",
               },
             ].map((item) => (

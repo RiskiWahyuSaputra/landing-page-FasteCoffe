@@ -47,11 +47,11 @@ export default function Navbar() {
         initial={false}
         animate={{
           backgroundColor: isScrolled
-            ? "rgba(16, 10, 7, 0.72)"
-            : "rgba(16, 10, 7, 0)",
+            ? "rgba(21, 17, 13, 0.78)"
+            : "rgba(21, 17, 13, 0)",
           borderColor: isScrolled
-            ? "rgba(244, 234, 220, 0.12)"
-            : "rgba(244, 234, 220, 0)",
+            ? "rgba(246, 239, 228, 0.12)"
+            : "rgba(246, 239, 228, 0)",
         }}
         className="fixed inset-x-0 top-0 z-50 border-b backdrop-blur-xl"
       >
@@ -70,7 +70,7 @@ export default function Navbar() {
                 type="button"
                 onClick={() => setLocale("id")}
                 className={`rounded-full px-2 py-1.5 text-[0.62rem] font-medium uppercase tracking-[0.16em] transition hover:bg-white/10 hover:text-white sm:px-2.5 sm:text-[0.65rem] sm:tracking-[0.2em] ${
-                  locale === "id" ? "bg-copper text-[#1a0f09]" : "text-sand"
+                  locale === "id" ? "bg-copper text-ink" : "text-sand"
                 }`}
               >
                 ID
@@ -79,7 +79,7 @@ export default function Navbar() {
                 type="button"
                 onClick={() => setLocale("en")}
                 className={`rounded-full px-2 py-1.5 text-[0.62rem] font-medium uppercase tracking-[0.16em] transition hover:bg-white/10 hover:text-white sm:px-2.5 sm:text-[0.65rem] sm:tracking-[0.2em] ${
-                  locale === "en" ? "bg-copper text-[#1a0f09]" : "text-sand"
+                  locale === "en" ? "bg-copper text-ink" : "text-sand"
                 }`}
               >
                 EN
@@ -138,7 +138,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-[60] bg-[rgba(11,7,5,0.94)] backdrop-blur-2xl"
+            className="fixed inset-0 z-[60] bg-[rgba(18,14,11,0.94)] backdrop-blur-2xl"
           >
             <div className="page-shell flex min-h-screen flex-col justify-between py-8">
               <div className="flex items-center justify-between">

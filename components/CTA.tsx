@@ -17,9 +17,9 @@ export default function CTA() {
             transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
             className="absolute left-1/2 top-1/2 h-[26rem] w-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-copper/20"
           />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,153,95,0.22),transparent_35%),linear-gradient(135deg,rgba(255,255,255,0.04),transparent_40%,rgba(255,255,255,0.02))]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(127,150,97,0.24),transparent_35%),radial-gradient(circle_at_12%_85%,rgba(91,63,42,0.2),transparent_30%),linear-gradient(135deg,rgba(255,255,255,0.04),transparent_40%,rgba(255,255,255,0.02))]" />
           <div className="absolute -left-12 bottom-0 h-56 w-56 rounded-full bg-copper/10 blur-3xl" />
-          <div className="absolute -right-10 top-0 h-72 w-72 rounded-full bg-[#6b3c20]/20 blur-3xl" />
+          <div className="absolute -right-10 top-0 h-72 w-72 rounded-full bg-mocha/20 blur-3xl" />
 
           <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center text-center">
             <p className="section-label !justify-center !text-center">{t("next_cup")}</p>

@@ -48,10 +48,10 @@ export default function AdminLoginForm() {
     <section className="glass-panel w-full max-w-md rounded-[2rem] border border-white/10 p-6 shadow-halo md:p-7">
       <div className="mb-8">
         <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
-          Secure Login
+          Login Aman
         </p>
         <h2 className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-cream">
-          Admin sign in
+          Masuk Admin
         </h2>
         <p className="mt-3 text-sm leading-6 text-sand/72">
           Masuk dengan akun admin yang disediakan backend Laravel.
@@ -96,9 +96,9 @@ export default function AdminLoginForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-full border border-copper/40 bg-copper px-5 py-3 text-sm font-medium uppercase tracking-[0.24em] text-[#1a0f09] transition hover:bg-[#e2a86d] disabled:cursor-not-allowed disabled:opacity-70"
+          className="w-full rounded-full border border-copper/40 bg-copper px-5 py-3 text-sm font-medium uppercase tracking-[0.24em] text-ink transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
         >
-          {isSubmitting ? "Signing in..." : "Login Admin"}
+          {isSubmitting ? "Memproses..." : "Masuk Admin"}
         </button>
       </form>
     </section>

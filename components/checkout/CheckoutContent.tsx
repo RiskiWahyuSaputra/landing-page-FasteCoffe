@@ -331,7 +331,7 @@ export default function CheckoutContent({
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-page px-6 py-24 md:px-10">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,153,95,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(89,49,28,0.28),transparent_34%),linear-gradient(180deg,#140c08_0%,#0d0806_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(127,150,97,0.2),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(91,63,42,0.28),transparent_34%),linear-gradient(180deg,#18130f_0%,#100c09_100%)]" />
 
       {showQrisModal ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 px-4 backdrop-blur-sm">
@@ -371,7 +371,7 @@ export default function CheckoutContent({
               </button>
             </div>
 
-            <div className="mt-6 rounded-[1.6rem] border border-white/10 bg-[linear-gradient(180deg,#fff8f1_0%,#f2e7dc_100%)] p-5 text-[#2b1a12]">
+            <div className="mt-6 rounded-[1.6rem] border border-white/10 bg-[linear-gradient(180deg,#f8f2e8_0%,#e8dbc7_100%)] p-5 text-ink">
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <p className="text-xs uppercase tracking-[0.24em] text-[#7f6148]">
@@ -701,7 +701,7 @@ export default function CheckoutContent({
             <button
               type="button"
               onClick={() => setShowQrisModal(false)}
-              className="mt-6 w-full rounded-full border border-copper/40 bg-copper px-5 py-3 text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d]"
+              className="mt-6 w-full rounded-full border border-copper/40 bg-copper px-5 py-3 text-sm font-medium uppercase tracking-[0.22em] text-ink transition hover:brightness-110"
             >
               {t("close")}
             </button>
@@ -730,7 +730,7 @@ export default function CheckoutContent({
             </Link>
             <Link
               href="/"
-              className="rounded-full border border-copper/30 bg-[rgba(212,153,95,0.12)] px-5 py-3 text-xs uppercase tracking-[0.24em] text-copper transition hover:border-copper/60 hover:bg-copper hover:text-[#1a0f09]"
+              className="rounded-full border border-copper/30 bg-copper/12 px-5 py-3 text-xs uppercase tracking-[0.24em] text-copper transition hover:border-copper/60 hover:bg-copper hover:text-ink"
             >
               {t("home")}
             </Link>
@@ -750,7 +750,7 @@ export default function CheckoutContent({
               {orderNumber ? ` ${t("nomor_order")}: ${orderNumber}.` : ""}
             </p>
             <div className="mt-8 text-left">
-              <div className="mb-4 rounded-[1.4rem] border border-copper/25 bg-[rgba(212,153,95,0.08)] px-5 py-4">
+              <div className="mb-4 rounded-[1.4rem] border border-copper/25 bg-copper/10 px-5 py-4">
                 <p className="text-xs uppercase tracking-[0.24em] text-sand/58">
                   {t("status_saat_ini")}
                 </p>
@@ -762,7 +762,7 @@ export default function CheckoutContent({
             </div>
             <Link
               href="/#menu"
-              className="mt-8 inline-flex rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d]"
+              className="mt-8 inline-flex rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-ink transition hover:brightness-110"
             >
               {t("pesan_lagi")}
             </Link>
@@ -783,7 +783,7 @@ export default function CheckoutContent({
               </span>
             </p>
             <div className="mt-8 text-left">
-              <div className="mb-4 rounded-[1.4rem] border border-copper/25 bg-[rgba(212,153,95,0.08)] px-5 py-4">
+              <div className="mb-4 rounded-[1.4rem] border border-copper/25 bg-copper/10 px-5 py-4">
                 <p className="text-xs uppercase tracking-[0.24em] text-sand/58">
                   {t("status_saat_ini")}
                 </p>
@@ -802,7 +802,7 @@ export default function CheckoutContent({
               </button>
               <Link
                 href="/#menu"
-                className="mt-4 inline-flex rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d]"
+                className="mt-4 inline-flex rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-ink transition hover:brightness-110"
               >
                 {t("pesan_lagi")}
               </Link>
@@ -821,7 +821,7 @@ export default function CheckoutContent({
             </p>
             <Link
               href="/#menu"
-              className="mt-8 inline-flex rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d]"
+              className="mt-8 inline-flex rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-ink transition hover:brightness-110"
             >
               {t("explore_menu")}
             </Link>
@@ -885,11 +885,11 @@ export default function CheckoutContent({
                           </div>
 
                           <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                            <div className="flex items-center gap-2 rounded-full border border-copper/30 bg-[rgba(212,153,95,0.12)] p-1">
+                            <div className="flex items-center gap-2 rounded-full border border-copper/30 bg-copper/12 p-1">
                               <button
                                 type="button"
                                 onClick={() => decreaseItem(item.name)}
-                                className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-copper transition hover:bg-copper hover:text-[#1a0f09]"
+                                className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-copper transition hover:bg-copper hover:text-ink"
                               >
                                 -
                               </button>
@@ -899,7 +899,7 @@ export default function CheckoutContent({
                               <button
                                 type="button"
                                 onClick={() => increaseItem(item.name)}
-                                className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-copper transition hover:bg-copper hover:text-[#1a0f09]"
+                                className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-copper transition hover:bg-copper hover:text-ink"
                               >
                                 +
                               </button>
@@ -998,7 +998,7 @@ export default function CheckoutContent({
                             }}
                             className={`rounded-[1.3rem] border px-4 py-4 text-left transition ${
                               isSelected
-                                ? "border-copper/40 bg-[rgba(212,153,95,0.12)]"
+                                ? "border-copper/40 bg-copper/12"
                                 : "border-white/10 bg-white/[0.03] hover:border-copper/25 hover:bg-white/[0.05]"
                             }`}
                           >
@@ -1016,7 +1016,7 @@ export default function CheckoutContent({
                               <span
                                 className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
                                   isSelected
-                                    ? "border-copper bg-copper text-[#1a0f09]"
+                                    ? "border-copper bg-copper text-ink"
                                     : "border-white/15 text-transparent"
                                 }`}
                               >
@@ -1040,7 +1040,7 @@ export default function CheckoutContent({
                     </div>
 
                     {paymentMethod === "qris" ? (
-                      <div className="mt-4 rounded-[1.2rem] border border-copper/25 bg-[rgba(212,153,95,0.08)] px-4 py-4">
+                      <div className="mt-4 rounded-[1.2rem] border border-copper/25 bg-copper/10 px-4 py-4">
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                           <div>
                             <p className="text-sm font-semibold text-cream">
@@ -1053,7 +1053,7 @@ export default function CheckoutContent({
                           <button
                             type="button"
                             onClick={() => setShowQrisModal(true)}
-                            className="rounded-full border border-copper/35 px-4 py-2 text-xs uppercase tracking-[0.2em] text-copper transition hover:bg-copper hover:text-[#1a0f09]"
+                            className="rounded-full border border-copper/35 px-4 py-2 text-xs uppercase tracking-[0.2em] text-copper transition hover:bg-copper hover:text-ink"
                           >
                             Buka QRIS
                           </button>
@@ -1144,7 +1144,7 @@ export default function CheckoutContent({
                           setPaymentProofFile(file);
                           setPaymentProofPreview(URL.createObjectURL(file));
                         }}
-                        className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-cream outline-none file:mr-4 file:rounded-full file:border-0 file:bg-copper file:px-4 file:py-2 file:text-xs file:font-medium file:uppercase file:tracking-[0.18em] file:text-[#1a0f09]"
+                        className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-cream outline-none file:mr-4 file:rounded-full file:border-0 file:bg-copper file:px-4 file:py-2 file:text-xs file:font-medium file:uppercase file:tracking-[0.18em] file:text-ink"
                       />
                       <p className="mt-3 text-xs leading-6 text-sand/62">
                         Upload JPG, PNG, atau WEBP. Maksimal 4 MB.
@@ -1219,7 +1219,7 @@ export default function CheckoutContent({
                 ) : null}
 
                 {success ? (
-                  <div className="mt-5 rounded-[1.2rem] border border-copper/25 bg-[rgba(212,153,95,0.12)] px-4 py-3 text-sm text-cream">
+                  <div className="mt-5 rounded-[1.2rem] border border-copper/25 bg-copper/12 px-4 py-3 text-sm text-cream">
                     {success}
                     {orderNumber ? ` Nomor order: ${orderNumber}.` : ""}
                   </div>
@@ -1229,7 +1229,7 @@ export default function CheckoutContent({
                   type="button"
                   onClick={handlePlaceOrder}
                   disabled={isSubmitting}
-                  className="mt-8 w-full rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d] disabled:cursor-not-allowed disabled:opacity-70"
+                  className="mt-8 w-full rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-ink transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   {isSubmitting ? t("submitting") : t("place_order")}
                 </button>

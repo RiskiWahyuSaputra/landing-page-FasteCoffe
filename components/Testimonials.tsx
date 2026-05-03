@@ -41,7 +41,7 @@ export default function Testimonials() {
 
   return (
     <section className="relative flex min-h-screen items-center overflow-hidden px-6 py-24 md:px-10">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,153,95,0.16),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(84,49,30,0.35),transparent_34%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(127,150,97,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(91,63,42,0.32),transparent_34%)]" />
 
       <div className="page-shell relative grid gap-10 lg:grid-cols-[0.38fr_0.62fr] lg:items-end">
         <div className="max-w-sm">

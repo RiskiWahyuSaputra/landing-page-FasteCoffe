@@ -13,7 +13,7 @@ export default async function AdminPanelLayout({
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#120b07]">
       {/* Background decorations */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,153,95,0.14),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(89,49,28,0.22),transparent_34%),linear-gradient(180deg,#130c08_0%,#0c0806_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(127,150,97,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(91,63,42,0.24),transparent_34%),linear-gradient(180deg,#17120e_0%,#100c09_100%)]" />
       <div className="absolute left-[8%] top-20 h-72 w-72 rounded-full bg-copper/8 blur-3xl" />
       <div className="absolute bottom-20 right-[5%] h-80 w-80 rounded-full bg-[#6d3c1f]/15 blur-3xl" />
 

@@ -11,8 +11,8 @@ import AdminLogoutButton from "@/components/admin/AdminLogoutButton";
 const navigation = [
   {
     href: "/admin/dashboard",
-    label: "Overview",
-    description: "Operational snapshot",
+    label: "Ringkasan",
+    description: "Snapshot operasional",
     icon: (
       <svg
         width="18"
@@ -34,7 +34,7 @@ const navigation = [
   {
     href: "/admin/menu",
     label: "Menu",
-    description: "Add and manage menu items",
+    description: "Tambah dan kelola item menu",
     icon: (
       <svg
         width="18"
@@ -56,8 +56,8 @@ const navigation = [
   },
   {
     href: "/admin/orders",
-    label: "Orders",
-    description: "Manage all orders",
+    label: "Pesanan",
+    description: "Kelola semua pesanan",
     icon: (
       <svg
         width="18"
@@ -77,8 +77,8 @@ const navigation = [
   },
   {
     href: "/admin/purchases",
-    label: "Purchases",
-    description: "Completed orders (Done/Ready)",
+    label: "Pembelian",
+    description: "Pesanan selesai (Siap Diambil/Selesai)",
     icon: (
       <svg
         width="18"
@@ -97,8 +97,8 @@ const navigation = [
   },
   {
     href: "/admin/reports",
-    label: "Reports",
-    description: "Financial reports",
+    label: "Laporan",
+    description: "Laporan keuangan",
     icon: (
       <svg
         width="18"
@@ -140,7 +140,7 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
         }}
       >
         {/* Brand */}
-        <div className="rounded-[1.6rem] border border-white/10 bg-[linear-gradient(135deg,rgba(212,153,95,0.16),rgba(255,255,255,0.03))] p-5">
+        <div className="rounded-[1.6rem] border border-white/10 bg-[linear-gradient(135deg,rgba(127,150,97,0.18),rgba(255,255,255,0.03))] p-5">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-[0.75rem] bg-copper/20">
               <svg
@@ -162,7 +162,7 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
             </div>
             <div>
               <p className="text-xs uppercase tracking-[0.28em] text-sand/55">
-                Admin Suite
+                Panel Admin
               </p>
               <h2 className="text-lg font-semibold tracking-[-0.04em] text-cream">
                 Faste Coffee
@@ -174,7 +174,7 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
         {/* Navigation */}
         <nav className="mt-5 space-y-2">
           <p className="mb-3 px-1 text-[0.65rem] uppercase tracking-[0.32em] text-sand/40">
-            Navigation
+            Navigasi
           </p>
           {navigation.map((item) => {
             const isActive = pathname === item.href;
@@ -184,7 +184,7 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
                 href={item.href}
                 className={`group flex items-center gap-3.5 rounded-[1.2rem] border px-4 py-3.5 transition-all duration-200 ${
                   isActive
-                    ? "border-copper/35 bg-[rgba(212,153,95,0.12)] text-copper"
+                    ? "border-copper/35 bg-copper/12 text-copper"
                     : "border-transparent text-sand/70 hover:border-white/10 hover:bg-white/[0.04] hover:text-cream"
                 }`}
               >
@@ -215,7 +215,7 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
         {/* User card */}
         <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.03] p-4">
           <p className="mb-3 text-[0.65rem] uppercase tracking-[0.28em] text-sand/40">
-            Signed in as
+            Masuk sebagai
           </p>
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-copper/20 text-xs font-semibold text-copper">
@@ -250,7 +250,7 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
               <polyline points="15 3 21 3 21 9" />
               <line x1="10" y1="14" x2="21" y2="3" />
             </svg>
-            View Website
+            Lihat Website
           </Link>
           <AdminLogoutButton />
         </div>
@@ -292,7 +292,7 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
                     href={item.href}
                     className={`rounded-full border px-3 py-1.5 text-[0.65rem] uppercase tracking-[0.2em] transition ${
                       isActive
-                        ? "border-copper/40 bg-[rgba(212,153,95,0.12)] text-copper"
+                        ? "border-copper/40 bg-copper/12 text-copper"
                         : "border-white/10 bg-white/[0.03] text-sand hover:text-white"
                     }`}
                   >
@@ -307,7 +307,7 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
               type="button"
               onClick={() => setMobileOpen(true)}
               className="flex h-8 w-8 items-center justify-center rounded-[0.6rem] border border-white/10 bg-white/[0.04] text-sand transition hover:text-cream md:hidden"
-              aria-label="Open menu"
+              aria-label="Buka menu"
             >
               <svg
                 width="15"
@@ -334,7 +334,7 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
               type="button"
               className="absolute inset-0 bg-black/60 backdrop-blur-sm"
               onClick={() => setMobileOpen(false)}
-              aria-label="Close menu"
+              aria-label="Tutup menu"
             />
 
             {/* Drawer */}
@@ -347,7 +347,7 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
                   type="button"
                   onClick={() => setMobileOpen(false)}
                   className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 text-sand hover:text-cream"
-                  aria-label="Close menu"
+                  aria-label="Tutup menu"
                 >
                   <svg
                     width="14"
@@ -374,7 +374,7 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
                       onClick={() => setMobileOpen(false)}
                       className={`flex items-center gap-3.5 rounded-[1.2rem] border px-4 py-3.5 transition-all ${
                         isActive
-                          ? "border-copper/35 bg-[rgba(212,153,95,0.12)] text-copper"
+                          ? "border-copper/35 bg-copper/12 text-copper"
                           : "border-transparent text-sand/70 hover:border-white/10 hover:bg-white/[0.04] hover:text-cream"
                       }`}
                     >
@@ -413,7 +413,7 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
                     href="/"
                     className="rounded-full border border-white/10 px-4 py-2.5 text-center text-xs uppercase tracking-[0.2em] text-sand hover:text-white"
                   >
-                    View Website
+                    Lihat Website
                   </Link>
                   <AdminLogoutButton />
                 </div>

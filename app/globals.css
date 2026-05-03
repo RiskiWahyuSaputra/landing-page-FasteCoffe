@@ -3,14 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --page: #120b07;
-  --page-soft: #1a100a;
-  --page-elevated: #24160f;
-  --cream: #f4eadc;
-  --sand: #dcc2a8;
-  --copper: #d4995f;
-  --mocha: #59311c;
-  --line: rgba(244, 234, 220, 0.12);
+  --page: #15110d;
+  --page-soft: #1d1712;
+  --page-elevated: #272019;
+  --cream: #f6efe4;
+  --sand: #d9ccb8;
+  --copper: #7f9661;
+  --mocha: #5b3f2a;
+  --forest: #314a33;
+  --ink: #21170f;
+  --line: rgba(246, 239, 228, 0.12);
 }
 
 * {
@@ -19,17 +21,18 @@
 
 html {
   background:
-    radial-gradient(circle at top, rgba(96, 53, 25, 0.35), transparent 30%),
-    linear-gradient(180deg, #140c08 0%, #0e0907 100%);
+    radial-gradient(circle at top, rgba(127, 150, 97, 0.18), transparent 32%),
+    radial-gradient(circle at 18% 14%, rgba(91, 63, 42, 0.28), transparent 26%),
+    linear-gradient(180deg, #18130f 0%, #110d0a 100%);
 }
 
 body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(circle at 10% 20%, rgba(212, 153, 95, 0.12), transparent 28%),
-    radial-gradient(circle at 90% 10%, rgba(78, 43, 23, 0.2), transparent 25%),
-    linear-gradient(180deg, #150d08 0%, #0c0806 100%);
+    radial-gradient(circle at 12% 18%, rgba(127, 150, 97, 0.14), transparent 28%),
+    radial-gradient(circle at 88% 10%, rgba(91, 63, 42, 0.22), transparent 25%),
+    linear-gradient(180deg, #17120e 0%, #0f0c09 100%);
   color: var(--cream);
   font-family: var(--font-outfit), sans-serif;
   text-rendering: optimizeLegibility;
@@ -52,7 +55,7 @@ canvas {
 }
 
 ::selection {
-  background: rgba(212, 153, 95, 0.28);
+  background: rgba(127, 150, 97, 0.32);
   color: #fff9f2;
 }
 
@@ -79,7 +82,7 @@ canvas {
   }
 
   .glass-panel {
-    background: linear-gradient(180deg, rgba(255, 248, 240, 0.06), rgba(255, 248, 240, 0.02));
+    background: linear-gradient(180deg, rgba(246, 239, 228, 0.06), rgba(246, 239, 228, 0.02));
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.06),
       0 30px 80px rgba(0, 0, 0, 0.2);

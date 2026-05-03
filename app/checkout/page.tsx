@@ -21,7 +21,7 @@ export default function CheckoutPage() {
   if (isInitializing) {
     return (
       <main className="relative min-h-screen overflow-hidden bg-page px-6 py-24 md:px-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,153,95,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(89,49,28,0.28),transparent_34%),linear-gradient(180deg,#140c08_0%,#0d0806_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(127,150,97,0.2),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(91,63,42,0.28),transparent_34%),linear-gradient(180deg,#18130f_0%,#100c09_100%)]" />
         <div className="page-shell relative flex min-h-[60vh] items-center justify-center">
           <div className="text-center">
             <div className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-copper/20 border-t-copper" />

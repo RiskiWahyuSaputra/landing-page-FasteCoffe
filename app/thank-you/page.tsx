@@ -117,12 +117,12 @@ export default function ThankYouPage() {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-page px-4 py-16 sm:px-6 md:px-10 md:py-24">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,153,95,0.22),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(89,49,28,0.3),transparent_34%),linear-gradient(180deg,#140c08_0%,#0d0806_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(127,150,97,0.22),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(91,63,42,0.28),transparent_34%),linear-gradient(180deg,#18130f_0%,#100c09_100%)]" />
 
       <div className="page-shell relative">
         <section className="grid gap-6 lg:grid-cols-[1.08fr_0.92fr]">
           <article className="overflow-hidden rounded-[2.2rem] border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] p-6 shadow-[0_30px_90px_rgba(0,0,0,0.3)] sm:p-8 md:p-10">
-            <div className="inline-flex items-center gap-3 rounded-full border border-copper/25 bg-[rgba(212,153,95,0.12)] px-4 py-2 text-[0.68rem] uppercase tracking-[0.28em] text-copper">
+            <div className="inline-flex items-center gap-3 rounded-full border border-copper/25 bg-copper/12 px-4 py-2 text-[0.68rem] uppercase tracking-[0.28em] text-copper">
               <span className="h-2 w-2 rounded-full bg-copper" />
               {t("thank_you_badge")}
             </div>
@@ -185,11 +185,11 @@ export default function ThankYouPage() {
             </div>
           </article>
 
-          <article className="overflow-hidden rounded-[2.2rem] border border-copper/18 bg-[linear-gradient(180deg,rgba(47,28,20,0.92),rgba(25,14,10,0.95))] p-6 shadow-[0_30px_90px_rgba(0,0,0,0.36)] sm:p-8 md:p-10">
+          <article className="overflow-hidden rounded-[2.2rem] border border-copper/18 bg-[linear-gradient(180deg,rgba(40,31,24,0.94),rgba(21,17,13,0.96))] p-6 shadow-[0_30px_90px_rgba(0,0,0,0.36)] sm:p-8 md:p-10">
             {isSubmitted ? (
               <div className="flex h-full flex-col justify-between gap-8">
                 <div>
-                  <div className="flex h-16 w-16 items-center justify-center rounded-[1.5rem] border border-copper/30 bg-[rgba(212,153,95,0.14)] text-copper">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-[1.5rem] border border-copper/30 bg-copper/14 text-copper">
                     <svg
                       width="28"
                       height="28"
@@ -218,7 +218,7 @@ export default function ThankYouPage() {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Link
                     href="/"
-                    className="inline-flex items-center justify-center rounded-full border border-copper/28 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d]"
+                    className="inline-flex items-center justify-center rounded-full border border-copper/28 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-ink transition hover:brightness-110"
                   >
                     {t("thank_you_home")}
                   </Link>
@@ -253,7 +253,7 @@ export default function ThankYouPage() {
                         onClick={() => setRating(option.value)}
                         className={`rounded-[1.6rem] border px-4 py-4 text-left transition ${
                           isActive
-                            ? "border-copper/45 bg-[rgba(212,153,95,0.14)]"
+                            ? "border-copper/45 bg-copper/14"
                             : "border-white/10 bg-white/[0.03] hover:border-copper/28 hover:bg-white/[0.05]"
                         }`}
                       >
@@ -297,7 +297,7 @@ export default function ThankYouPage() {
                     type="button"
                     onClick={handleSubmit}
                     disabled={!rating}
-                    className="inline-flex items-center justify-center rounded-full border border-copper/35 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d] disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center justify-center rounded-full border border-copper/35 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-ink transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {t("thank_you_submit")}
                   </button>

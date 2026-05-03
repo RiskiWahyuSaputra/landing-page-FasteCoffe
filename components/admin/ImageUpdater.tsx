@@ -91,10 +91,10 @@ export default function ImageUpdater({
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
-            Image Management
+            Manajemen Gambar
           </p>
           <h3 className="mt-2 text-xl font-semibold tracking-[-0.02em] text-cream">
-            Update Product Image
+            Perbarui Gambar Produk
           </h3>
         </div>
       </div>
@@ -105,12 +105,12 @@ export default function ImageUpdater({
           {preview ? (
             <img
               src={preview}
-              alt="Product Preview"
+              alt="Pratinjau Produk"
               className="h-full w-full object-cover transition-opacity duration-500"
             />
           ) : (
             <div className="flex h-full items-center justify-center text-sand/40">
-              No image selected
+              Belum ada gambar dipilih
             </div>
           )}
           
@@ -129,7 +129,7 @@ export default function ImageUpdater({
         )}
 
         {success && (
-          <div className="rounded-[1.2rem] border border-copper/25 bg-[rgba(212,153,95,0.12)] px-4 py-3 text-sm text-cream">
+          <div className="rounded-[1.2rem] border border-copper/25 bg-copper/12 px-4 py-3 text-sm text-cream">
             {success}
           </div>
         )}
@@ -147,15 +147,15 @@ export default function ImageUpdater({
             onChange={handleFileChange}
             accept="image/*"
             disabled={isUploading}
-            className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-cream outline-none transition file:mr-4 file:rounded-full file:border-0 file:bg-copper file:px-4 file:py-2 file:text-xs file:font-medium file:uppercase file:tracking-[0.18em] file:text-[#1a0f09] hover:bg-white/[0.06] disabled:opacity-50"
+            className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-cream outline-none transition file:mr-4 file:rounded-full file:border-0 file:bg-copper file:px-4 file:py-2 file:text-xs file:font-medium file:uppercase file:tracking-[0.18em] file:text-ink hover:bg-white/[0.06] disabled:opacity-50"
           />
 
           <button
             onClick={handleUpload}
             disabled={!file || isUploading}
-            className="w-full rounded-full bg-copper py-4 text-sm font-bold uppercase tracking-[0.24em] text-[#1a0f09] transition hover:scale-[1.02] hover:bg-[#e2a86d] active:scale-[0.98] disabled:scale-100 disabled:opacity-50"
+            className="w-full rounded-full bg-copper py-4 text-sm font-bold uppercase tracking-[0.24em] text-ink transition hover:scale-[1.02] hover:brightness-110 active:scale-[0.98] disabled:scale-100 disabled:opacity-50"
           >
-            {isUploading ? "Uploading..." : "Save Changes"}
+            {isUploading ? "Mengunggah..." : "Simpan Perubahan"}
           </button>
         </div>
       </div>

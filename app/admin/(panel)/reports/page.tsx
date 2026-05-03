@@ -6,9 +6,9 @@ import { formatRupiah } from "@/lib/currency";
 import type { OrderHistoryEntry, OrderHistoryFilter } from "@/lib/order-types";
 
 const filters: { value: OrderHistoryFilter; label: string }[] = [
-  { value: "today", label: "Today" },
-  { value: "last_month", label: "Last Month" },
-  { value: "last_year", label: "Last Year" },
+  { value: "today", label: "Hari Ini" },
+  { value: "last_month", label: "Bulan Lalu" },
+  { value: "last_year", label: "Tahun Lalu" },
 ];
 
 function formatDate(value: string | null) {
@@ -42,7 +42,7 @@ export default async function FinancialReportsPage() {
       <header className="glass-panel grain-overlay rounded-[1.8rem] border border-white/10 px-4 py-5 sm:px-6 md:px-8">
         <div className="flex flex-col gap-4 sm:gap-5 xl:flex-row xl:items-center xl:justify-between">
           <div>
-            <p className="section-label">Financial Reports</p>
+            <p className="section-label">Laporan Keuangan</p>
             <h1 className="text-[clamp(1.5rem,4vw,3.4rem)] font-semibold leading-[1.05] tracking-[-0.05em] text-cream">
               Laporan Keuangan
             </h1>
@@ -58,27 +58,27 @@ export default async function FinancialReportsPage() {
         {/* Today */}
         <article className="glass-panel rounded-[1.5rem] border border-white/10 p-5">
           <p className="text-xs uppercase tracking-[0.28em] text-sand/55">
-            Today
+            Hari Ini
           </p>
           <div className="mt-4 space-y-4">
             <div>
               <p className="text-2xl font-semibold tracking-[-0.05em] text-cream">
                 {formatRupiah(getSummary(todayData).revenue)}
               </p>
-              <p className="mt-1 text-xs text-sand/50">Total Revenue</p>
+              <p className="mt-1 text-xs text-sand/50">Total Pendapatan</p>
             </div>
             <div className="flex justify-between">
               <div>
                 <p className="text-xl font-semibold text-cream">
                   {getSummary(todayData).count}
                 </p>
-                <p className="text-xs text-sand/50">Orders</p>
+                <p className="text-xs text-sand/50">Pesanan</p>
               </div>
               <div className="text-right">
                 <p className="text-xl font-semibold text-cream">
                   {formatRupiah(getAverage(todayData))}
                 </p>
-                <p className="text-xs text-sand/50">Avg. Value</p>
+                <p className="text-xs text-sand/50">Rata-rata Nilai</p>
               </div>
             </div>
           </div>
@@ -87,27 +87,27 @@ export default async function FinancialReportsPage() {
         {/* Last Month */}
         <article className="glass-panel rounded-[1.5rem] border border-white/10 p-5">
           <p className="text-xs uppercase tracking-[0.28em] text-sand/55">
-            Last Month
+            Bulan Lalu
           </p>
           <div className="mt-4 space-y-4">
             <div>
               <p className="text-2xl font-semibold tracking-[-0.05em] text-cream">
                 {formatRupiah(getSummary(lastMonthData).revenue)}
               </p>
-              <p className="mt-1 text-xs text-sand/50">Total Revenue</p>
+              <p className="mt-1 text-xs text-sand/50">Total Pendapatan</p>
             </div>
             <div className="flex justify-between">
               <div>
                 <p className="text-xl font-semibold text-cream">
                   {getSummary(lastMonthData).count}
                 </p>
-                <p className="text-xs text-sand/50">Orders</p>
+                <p className="text-xs text-sand/50">Pesanan</p>
               </div>
               <div className="text-right">
                 <p className="text-xl font-semibold text-cream">
                   {formatRupiah(getAverage(lastMonthData))}
                 </p>
-                <p className="text-xs text-sand/50">Avg. Value</p>
+                <p className="text-xs text-sand/50">Rata-rata Nilai</p>
               </div>
             </div>
           </div>
@@ -116,27 +116,27 @@ export default async function FinancialReportsPage() {
         {/* Last Year */}
         <article className="glass-panel rounded-[1.5rem] border border-white/10 p-5">
           <p className="text-xs uppercase tracking-[0.28em] text-sand/55">
-            Last Year
+            Tahun Lalu
           </p>
           <div className="mt-4 space-y-4">
             <div>
               <p className="text-2xl font-semibold tracking-[-0.05em] text-cream">
                 {formatRupiah(getSummary(lastYearData).revenue)}
               </p>
-              <p className="mt-1 text-xs text-sand/50">Total Revenue</p>
+              <p className="mt-1 text-xs text-sand/50">Total Pendapatan</p>
             </div>
             <div className="flex justify-between">
               <div>
                 <p className="text-xl font-semibold text-cream">
                   {getSummary(lastYearData).count}
                 </p>
-                <p className="text-xs text-sand/50">Orders</p>
+                <p className="text-xs text-sand/50">Pesanan</p>
               </div>
               <div className="text-right">
                 <p className="text-xl font-semibold text-cream">
                   {formatRupiah(getAverage(lastYearData))}
                 </p>
-                <p className="text-xs text-sand/50">Avg. Value</p>
+                <p className="text-xs text-sand/50">Rata-rata Nilai</p>
               </div>
             </div>
           </div>
@@ -159,10 +159,10 @@ export default async function FinancialReportsPage() {
       <article className="glass-panel rounded-[1.8rem] border border-white/10 overflow-hidden">
         <div className="border-b border-white/10 px-4 py-4 sm:px-6">
           <p className="text-xs uppercase tracking-[0.28em] text-sand/55">
-            Recent Orders
+            Pesanan Terbaru
           </p>
           <h2 className="mt-2 text-xl font-semibold tracking-[-0.04em] text-cream sm:text-2xl">
-            Today's Transactions
+            Transaksi Hari Ini
           </h2>
         </div>
 
@@ -176,16 +176,16 @@ export default async function FinancialReportsPage() {
               <thead>
                 <tr className="border-b border-white/10 text-left">
                   <th className="px-4 py-3 text-xs uppercase tracking-[0.2em] text-sand/50 sm:px-6 sm:py-4">
-                    Order ID
+                    ID Pesanan
                   </th>
                   <th className="px-4 py-3 text-xs uppercase tracking-[0.2em] text-sand/50 sm:px-6 sm:py-4">
-                    Customer
+                    Pelanggan
                   </th>
                   <th className="px-4 py-3 text-xs uppercase tracking-[0.2em] text-sand/50 sm:px-6 sm:py-4">
-                    Items
+                    Item
                   </th>
                   <th className="px-4 py-3 text-xs uppercase tracking-[0.2em] text-sand/50 sm:px-6 sm:py-4">
-                    Date
+                    Tanggal
                   </th>
                   <th className="px-4 py-3 text-right text-xs uppercase tracking-[0.2em] text-sand/50 sm:px-6 sm:py-4">
                     Total
@@ -213,7 +213,7 @@ export default async function FinancialReportsPage() {
                     </td>
                     <td className="px-4 py-3 sm:px-6 sm:py-4">
                       <p className="text-sm text-sand">
-                        {order.items.length} item(s)
+                        {order.items.length} item
                       </p>
                     </td>
                     <td className="px-4 py-3 sm:px-6 sm:py-4">

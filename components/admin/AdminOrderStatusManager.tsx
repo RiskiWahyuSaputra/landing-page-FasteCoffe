@@ -65,7 +65,7 @@ export default function AdminOrderStatusManager({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-sand/45">
-            Order Progress
+            Progres Pesanan
           </p>
           <h4 className="mt-2 text-lg font-semibold text-cream">
             {getOrderStatusLabel(status, t)}
@@ -93,11 +93,11 @@ export default function AdminOrderStatusManager({
               disabled={isLoading}
               className={`rounded-full border px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] transition ${
                 isActive
-                  ? "border-copper/40 bg-[rgba(212,153,95,0.12)] text-copper"
+                  ? "border-copper/40 bg-copper/12 text-copper"
                   : "border-white/10 bg-white/[0.03] text-sand hover:border-copper/25 hover:text-white"
               } disabled:cursor-not-allowed disabled:opacity-70`}
             >
-              {isLoading ? "Updating..." : t(step.labelKey)}
+              {isLoading ? "Memperbarui..." : t(step.labelKey)}
             </button>
           );
         })}

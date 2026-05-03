@@ -77,11 +77,11 @@ function formatPaymentMethod(value: string) {
     case "qris":
       return "QRIS";
     case "bank_transfer":
-      return "Bank Transfer";
+      return "Transfer Bank";
     case "cash_on_pickup":
-      return "Cash on Pickup";
+      return "Bayar Saat Ambil";
     case "e_wallet":
-      return "E-Wallet";
+      return "Dompet Digital";
     default:
       return value;
   }
@@ -162,7 +162,7 @@ export default function AdminOrdersRealtime({
       <header className="glass-panel grain-overlay rounded-[1.8rem] border border-white/10 px-4 py-5 sm:px-6 md:px-8">
         <div className="flex flex-col gap-4 sm:gap-5 xl:flex-row xl:items-center xl:justify-between">
           <div>
-            <p className="section-label">Orders</p>
+            <p className="section-label">Pesanan</p>
             <h1 className="text-[clamp(1.5rem,4vw,3.2rem)] font-semibold leading-[1.05] tracking-[-0.05em] text-cream">
               Daftar Pesanan
             </h1>
@@ -188,7 +188,7 @@ export default function AdminOrdersRealtime({
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.26em] text-sand/55">
-              Filter Status
+              Status Pesanan
             </p>
             <h2 className="mt-1.5 text-xl font-semibold tracking-[-0.03em] text-cream">
               Pilih status pesanan
@@ -204,7 +204,7 @@ export default function AdminOrdersRealtime({
                   href={`/admin/orders?status=${filter.value}`}
                   className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] transition ${
                     isActive
-                      ? "border-copper/40 bg-[rgba(212,153,95,0.12)] text-copper"
+                      ? "border-copper/40 bg-copper/12 text-copper"
                       : "border-white/10 bg-white/[0.03] text-sand hover:border-copper/25 hover:text-white"
                   }`}
                 >
@@ -279,7 +279,7 @@ export default function AdminOrdersRealtime({
                   </div>
 
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className="rounded-full border border-copper/30 bg-[rgba(212,153,95,0.1)] px-3.5 py-1.5 text-sm font-semibold text-copper">
+                    <span className="rounded-full border border-copper/30 bg-copper/10 px-3.5 py-1.5 text-sm font-semibold text-copper">
                       {formatRupiah(order.total)}
                     </span>
                     <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-sand/60">
@@ -295,7 +295,7 @@ export default function AdminOrdersRealtime({
                 <div className="grid gap-0 divide-y divide-white/[0.05] lg:grid-cols-3 lg:divide-x lg:divide-y-0">
                   <div className="p-5">
                     <p className="mb-2 text-xs uppercase tracking-[0.22em] text-sand/45">
-                      Customer
+                      Pelanggan
                     </p>
                     <p className="text-sm font-medium text-cream">
                       {order.customer_name}
@@ -327,7 +327,7 @@ export default function AdminOrdersRealtime({
                       />
                     ) : (
                       <p className="mt-2 text-xs text-sand/55">
-                        No proof uploaded.
+                        Belum ada bukti pembayaran.
                       </p>
                     )}
                   </div>
@@ -342,7 +342,7 @@ export default function AdminOrdersRealtime({
 
                 <div className="border-t border-white/[0.06] p-5">
                   <p className="mb-3 text-xs uppercase tracking-[0.22em] text-sand/45">
-                    Items Ordered
+                    Item Pesanan
                   </p>
                   <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                     {order.items.map((item) => (

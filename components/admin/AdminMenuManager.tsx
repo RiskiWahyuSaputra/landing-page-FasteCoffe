@@ -164,16 +164,16 @@ export default function AdminMenuManager({
     }
   };
 
-  const formHeading = editingItem ? "Edit menu item" : "Publish a new menu item";
+  const formHeading = editingItem ? "Edit item menu" : "Publikasikan item menu baru";
   const formDescription = editingItem
     ? "Perbarui nama, harga, deskripsi, atau ganti gambar menu yang sudah tayang."
-    : "Menu yang ditambahkan di sini akan langsung dipakai oleh section menu di landing page Next.js.";
+    : "Menu yang ditambahkan di sini akan langsung dipakai oleh section menu di halaman utama Next.js.";
 
   return (
     <section className="grid gap-5 xl:grid-cols-[0.9fr_1.1fr]">
       <article className="glass-panel rounded-[2rem] border border-white/10 p-4 sm:p-6">
         <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
-          {editingItem ? "Edit Menu" : "Add Menu"}
+          {editingItem ? "Edit Menu" : "Tambah Menu"}
         </p>
         <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-cream sm:text-3xl">
           {formHeading}
@@ -247,7 +247,7 @@ export default function AdminMenuManager({
 
             <label className="block">
               <span className="mb-2 block text-xs uppercase tracking-[0.24em] text-sand/62">
-                Accent
+                Aksen
               </span>
               <select
                 value={accent}
@@ -256,7 +256,7 @@ export default function AdminMenuManager({
               >
                 {accentOptions.map((option, index) => (
                   <option key={option} value={option} className="bg-[#160e0a]">
-                    Accent {index + 1}
+                    Aksen {index + 1}
                   </option>
                 ))}
               </select>
@@ -301,7 +301,7 @@ export default function AdminMenuManager({
                 setImageFile(file);
                 setImagePreview(URL.createObjectURL(file));
               }}
-              className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-cream outline-none file:mr-4 file:rounded-full file:border-0 file:bg-copper file:px-4 file:py-2 file:text-xs file:font-medium file:uppercase file:tracking-[0.18em] file:text-[#1a0f09]"
+              className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-cream outline-none file:mr-4 file:rounded-full file:border-0 file:bg-copper file:px-4 file:py-2 file:text-xs file:font-medium file:uppercase file:tracking-[0.18em] file:text-ink"
             />
             <p className="mt-3 text-xs leading-6 text-sand/62">
               Format yang didukung: JPG, JPEG, PNG, BMP, GIF, SVG, WEBP.
@@ -313,7 +313,7 @@ export default function AdminMenuManager({
             <div className="overflow-hidden rounded-[1.4rem] border border-white/10 bg-white/[0.03] p-3">
               <img
                 src={imagePreview}
-                alt="Preview menu"
+                alt="Pratinjau menu"
                 className="h-48 w-full rounded-[1rem] object-cover"
               />
             </div>
@@ -326,7 +326,7 @@ export default function AdminMenuManager({
           ) : null}
 
           {success ? (
-            <div className="rounded-[1.2rem] border border-copper/25 bg-[rgba(212,153,95,0.12)] px-4 py-3 text-sm text-cream">
+            <div className="rounded-[1.2rem] border border-copper/25 bg-copper/12 px-4 py-3 text-sm text-cream">
               {success}
             </div>
           ) : null}
@@ -335,14 +335,14 @@ export default function AdminMenuManager({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-[#1a0f09] transition hover:bg-[#e2a86d] disabled:cursor-not-allowed disabled:opacity-70"
+              className="w-full rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-ink transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
             >
               {isSubmitting
                 ? editingItem
-                  ? "Updating..."
-                  : "Publishing..."
+                  ? "Menyimpan..."
+                  : "Menerbitkan..."
                 : editingItem
-                  ? "Update Menu"
+                  ? "Perbarui Menu"
                   : "Tambah Menu"}
             </button>
             {editingItem ? (
@@ -351,7 +351,7 @@ export default function AdminMenuManager({
                 onClick={resetForm}
                 className="w-full rounded-full border border-white/10 px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-sand transition hover:border-copper/40 hover:text-white"
               >
-                Cancel Edit
+                Batal Edit
               </button>
             ) : null}
           </div>
@@ -362,10 +362,10 @@ export default function AdminMenuManager({
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
-              Current Menu
+              Menu Saat Ini
             </p>
             <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-cream sm:text-3xl">
-              Landing page menu source
+              Sumber menu halaman utama
             </h2>
           </div>
           <p className="text-sm leading-6 text-sand/68">
@@ -416,13 +416,13 @@ export default function AdminMenuManager({
 
                   <div className="mt-5 flex items-center justify-between gap-4">
                     <p className="text-xs uppercase tracking-[0.22em] text-sand/62">
-                      Sort Order {item.sort_order}
+                      Urutan Tampil {item.sort_order}
                     </p>
                     <div className="flex items-center gap-2">
                       <button
                         type="button"
                         onClick={() => fillFormForEdit(item)}
-                        className="rounded-full border border-copper/25 bg-[rgba(212,153,95,0.1)] px-4 py-2 text-xs uppercase tracking-[0.22em] text-copper transition hover:border-copper/50 hover:bg-copper hover:text-[#1a0f09]"
+                        className="rounded-full border border-copper/25 bg-copper/10 px-4 py-2 text-xs uppercase tracking-[0.22em] text-copper transition hover:border-copper/50 hover:bg-copper hover:text-ink"
                       >
                         Edit
                       </button>
@@ -432,7 +432,7 @@ export default function AdminMenuManager({
                         disabled={deletingId === item.id}
                         className="rounded-full border border-white/10 px-4 py-2 text-xs uppercase tracking-[0.22em] text-sand transition hover:border-[#c86b57]/40 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
                       >
-                        {deletingId === item.id ? "Removing..." : "Delete"}
+                        {deletingId === item.id ? "Menghapus..." : "Hapus"}
                       </button>
                     </div>
                   </div>

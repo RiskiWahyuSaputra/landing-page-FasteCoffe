@@ -30,7 +30,7 @@ export default function AdminLogoutButton() {
       disabled={isSubmitting}
       className="rounded-full border border-white/10 px-5 py-3 text-xs uppercase tracking-[0.24em] text-sand transition hover:border-copper/50 hover:text-white disabled:cursor-not-allowed disabled:opacity-70"
     >
-      {isSubmitting ? "Signing out..." : "Logout"}
+      {isSubmitting ? "Keluar..." : "Keluar"}
     </button>
   );
 }

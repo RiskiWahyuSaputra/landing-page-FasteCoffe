@@ -22,7 +22,7 @@ export default function OrderProgress({
             key={step.value}
             className={`rounded-[1.3rem] border px-4 py-4 transition ${
               isCurrent
-                ? "border-copper/40 bg-[rgba(212,153,95,0.12)]"
+                ? "border-copper/40 bg-copper/12"
                 : isComplete
                   ? "border-emerald-500/20 bg-emerald-500/10"
                   : "border-white/10 bg-white/[0.03]"
@@ -32,7 +32,7 @@ export default function OrderProgress({
               <span
                 className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-sm font-semibold ${
                   isCurrent
-                    ? "border-copper bg-copper text-[#1a0f09]"
+                    ? "border-copper bg-copper text-ink"
                     : isComplete
                       ? "border-emerald-400/40 bg-emerald-400/20 text-emerald-300"
                       : "border-white/10 text-sand/60"

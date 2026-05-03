@@ -99,7 +99,7 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
                 onClick={() => setActiveCategory(option.value)}
                 className={`rounded-full border px-4 py-2 text-xs uppercase tracking-[0.22em] transition ${
                   isActive
-                    ? "border-copper bg-copper text-[#1a0f09]"
+                    ? "border-copper bg-copper text-ink"
                     : "border-white/10 bg-white/[0.03] text-sand hover:border-copper/40 hover:text-white"
                 }`}
               >
@@ -125,7 +125,7 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
                   transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                   className="group glass-panel grain-overlay relative overflow-hidden rounded-[2rem] border border-white/10 p-5 shadow-halo"
                 >
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212,153,95,0.18),transparent_55%)] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(127,150,97,0.2),transparent_55%)] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
 
                   <div
                     className={`relative aspect-[4/3] overflow-hidden rounded-[1.6rem] bg-gradient-to-br ${item.accent}`}
@@ -154,7 +154,7 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
                       {categoryLabel}
                     </div>
                     {quantity ? (
-                      <div className="absolute right-4 top-4 rounded-full border border-copper/30 bg-[rgba(212,153,95,0.16)] px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-copper">
+                      <div className="absolute right-4 top-4 rounded-full border border-copper/30 bg-copper/16 px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-copper">
                         {t("in_cart")} x{quantity}
                       </div>
                     ) : null}
@@ -179,12 +179,12 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
                       {categoryLabel}
                     </p>
 
-                    <div className="flex items-center gap-2 rounded-full border border-copper/30 bg-[rgba(212,153,95,0.12)] p-1">
+                    <div className="flex items-center gap-2 rounded-full border border-copper/30 bg-copper/12 p-1">
                       <button
                         type="button"
                         onClick={() => decreaseItem(item.name)}
                         disabled={!quantity}
-                        className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-copper transition hover:bg-copper hover:text-[#1a0f09] disabled:cursor-not-allowed disabled:opacity-35"
+                        className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-copper transition hover:bg-copper hover:text-ink disabled:cursor-not-allowed disabled:opacity-35"
                         aria-label={t("decrease")}
                       >
                         -
@@ -197,7 +197,7 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
                         onClick={() =>
                           quantity ? increaseItem(item.name) : addItem(item)
                         }
-                        className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-copper transition hover:bg-copper hover:text-[#1a0f09]"
+                        className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-copper transition hover:bg-copper hover:text-ink"
                         aria-label={t("increase")}
                       >
                         +
@@ -255,7 +255,7 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
                   />
                 </div>
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,6,4,0.28)_0%,rgba(10,6,4,0.4)_22%,rgba(10,6,4,0.82)_72%,rgba(10,6,4,0.95)_100%)]" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(212,153,95,0.2),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.04),transparent)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(127,150,97,0.22),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.04),transparent)]" />
                 <div className="absolute -right-10 top-8 h-40 w-40 rounded-full bg-copper/10 blur-3xl transition-transform duration-500 group-hover:scale-125" />
                 <div className="absolute bottom-0 left-0 h-28 w-full bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.24))]" />
 
