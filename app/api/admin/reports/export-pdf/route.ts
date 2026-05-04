@@ -10,34 +10,30 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const filter = searchParams.get("filter") || "today";
 
-    const response = await fetch(`${LARAVEL_API_URL}/admin/orders/export?filter=${filter}`, {
+    const response = await fetch(`${LARAVEL_API_URL}/admin/orders/export-pdf?filter=${filter}`, {
       headers: {
-        Accept: "application/vnd.ms-excel",
+        Accept: "text/html",
         Authorization: `Bearer ${token}`,
       },
       cache: "no-store",
     });
 
     if (!response.ok) {
-      return new Response("Gagal mengambil data laporan dari backend.", { 
+      return new Response("Gagal mengambil data laporan PDF dari backend.", { 
         status: response.status 
       });
     }
 
-    const blob = await response.blob();
-    const contentDisposition = response.headers.get("content-disposition");
+    const html = await response.text();
     
-    // Forward the Excel response with correct headers
-    return new Response(blob, {
+    // Return HTML which has window.print() script
+    return new Response(html, {
       headers: {
-        "Content-Type": "application/vnd.ms-excel",
-        "Content-Disposition": contentDisposition || `attachment; filename="laporan-faste-coffee-${filter}.xls"`,
+        "Content-Type": "text/html",
       },
     });
   } catch (error) {
-    console.error("Export error:", error);
-    // If requireAdminSession redirects, it throws an error that Next.js handles,
-    // but in an API route we should ideally return a 401.
+    console.error("PDF Export error:", error);
     return new Response("Unauthorized or Session Expired", { status: 401 });
   }
 }

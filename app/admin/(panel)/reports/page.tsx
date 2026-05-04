@@ -4,6 +4,7 @@ import { requireAdminSession } from "@/lib/admin-session";
 import { getAdminOrders } from "@/lib/laravel-admin-api";
 import { formatRupiah } from "@/lib/currency";
 import type { OrderHistoryEntry, OrderHistoryFilter } from "@/lib/order-types";
+import { DownloadPdfButton } from "@/components/admin/reports/DownloadPdfButton";
 
 const filters: { value: OrderHistoryFilter; label: string }[] = [
   { value: "today", label: "Hari Ini" },
@@ -63,7 +64,8 @@ export default async function FinancialReportsPage({
             </p>
           </div>
 
-          <div className="flex shrink-0 gap-2">
+          <div className="flex shrink-0 flex-wrap gap-2">
+            <DownloadPdfButton filter={activeFilter} />
             <a
               href={`/api/admin/reports/export?filter=${activeFilter}`}
               className="flex items-center gap-2 rounded-full bg-copper px-6 py-3 text-sm font-semibold text-white transition hover:bg-copper-600 active:scale-[0.98]"
@@ -87,7 +89,7 @@ export default async function FinancialReportsPage({
                   d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
                 />
               </svg>
-              Export CSV (Excel)
+              Export Excel (.xls)
             </a>
           </div>
         </div>

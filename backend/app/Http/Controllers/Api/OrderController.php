@@ -175,7 +175,7 @@ public function destroyPaymentProof(Order $order): JsonResponse
         ]);
     }
 
-    public function exportOrders(Request $request): \Symfony\Component\HttpFoundation\StreamedResponse
+    public function exportOrders(Request $request): \Illuminate\Http\Response
     {
         $filter = $request->query('filter', 'today');
         $ordersQuery = Order::query()->with('items')->latest('placed_at');
@@ -198,31 +198,175 @@ public function destroyPaymentProof(Order $order): JsonResponse
 
         $orders = $ordersQuery->get();
 
-        $headers = [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="laporan-pesanan-' . $filter . '-' . now()->format('Y-m-d') . '.csv"',
-        ];
+        $filename = 'laporan-pesanan-' . $filter . '-' . now()->format('Y-m-d') . '.xls';
 
-        return response()->stream(function () use ($orders) {
-            $handle = fopen('php://output', 'w');
-            // CSV Header
-            fputcsv($handle, ['ID Pesanan', 'Pelanggan', 'Telepon', 'Metode Pembayaran', 'Status', 'Subtotal', 'Biaya Layanan', 'Total', 'Tanggal']);
+        // Generate HTML table for Excel with basic styling (Borders and Colors)
+        $html = '
+        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+            <style>
+                .table-header { background-color: #D2691E; color: #FFFFFF; font-weight: bold; text-align: center; }
+                .cell { border: 0.5pt solid #000000; padding: 5px; }
+                .text-center { text-align: center; }
+                .text-right { text-align: right; }
+                .money { mso-number-format: "\"\Rp\"\#\,\#\#0"; }
+            </style>
+        </head>
+        <body>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th class="cell table-header">ID Pesanan</th>
+                        <th class="cell table-header">Pelanggan</th>
+                        <th class="cell table-header">Telepon</th>
+                        <th class="cell table-header">Metode</th>
+                        <th class="cell table-header">Status</th>
+                        <th class="cell table-header">Subtotal</th>
+                        <th class="cell table-header">Biaya</th>
+                        <th class="cell table-header">Total</th>
+                        <th class="cell table-header">Tanggal</th>
+                    </tr>
+                </thead>
+                <tbody>';
 
-            foreach ($orders as $order) {
-                fputcsv($handle, [
-                    $order->order_number,
-                    $order->customer_name,
-                    $order->customer_phone,
-                    $order->payment_method,
-                    $order->status,
-                    $order->subtotal,
-                    $order->service_fee,
-                    $order->total,
-                    $order->placed_at?->format('Y-m-d H:i:s'),
-                ]);
-            }
-            fclose($handle);
-        }, 200, $headers);
+        foreach ($orders as $order) {
+            $html .= '
+                    <tr>
+                        <td class="cell">' . $order->order_number . '</td>
+                        <td class="cell">' . $order->customer_name . '</td>
+                        <td class="cell">' . $order->customer_phone . '</td>
+                        <td class="cell text-center">' . strtoupper($order->payment_method) . '</td>
+                        <td class="cell text-center">' . strtoupper($order->status) . '</td>
+                        <td class="cell text-right money">' . $order->subtotal . '</td>
+                        <td class="cell text-right money">' . $order->service_fee . '</td>
+                        <td class="cell text-right money">' . $order->total . '</td>
+                        <td class="cell">' . ($order->placed_at ? $order->placed_at->format('Y-m-d H:i') : '-') . '</td>
+                    </tr>';
+        }
+
+        $html .= '
+                </tbody>
+            </table>
+        </body>
+        </html>';
+
+        return response($html, 200)
+            ->header('Content-Type', 'application/vnd.ms-excel')
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+    }
+
+    public function exportPdf(Request $request): \Illuminate\Http\Response
+    {
+        $filter = $request->query('filter', 'today');
+        $ordersQuery = Order::query()->with('items')->latest('placed_at');
+
+        if ($filter === 'all') {
+            // No date restriction
+        } elseif ($filter === 'today') {
+            $ordersQuery->whereDate('placed_at', today());
+        } elseif ($filter === 'yesterday') {
+            $ordersQuery->whereDate('placed_at', today()->subDay());
+        } elseif ($filter === 'last_month') {
+            $start = now()->subMonthNoOverflow()->startOfMonth();
+            $end = now()->subMonthNoOverflow()->endOfMonth();
+            $ordersQuery->whereBetween('placed_at', [$start, $end]);
+        } elseif ($filter === 'last_year') {
+            $start = Carbon::create(now()->year - 1, 1, 1)->startOfDay();
+            $end = Carbon::create(now()->year - 1, 12, 31)->endOfDay();
+            $ordersQuery->whereBetween('placed_at', [$start, $end]);
+        }
+
+        $orders = $ordersQuery->get();
+        $totalRevenue = $orders->sum('total');
+
+        $html = '
+        <!DOCTYPE html>
+        <html lang="id">
+        <head>
+            <meta charset="UTF-8">
+            <title>Laporan Keuangan Faste Coffee</title>
+            <style>
+                body { font-family: sans-serif; color: #333; line-height: 1.6; padding: 20px; }
+                .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #22c55e; padding-bottom: 10px; }
+                .header h1 { color: #22c55e; margin: 0; }
+                .header p { margin: 5px 0; color: #666; }
+                .summary { margin-bottom: 20px; background: #f0fdf4; padding: 15px; border-radius: 8px; border-left: 4px solid #22c55e; }
+                .summary table { width: 100%; border: none; }
+                .summary td { border: none; padding: 5px; }
+                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+                th { background-color: #f0fdf4; color: #166534; font-weight: bold; text-align: left; }
+                th, td { border: 1px solid #d1fae5; padding: 8px; font-size: 11px; }
+                .text-right { text-align: right; }
+                .footer { margin-top: 50px; text-align: right; font-size: 12px; color: #166534; }
+                @media print {
+                    .no-print { display: none; }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h1>FASTE COFFEE</h1>
+                <p>Laporan Transaksi Keuangan - ' . strtoupper(str_replace('_', ' ', $filter)) . '</p>
+                <p>Dicetak pada: ' . now()->format('d/m/Y H:i') . '</p>
+            </div>
+
+            <div class="summary">
+                <table>
+                    <tr>
+                        <td><strong>Total Transaksi:</strong> ' . $orders->count() . ' Pesanan</td>
+                        <td class="text-right"><strong>Total Pendapatan:</strong> Rp ' . number_format($totalRevenue, 0, ',', '.') . '</td>
+                    </tr>
+                </table>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Pesanan</th>
+                        <th>Pelanggan</th>
+                        <th>Metode</th>
+                        <th>Status</th>
+                        <th class="text-right">Total</th>
+                        <th>Tanggal</th>
+                    </tr>
+                </thead>
+                <tbody>';
+
+        foreach ($orders as $order) {
+            $html .= '
+                    <tr>
+                        <td>' . $order->order_number . '</td>
+                        <td>' . $order->customer_name . ' (' . $order->customer_phone . ')</td>
+                        <td>' . strtoupper($order->payment_method) . '</td>
+                        <td>' . strtoupper($order->status) . '</td>
+                        <td class="text-right">Rp ' . number_format($order->total, 0, ',', '.') . '</td>
+                        <td>' . ($order->placed_at ? $order->placed_at->format('d/m/Y H:i') : '-') . '</td>
+                    </tr>';
+        }
+
+        $html .= '
+                </tbody>
+            </table>
+
+            <div class="footer">
+                <p>Manajemen Faste Coffee</p>
+                <br><br><br>
+                <p>(__________________________)</p>
+            </div>
+
+            <script class="no-print">
+                window.onload = function() { 
+                    window.print();
+                    // Close the window after print dialog is closed (optional)
+                    // window.onafterprint = function() { window.close(); }
+                }
+            </script>
+        </body>
+        </html>';
+
+        return response($html, 200)
+            ->header('Content-Type', 'text/html');
     }
 
     /**
