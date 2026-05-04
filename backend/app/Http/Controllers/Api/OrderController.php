@@ -151,6 +151,8 @@ public function destroyPaymentProof(Order $order): JsonResponse
             // Show every order without date restriction.
         } elseif ($filter === 'today') {
             $ordersQuery->whereDate('placed_at', today());
+        } elseif ($filter === 'yesterday') {
+            $ordersQuery->whereDate('placed_at', today()->subDay());
         } elseif ($filter === 'last_month') {
             $start = now()->subMonthNoOverflow()->startOfMonth();
             $end = now()->subMonthNoOverflow()->endOfMonth();
@@ -171,6 +173,56 @@ public function destroyPaymentProof(Order $order): JsonResponse
             ],
             'orders' => $orders->map(fn (Order $order): array => $this->serializeOrder($order))->all(),
         ]);
+    }
+
+    public function exportOrders(Request $request): \Symfony\Component\HttpFoundation\StreamedResponse
+    {
+        $filter = $request->query('filter', 'today');
+        $ordersQuery = Order::query()->with('items')->latest('placed_at');
+
+        if ($filter === 'all') {
+            // No date restriction
+        } elseif ($filter === 'today') {
+            $ordersQuery->whereDate('placed_at', today());
+        } elseif ($filter === 'yesterday') {
+            $ordersQuery->whereDate('placed_at', today()->subDay());
+        } elseif ($filter === 'last_month') {
+            $start = now()->subMonthNoOverflow()->startOfMonth();
+            $end = now()->subMonthNoOverflow()->endOfMonth();
+            $ordersQuery->whereBetween('placed_at', [$start, $end]);
+        } elseif ($filter === 'last_year') {
+            $start = Carbon::create(now()->year - 1, 1, 1)->startOfDay();
+            $end = Carbon::create(now()->year - 1, 12, 31)->endOfDay();
+            $ordersQuery->whereBetween('placed_at', [$start, $end]);
+        }
+
+        $orders = $ordersQuery->get();
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="laporan-pesanan-' . $filter . '-' . now()->format('Y-m-d') . '.csv"',
+        ];
+
+        return response()->stream(function () use ($orders) {
+            $handle = fopen('php://output', 'w');
+            // CSV Header
+            fputcsv($handle, ['ID Pesanan', 'Pelanggan', 'Telepon', 'Metode Pembayaran', 'Status', 'Subtotal', 'Biaya Layanan', 'Total', 'Tanggal']);
+
+            foreach ($orders as $order) {
+                fputcsv($handle, [
+                    $order->order_number,
+                    $order->customer_name,
+                    $order->customer_phone,
+                    $order->payment_method,
+                    $order->status,
+                    $order->subtotal,
+                    $order->service_fee,
+                    $order->total,
+                    $order->placed_at?->format('Y-m-d H:i:s'),
+                ]);
+            }
+            fclose($handle);
+        }, 200, $headers);
     }
 
     /**

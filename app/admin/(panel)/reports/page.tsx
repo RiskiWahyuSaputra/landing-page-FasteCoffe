@@ -7,6 +7,7 @@ import type { OrderHistoryEntry, OrderHistoryFilter } from "@/lib/order-types";
 
 const filters: { value: OrderHistoryFilter; label: string }[] = [
   { value: "today", label: "Hari Ini" },
+  { value: "yesterday", label: "Kemarin" },
   { value: "last_month", label: "Bulan Lalu" },
   { value: "last_year", label: "Tahun Lalu" },
 ];
@@ -19,15 +20,23 @@ function formatDate(value: string | null) {
   }).format(new Date(value));
 }
 
-export default async function FinancialReportsPage() {
+export default async function FinancialReportsPage({
+  searchParams,
+}: {
+  searchParams: { filter?: string };
+}) {
   const { token } = await requireAdminSession();
+  const activeFilter = (searchParams.filter as OrderHistoryFilter) || "today";
 
   // Get data for all filters to show summary
-  const [todayData, lastMonthData, lastYearData] = await Promise.all([
-    getAdminOrders(token, "today"),
-    getAdminOrders(token, "last_month"),
-    getAdminOrders(token, "last_year"),
-  ]);
+  const [todayData, yesterdayData, lastMonthData, lastYearData, activeData] =
+    await Promise.all([
+      getAdminOrders(token, "today"),
+      getAdminOrders(token, "yesterday"),
+      getAdminOrders(token, "last_month"),
+      getAdminOrders(token, "last_year"),
+      getAdminOrders(token, activeFilter),
+    ]);
 
   const getSummary = (data: { summary: { count: number; revenue: number } }) =>
     data.summary;
@@ -35,6 +44,9 @@ export default async function FinancialReportsPage() {
     data.summary.count > 0
       ? Math.round(data.summary.revenue / data.summary.count)
       : 0;
+
+  const activeFilterLabel =
+    filters.find((f) => f.value === activeFilter)?.label || "Hari Ini";
 
   return (
     <section className="flex min-h-[calc(100vh-2rem)] flex-col gap-5">
@@ -50,11 +62,39 @@ export default async function FinancialReportsPage() {
               Pantau performa keuangan Faste Coffee dari sini.
             </p>
           </div>
+
+          <div className="flex shrink-0 gap-2">
+            <a
+              href={`/api/admin/reports/export?filter=${activeFilter}`}
+              className="flex items-center gap-2 rounded-full bg-copper px-6 py-3 text-sm font-semibold text-white transition hover:bg-copper-600 active:scale-[0.98]"
+            >
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="vertical-align-bottom 12h8m-8 0V4m0 16l4-4m-4 4l-4-4"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                />
+              </svg>
+              Export CSV (Excel)
+            </a>
+          </div>
         </div>
       </header>
 
       {/* Summary Cards - All Periods */}
-      <div className="grid gap-3 sm:gap-4 xl:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 md:grid-cols-2 xl:grid-cols-4">
         {/* Today */}
         <article className="glass-panel rounded-[1.5rem] border border-white/10 p-5">
           <p className="text-xs uppercase tracking-[0.28em] text-sand/55">
@@ -77,6 +117,35 @@ export default async function FinancialReportsPage() {
               <div className="text-right">
                 <p className="text-xl font-semibold text-cream">
                   {formatRupiah(getAverage(todayData))}
+                </p>
+                <p className="text-xs text-sand/50">Rata-rata Nilai</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        {/* Yesterday */}
+        <article className="glass-panel rounded-[1.5rem] border border-white/10 p-5">
+          <p className="text-xs uppercase tracking-[0.28em] text-sand/55">
+            Kemarin
+          </p>
+          <div className="mt-4 space-y-4">
+            <div>
+              <p className="text-2xl font-semibold tracking-[-0.05em] text-cream">
+                {formatRupiah(getSummary(yesterdayData).revenue)}
+              </p>
+              <p className="mt-1 text-xs text-sand/50">Total Pendapatan</p>
+            </div>
+            <div className="flex justify-between">
+              <div>
+                <p className="text-xl font-semibold text-cream">
+                  {getSummary(yesterdayData).count}
+                </p>
+                <p className="text-xs text-sand/50">Pesanan</p>
+              </div>
+              <div className="text-right">
+                <p className="text-xl font-semibold text-cream">
+                  {formatRupiah(getAverage(yesterdayData))}
                 </p>
                 <p className="text-xs text-sand/50">Rata-rata Nilai</p>
               </div>
@@ -143,32 +212,37 @@ export default async function FinancialReportsPage() {
         </article>
       </div>
 
-      {/* Filter Tabs - Client-side navigation would be needed for interactive filtering */}
+      {/* Filter Tabs */}
       <div className="flex gap-2 overflow-x-auto pb-2">
         {filters.map((f) => (
           <a
+            key={f.value}
             href={`?filter=${f.value}`}
-            className="shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] text-sand transition hover:border-copper/30 hover:text-white"
+            className={`shrink-0 rounded-full border border-white/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] transition hover:border-copper/30 hover:text-white ${
+              activeFilter === f.value
+                ? "bg-copper text-white"
+                : "bg-white/[0.04] text-sand"
+            }`}
           >
             {f.label}
           </a>
         ))}
       </div>
 
-      {/* Quick View - Today's Orders as default */}
+      {/* Quick View - Dynamic based on filter */}
       <article className="glass-panel rounded-[1.8rem] border border-white/10 overflow-hidden">
         <div className="border-b border-white/10 px-4 py-4 sm:px-6">
           <p className="text-xs uppercase tracking-[0.28em] text-sand/55">
-            Pesanan Terbaru
+            Riwayat Pesanan
           </p>
           <h2 className="mt-2 text-xl font-semibold tracking-[-0.04em] text-cream sm:text-2xl">
-            Transaksi Hari Ini
+            Transaksi {activeFilterLabel}
           </h2>
         </div>
 
-        {todayData.orders.length === 0 ? (
+        {activeData.orders.length === 0 ? (
           <div className="py-12 text-center sm:py-16">
-            <p className="text-sand/55">Tidak ada pesanan hari ini.</p>
+            <p className="text-sand/55">Tidak ada pesanan untuk periode ini.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -193,7 +267,7 @@ export default async function FinancialReportsPage() {
                 </tr>
               </thead>
               <tbody>
-                {todayData.orders.slice(0, 10).map((order) => (
+                {activeData.orders.map((order) => (
                   <tr
                     key={order.id}
                     className="border-b border-white/5 transition hover:bg-white/[0.02]"
