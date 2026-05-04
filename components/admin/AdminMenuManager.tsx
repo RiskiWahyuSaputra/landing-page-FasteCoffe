@@ -49,6 +49,21 @@ export default function AdminMenuManager({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<
+    "all" | (typeof MENU_CATEGORIES)[number]
+  >("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  const filteredItems = items.filter(
+    (item) => activeFilter === "all" || item.category === activeFilter,
+  );
+
+  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+  const paginatedItems = filteredItems.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage,
+  );
 
   const resetForm = () => {
     setEditingItem(null);
@@ -403,74 +418,144 @@ export default function AdminMenuManager({
           )}
         </div>
 
-        <div className="mt-8 space-y-4">
-          {items.map((item) => (
-            <div
-              key={item.id}
-              className="rounded-[1.6rem] border border-white/10 bg-white/[0.03] p-4"
+        {/* Filter Tabs */}
+        <div className="mt-8 flex flex-wrap gap-2">
+          <button
+            onClick={() => {
+              setActiveFilter("all");
+              setCurrentPage(1);
+            }}
+            className={`rounded-full border border-white/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] transition hover:border-copper/30 hover:text-white ${
+              activeFilter === "all"
+                ? "bg-copper text-ink"
+                : "bg-white/[0.04] text-sand"
+            }`}
+          >
+            Semua
+          </button>
+          {MENU_CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => {
+                setActiveFilter(cat);
+                setCurrentPage(1);
+              }}
+              className={`rounded-full border border-white/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] transition hover:border-copper/30 hover:text-white ${
+                activeFilter === cat
+                  ? "bg-copper text-ink"
+                  : "bg-white/[0.04] text-sand"
+              }`}
             >
-              <div className="flex gap-4">
-                <div
-                  className={`h-24 w-20 shrink-0 rounded-[1.2rem] bg-gradient-to-br ${item.accent}`}
-                >
-                  {item.image_url ? (
-                    <img
-                      src={item.image_url}
-                      alt={item.name}
-                      className="h-full w-full rounded-[1.2rem] object-cover"
-                    />
-                  ) : null}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                    <div>
-                      <h3 className="text-xl font-semibold text-cream">
-                        {item.name}
-                      </h3>
-                      <p className="mt-2 text-xs uppercase tracking-[0.22em] text-copper">
-                        {getMenuCategoryAdminLabel(item.category)}
-                      </p>
-                      <p className="mt-2 text-sm leading-6 text-sand/72">
-                        {item.description}
-                      </p>
-                    </div>
-                    <div className="text-left sm:text-right">
-                      <p className="text-xs uppercase tracking-[0.22em] text-sand/58">
-                        Harga
-                      </p>
-                      <p className="mt-2 text-lg font-semibold text-copper">
-                        {formatRupiah(item.price)}
-                      </p>
-                    </div>
-                  </div>
+              {getMenuCategoryAdminLabel(cat)}
+            </button>
+          ))}
+        </div>
 
-                  <div className="mt-5 flex items-center justify-between gap-4">
-                    <p className="text-xs uppercase tracking-[0.22em] text-sand/62">
-                      Urutan Tampil {item.sort_order}
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => fillFormForEdit(item)}
-                        className="rounded-full border border-copper/25 bg-copper/10 px-4 py-2 text-xs uppercase tracking-[0.22em] text-copper transition hover:border-copper/50 hover:bg-copper hover:text-ink"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(item.id)}
-                        disabled={deletingId === item.id}
-                        className="rounded-full border border-white/10 px-4 py-2 text-xs uppercase tracking-[0.22em] text-sand transition hover:border-[#c86b57]/40 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
-                      >
-                        {deletingId === item.id ? "Menghapus..." : "Hapus"}
-                      </button>
+        <div className="mt-6 space-y-4">
+          {paginatedItems.length === 0 ? (
+            <div className="py-12 text-center sm:py-16">
+              <p className="text-sand/55"> Tidak ada menu untuk kategori ini. </p>
+            </div>
+          ) : (
+            paginatedItems.map((item) => (
+              <div
+                key={item.id}
+                className="rounded-[1.6rem] border border-white/10 bg-white/[0.03] p-4"
+              >
+                <div className="flex gap-4">
+                  <div
+                    className={`h-24 w-20 shrink-0 rounded-[1.2rem] bg-gradient-to-br ${item.accent}`}
+                  >
+                    {item.image_url ? (
+                      <img
+                        src={item.image_url}
+                        alt={item.name}
+                        className="h-full w-full rounded-[1.2rem] object-cover"
+                      />
+                    ) : null}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                      <div>
+                        <h3 className="text-xl font-semibold text-cream">
+                          {item.name}
+                        </h3>
+                        <p className="mt-2 text-xs uppercase tracking-[0.22em] text-copper">
+                          {getMenuCategoryAdminLabel(item.category)}
+                        </p>
+                        <p className="mt-2 text-sm leading-6 text-sand/72">
+                          {item.description}
+                        </p>
+                      </div>
+                      <div className="text-left sm:text-right">
+                        <p className="text-xs uppercase tracking-[0.22em] text-sand/58">
+                          Harga
+                        </p>
+                        <p className="mt-2 text-lg font-semibold text-copper">
+                          {formatRupiah(item.price)}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-5 flex items-center justify-between gap-4">
+                      <p className="text-xs uppercase tracking-[0.22em] text-sand/62">
+                        Urutan Tampil {item.sort_order}
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => fillFormForEdit(item)}
+                          className="rounded-full border border-copper/25 bg-copper/10 px-4 py-2 text-xs uppercase tracking-[0.22em] text-copper transition hover:border-copper/50 hover:bg-copper hover:text-ink"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(item.id)}
+                          disabled={deletingId === item.id}
+                          className="rounded-full border border-white/10 px-4 py-2 text-xs uppercase tracking-[0.22em] text-sand transition hover:border-[#c86b57]/40 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+                        >
+                          {deletingId === item.id ? "Menghapus..." : "Hapus"}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-8 flex items-center justify-between border-t border-white/10 pt-6">
+            <p className="text-xs uppercase tracking-[0.2em] text-sand/50">
+              Halaman {currentPage} dari {totalPages}
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  setCurrentPage((p) => Math.max(1, p - 1));
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                disabled={currentPage === 1}
+                className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] text-sand transition hover:border-copper/30 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed"
+              >
+                Sebelumnya
+              </button>
+              <button
+                onClick={() => {
+                  setCurrentPage((p) => Math.min(totalPages, p + 1));
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                disabled={currentPage === totalPages}
+                className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] text-sand transition hover:border-copper/30 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed"
+              >
+                Selanjutnya
+              </button>
+            </div>
+          </div>
+        )}
       </article>
     </div>
   );
