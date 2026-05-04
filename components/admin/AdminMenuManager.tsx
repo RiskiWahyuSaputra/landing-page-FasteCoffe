@@ -48,6 +48,7 @@ export default function AdminMenuManager({
   const [success, setSuccess] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [showForm, setShowForm] = useState(false);
 
   const resetForm = () => {
     setEditingItem(null);
@@ -58,6 +59,7 @@ export default function AdminMenuManager({
     setAccent(accentOptions[0]);
     setImageFile(null);
     setImagePreview("");
+    setShowForm(false);
   };
 
   const fillFormForEdit = (item: MenuItemPayload) => {
@@ -69,6 +71,8 @@ export default function AdminMenuManager({
     setAccent(item.accent);
     setImageFile(null);
     setImagePreview(item.image_url ?? "");
+    setShowForm(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -170,76 +174,29 @@ export default function AdminMenuManager({
     : "Menu yang ditambahkan di sini akan langsung dipakai oleh section menu di halaman utama Next.js.";
 
   return (
-    <section className="grid gap-5 xl:grid-cols-[0.9fr_1.1fr]">
-      <article className="glass-panel rounded-[2rem] border border-white/10 p-4 sm:p-6">
-        <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
-          {editingItem ? "Edit Menu" : "Tambah Menu"}
-        </p>
-        <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-cream sm:text-3xl">
-          {formHeading}
-        </h2>
-        <p className="mt-3 text-sm leading-6 text-sand/70">{formDescription}</p>
+    <div className="flex flex-col gap-5">
+      {showForm && (
+        <article className="glass-panel animate-in fade-in slide-in-from-top-4 duration-500 rounded-[2rem] border border-white/10 p-4 sm:p-6">
+          <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
+            {editingItem ? "Edit Menu" : "Tambah Menu"}
+          </p>
+          <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-cream sm:text-3xl">
+            {formHeading}
+          </h2>
+          <p className="mt-3 text-sm leading-6 text-sand/70">
+            {formDescription}
+          </p>
 
-        <form className="mt-5 space-y-4 sm:mt-7" onSubmit={handleSubmit}>
-          <label className="block">
-            <span className="mb-2 block text-xs uppercase tracking-[0.24em] text-sand/62">
-              Nama Menu
-            </span>
-            <input
-              type="text"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              placeholder="Contoh: Mocha Sea Salt"
-              className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition placeholder:text-sand/35 focus:border-copper/50 focus:bg-white/[0.06]"
-              required
-            />
-          </label>
-
-          <label className="block">
-            <span className="mb-2 block text-xs uppercase tracking-[0.24em] text-sand/62">
-              Deskripsi
-            </span>
-            <textarea
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-              rows={3}
-              placeholder="Rasa singkat yang tampil di halaman depan"
-              className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition placeholder:text-sand/35 focus:border-copper/50 focus:bg-white/[0.06]"
-              required
-            />
-          </label>
-
-          <div className="grid gap-4 sm:grid-cols-3">
+          <form className="mt-5 space-y-4 sm:mt-7" onSubmit={handleSubmit}>
             <label className="block">
               <span className="mb-2 block text-xs uppercase tracking-[0.24em] text-sand/62">
-                Kategori
-              </span>
-              <select
-                value={category}
-                onChange={(event) =>
-                  setCategory(event.target.value as (typeof MENU_CATEGORIES)[number])
-                }
-                className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition focus:border-copper/50 focus:bg-white/[0.06]"
-              >
-                {MENU_CATEGORIES.map((option) => (
-                  <option key={option} value={option} className="bg-[#160e0a]">
-                    {getMenuCategoryAdminLabel(option)}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label className="block">
-              <span className="mb-2 block text-xs uppercase tracking-[0.24em] text-sand/62">
-                Harga
+                Nama Menu
               </span>
               <input
-                type="number"
-                min="1000"
-                step="1000"
-                value={price}
-                onChange={(event) => setPrice(event.target.value)}
-                placeholder="18000"
+                type="text"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                placeholder="Contoh: Mocha Sea Salt"
                 className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition placeholder:text-sand/35 focus:border-copper/50 focus:bg-white/[0.06]"
                 required
               />
@@ -247,130 +204,203 @@ export default function AdminMenuManager({
 
             <label className="block">
               <span className="mb-2 block text-xs uppercase tracking-[0.24em] text-sand/62">
-                Aksen
+                Deskripsi
               </span>
-              <select
-                value={accent}
-                onChange={(event) => setAccent(event.target.value)}
-                className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition focus:border-copper/50 focus:bg-white/[0.06]"
-              >
-                {accentOptions.map((option, index) => (
-                  <option key={option} value={option} className="bg-[#160e0a]">
-                    Aksen {index + 1}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <label className="block">
-            <span className="mb-2 block text-xs uppercase tracking-[0.24em] text-sand/62">
-              Gambar Menu
-            </span>
-            <input
-              type="file"
-              accept=".jpg,.jpeg,.png,.bmp,.gif,.svg,.webp,image/jpeg,image/png,image/bmp,image/gif,image/svg+xml,image/webp"
-              onChange={(event) => {
-                const file = event.target.files?.[0] ?? null;
-                setError("");
-
-                if (!file) {
-                  setImageFile(null);
-                  setImagePreview(editingItem?.image_url ?? "");
-                  return;
-                }
-
-                if (!allowedMimeTypes.has(file.type)) {
-                  setImageFile(null);
-                  setImagePreview(editingItem?.image_url ?? "");
-                  setError(
-                    "Format gambar tidak didukung. Gunakan JPG, JPEG, PNG, BMP, GIF, SVG, atau WEBP.",
-                  );
-                  event.currentTarget.value = "";
-                  return;
-                }
-
-                if (file.size > MAX_IMAGE_SIZE_BYTES) {
-                  setImageFile(null);
-                  setImagePreview(editingItem?.image_url ?? "");
-                  setError("Ukuran gambar maksimal 4 MB.");
-                  event.currentTarget.value = "";
-                  return;
-                }
-
-                setImageFile(file);
-                setImagePreview(URL.createObjectURL(file));
-              }}
-              className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-cream outline-none file:mr-4 file:rounded-full file:border-0 file:bg-copper file:px-4 file:py-2 file:text-xs file:font-medium file:uppercase file:tracking-[0.18em] file:text-ink"
-            />
-            <p className="mt-3 text-xs leading-6 text-sand/62">
-              Format yang didukung: JPG, JPEG, PNG, BMP, GIF, SVG, WEBP.
-              Maksimal ukuran file: 4 MB.
-            </p>
-          </label>
-
-          {imagePreview ? (
-            <div className="overflow-hidden rounded-[1.4rem] border border-white/10 bg-white/[0.03] p-3">
-              <img
-                src={imagePreview}
-                alt="Pratinjau menu"
-                className="h-48 w-full rounded-[1rem] object-cover"
+              <textarea
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+                rows={3}
+                placeholder="Rasa singkat yang tampil di halaman depan"
+                className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition placeholder:text-sand/35 focus:border-copper/50 focus:bg-white/[0.06]"
+                required
               />
-            </div>
-          ) : null}
+            </label>
 
-          {error ? (
-            <div className="rounded-[1.2rem] border border-[#c86b57]/35 bg-[#5a2018]/20 px-4 py-3 text-sm text-[#ffd8d1]">
-              {error}
-            </div>
-          ) : null}
+            <div className="grid gap-4 sm:grid-cols-3">
+              <label className="block">
+                <span className="mb-2 block text-xs uppercase tracking-[0.24em] text-sand/62">
+                  Kategori
+                </span>
+                <select
+                  value={category}
+                  onChange={(event) =>
+                    setCategory(
+                      event.target.value as (typeof MENU_CATEGORIES)[number],
+                    )
+                  }
+                  className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition focus:border-copper/50 focus:bg-white/[0.06]"
+                >
+                  {MENU_CATEGORIES.map((option) => (
+                    <option key={option} value={option} className="bg-[#160e0a]">
+                      {getMenuCategoryAdminLabel(option)}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
-          {success ? (
-            <div className="rounded-[1.2rem] border border-copper/25 bg-copper/12 px-4 py-3 text-sm text-cream">
-              {success}
-            </div>
-          ) : null}
+              <label className="block">
+                <span className="mb-2 block text-xs uppercase tracking-[0.24em] text-sand/62">
+                  Harga
+                </span>
+                <input
+                  type="number"
+                  min="1000"
+                  step="1000"
+                  value={price}
+                  onChange={(event) => setPrice(event.target.value)}
+                  placeholder="18000"
+                  className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition placeholder:text-sand/35 focus:border-copper/50 focus:bg-white/[0.06]"
+                  required
+                />
+              </label>
 
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-ink transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
-            >
-              {isSubmitting
-                ? editingItem
-                  ? "Menyimpan..."
-                  : "Menerbitkan..."
-                : editingItem
-                  ? "Perbarui Menu"
-                  : "Tambah Menu"}
-            </button>
-            {editingItem ? (
+              <label className="block">
+                <span className="mb-2 block text-xs uppercase tracking-[0.24em] text-sand/62">
+                  Aksen
+                </span>
+                <select
+                  value={accent}
+                  onChange={(event) => setAccent(event.target.value)}
+                  className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition focus:border-copper/50 focus:bg-white/[0.06]"
+                >
+                  {accentOptions.map((option, index) => (
+                    <option key={option} value={option} className="bg-[#160e0a]">
+                      Aksen {index + 1}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <label className="block">
+              <span className="mb-2 block text-xs uppercase tracking-[0.24em] text-sand/62">
+                Gambar Menu
+              </span>
+              <input
+                type="file"
+                accept=".jpg,.jpeg,.png,.bmp,.gif,.svg,.webp,image/jpeg,image/png,image/bmp,image/gif,image/svg+xml,image/webp"
+                onChange={(event) => {
+                  const file = event.target.files?.[0] ?? null;
+                  setError("");
+
+                  if (!file) {
+                    setImageFile(null);
+                    setImagePreview(editingItem?.image_url ?? "");
+                    return;
+                  }
+
+                  if (!allowedMimeTypes.has(file.type)) {
+                    setImageFile(null);
+                    setImagePreview(editingItem?.image_url ?? "");
+                    setError(
+                      "Format gambar tidak didukung. Gunakan JPG, JPEG, PNG, BMP, GIF, SVG, atau WEBP.",
+                    );
+                    event.currentTarget.value = "";
+                    return;
+                  }
+
+                  if (file.size > MAX_IMAGE_SIZE_BYTES) {
+                    setImageFile(null);
+                    setImagePreview(editingItem?.image_url ?? "");
+                    setError("Ukuran gambar maksimal 4 MB.");
+                    event.currentTarget.value = "";
+                    return;
+                  }
+
+                  setImageFile(file);
+                  setImagePreview(URL.createObjectURL(file));
+                }}
+                className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-cream outline-none file:mr-4 file:rounded-full file:border-0 file:bg-copper file:px-4 file:py-2 file:text-xs file:font-medium file:uppercase file:tracking-[0.18em] file:text-ink"
+              />
+              <p className="mt-3 text-xs leading-6 text-sand/62">
+                Format yang didukung: JPG, JPEG, PNG, BMP, GIF, SVG, WEBP.
+                Maksimal ukuran file: 4 MB.
+              </p>
+            </label>
+
+            {imagePreview ? (
+              <div className="overflow-hidden rounded-[1.4rem] border border-white/10 bg-white/[0.03] p-3">
+                <img
+                  src={imagePreview}
+                  alt="Pratinjau menu"
+                  className="h-48 w-full rounded-[1rem] object-cover"
+                />
+              </div>
+            ) : null}
+
+            {error ? (
+              <div className="rounded-[1.2rem] border border-[#c86b57]/35 bg-[#5a2018]/20 px-4 py-3 text-sm text-[#ffd8d1]">
+                {error}
+              </div>
+            ) : null}
+
+            {success ? (
+              <div className="rounded-[1.2rem] border border-copper/25 bg-copper/12 px-4 py-3 text-sm text-cream">
+                {success}
+              </div>
+            ) : null}
+
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full rounded-full border border-copper/40 bg-copper px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-ink transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {isSubmitting
+                  ? editingItem
+                    ? "Menyimpan..."
+                    : "Menerbitkan..."
+                  : editingItem
+                    ? "Perbarui Menu"
+                    : "Tambah Menu"}
+              </button>
               <button
                 type="button"
                 onClick={resetForm}
                 className="w-full rounded-full border border-white/10 px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] text-sand transition hover:border-copper/40 hover:text-white"
               >
-                Batal Edit
+                {editingItem ? "Batal Edit" : "Tutup Form"}
               </button>
-            ) : null}
-          </div>
-        </form>
-      </article>
+            </div>
+          </form>
+        </article>
+      )}
 
       <article className="glass-panel rounded-[2rem] border border-white/10 p-4 sm:p-6">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
               Menu Saat Ini
             </p>
-            <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-cream sm:text-3xl">
+            <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-cream sm:text-3xl">
               Sumber menu halaman utama
             </h2>
+            <p className="mt-1 text-sm leading-6 text-sand/68">
+              {items.length} menu aktif tersimpan di backend.
+            </p>
           </div>
-          <p className="text-sm leading-6 text-sand/68">
-            {items.length} menu aktif tersimpan di backend.
-          </p>
+
+          {!showForm && (
+            <button
+              onClick={() => setShowForm(true)}
+              className="group flex items-center gap-3 rounded-full bg-copper px-6 py-3 text-sm font-bold uppercase tracking-[0.15em] text-ink transition hover:brightness-110 active:scale-[0.98]"
+            >
+              <svg
+                className="h-4 w-4 transition-transform group-hover:rotate-90"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              Tambah Menu Baru
+            </button>
+          )}
         </div>
 
         <div className="mt-8 space-y-4">
@@ -442,6 +472,6 @@ export default function AdminMenuManager({
           ))}
         </div>
       </article>
-    </section>
+    </div>
   );
 }
