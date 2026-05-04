@@ -28,7 +28,11 @@ html {
   color-scheme: dark;
   background:
     radial-gradient(circle at top, rgba(124, 147, 82, 0.2), transparent 34%),
-    radial-gradient(circle at 16% 12%, rgba(123, 83, 52, 0.24), transparent 24%),
+    radial-gradient(
+      circle at 16% 12%,
+      rgba(123, 83, 52, 0.24),
+      transparent 24%
+    ),
     radial-gradient(circle at 84% 18%, rgba(48, 70, 50, 0.22), transparent 22%),
     linear-gradient(180deg, #1b1510 0%, #120d0a 100%);
 }
@@ -37,9 +41,21 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(circle at 12% 18%, rgba(124, 147, 82, 0.14), transparent 28%),
-    radial-gradient(circle at 88% 10%, rgba(123, 83, 52, 0.18), transparent 24%),
-    radial-gradient(circle at 50% 110%, rgba(48, 70, 50, 0.12), transparent 28%),
+    radial-gradient(
+      circle at 12% 18%,
+      rgba(124, 147, 82, 0.14),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 88% 10%,
+      rgba(123, 83, 52, 0.18),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 50% 110%,
+      rgba(48, 70, 50, 0.12),
+      transparent 28%
+    ),
     linear-gradient(180deg, #17120e 0%, #100c09 100%);
   color: var(--cream);
   font-family: var(--font-outfit), sans-serif;
@@ -78,6 +94,30 @@ canvas {
     @apply mx-auto w-full max-w-[1440px] px-4 sm:px-6 md:px-10;
   }
 
+  /* Admin sidebar custom scrollbar - brown subtle */
+  .glass-panel nav.overflow-y-auto {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(124, 147, 82, 0.6) transparent;
+  }
+
+  .glass-panel nav.overflow-y-auto::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .glass-panel nav.overflow-y-auto::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .glass-panel nav.overflow-y-auto::-webkit-scrollbar-thumb {
+    background: rgba(124, 147, 82, 0.6);
+    border-radius: 2px;
+    border: none;
+  }
+
+  .glass-panel nav.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background: rgba(124, 147, 82, 0.8);
+  }
+
   .section-label {
     @apply mb-5 inline-flex items-center gap-3 text-[0.72rem] font-medium uppercase tracking-[0.34em];
     color: rgba(221, 201, 171, 0.76);
@@ -91,7 +131,11 @@ canvas {
 
   .glass-panel {
     background:
-      linear-gradient(180deg, rgba(243, 234, 216, 0.06), rgba(243, 234, 216, 0.02)),
+      linear-gradient(
+        180deg,
+        rgba(243, 234, 216, 0.06),
+        rgba(243, 234, 216, 0.02)
+      ),
       linear-gradient(145deg, var(--panel), rgba(27, 20, 15, 0.82));
     border-color: rgba(231, 214, 188, 0.14);
     box-shadow:
@@ -101,13 +145,21 @@ canvas {
   }
 
   .theme-surface {
-    background: linear-gradient(180deg, rgba(243, 234, 216, 0.05), rgba(243, 234, 216, 0.025));
+    background: linear-gradient(
+      180deg,
+      rgba(243, 234, 216, 0.05),
+      rgba(243, 234, 216, 0.025)
+    );
     border-color: rgba(231, 214, 188, 0.14);
   }
 
   .theme-surface-strong {
     background:
-      linear-gradient(180deg, rgba(243, 234, 216, 0.05), rgba(243, 234, 216, 0.01)),
+      linear-gradient(
+        180deg,
+        rgba(243, 234, 216, 0.05),
+        rgba(243, 234, 216, 0.01)
+      ),
       linear-gradient(145deg, var(--panel-strong), rgba(24, 17, 12, 0.94));
     border-color: rgba(123, 83, 52, 0.24);
   }
@@ -129,7 +181,12 @@ canvas {
   }
 
   .theme-divider {
-    background: linear-gradient(90deg, transparent, rgba(231, 214, 188, 0.2), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(231, 214, 188, 0.2),
+      transparent
+    );
   }
 
   .grain-overlay {
@@ -144,9 +201,19 @@ canvas {
     z-index: -1;
     opacity: 0.18;
     background-image:
-      radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.18) 0, transparent 1.4px),
-      radial-gradient(circle at 75% 75%, rgba(255, 248, 237, 0.1) 0, transparent 1px);
-    background-size: 24px 24px, 18px 18px;
+      radial-gradient(
+        circle at 25% 25%,
+        rgba(255, 255, 255, 0.18) 0,
+        transparent 1.4px
+      ),
+      radial-gradient(
+        circle at 75% 75%,
+        rgba(255, 248, 237, 0.1) 0,
+        transparent 1px
+      );
+    background-size:
+      24px 24px,
+      18px 18px;
     mix-blend-mode: soft-light;
     pointer-events: none;
   }

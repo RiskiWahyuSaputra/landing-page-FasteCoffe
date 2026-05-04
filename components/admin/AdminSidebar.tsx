@@ -132,7 +132,7 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
     <>
       {/* ── Desktop Sidebar ── */}
       <aside
-        className="glass-panel hidden w-[270px] shrink-0 flex-col rounded-[2rem] border border-white/10 p-5 shadow-halo lg:flex"
+        className="glass-panel hidden w-[270px] shrink-0 flex-col overflow-hidden rounded-[2rem] border border-white/10 p-5 shadow-halo lg:flex"
         style={{
           height: "calc(100vh - 2rem)",
           position: "sticky",
@@ -171,67 +171,69 @@ export default function AdminSidebar({ user }: { user: AdminUser }) {
           </div>
         </div>
 
-        {/* Navigation */}
-        <nav className="mt-5 space-y-2">
-          <p className="mb-3 px-1 text-[0.65rem] uppercase tracking-[0.32em] text-sand/40">
-            Navigasi
-          </p>
-          {navigation.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`group flex items-center gap-3.5 rounded-[1.2rem] border px-4 py-3.5 transition-all duration-200 ${
-                  isActive
-                    ? "border-copper/35 bg-copper/12 text-copper"
-                    : "border-transparent text-sand/70 hover:border-white/10 hover:bg-white/[0.04] hover:text-cream"
-                }`}
-              >
-                <span
-                  className={`shrink-0 transition-colors ${isActive ? "text-copper" : "text-sand/50 group-hover:text-sand"}`}
+        <div className="mt-5 flex min-h-0 flex-1 flex-col">
+          {/* Navigation */}
+          <nav className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
+            <p className="mb-3 px-1 text-[0.65rem] uppercase tracking-[0.32em] text-sand/40">
+              Navigasi
+            </p>
+            {navigation.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`group flex items-center gap-3.5 rounded-[1.2rem] border px-4 py-3.5 transition-all duration-200 ${
+                    isActive
+                      ? "border-copper/35 bg-copper/12 text-copper"
+                      : "border-transparent text-sand/70 hover:border-white/10 hover:bg-white/[0.04] hover:text-cream"
+                  }`}
                 >
-                  {item.icon}
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium leading-none">
-                    {item.label}
-                  </p>
-                  <p className="mt-1 text-xs text-sand/50">
-                    {item.description}
-                  </p>
-                </div>
-                {isActive && (
-                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-copper" />
-                )}
-              </Link>
-            );
-          })}
-        </nav>
+                  <span
+                    className={`shrink-0 transition-colors ${isActive ? "text-copper" : "text-sand/50 group-hover:text-sand"}`}
+                  >
+                    {item.icon}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium leading-none">
+                      {item.label}
+                    </p>
+                    <p className="mt-1 text-xs text-sand/50">
+                      {item.description}
+                    </p>
+                  </div>
+                  {isActive && (
+                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-copper" />
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
 
-        {/* Divider */}
-        <div className="my-5 h-px bg-white/[0.06]" />
+          {/* Divider */}
+          <div className="my-5 h-px shrink-0 bg-white/[0.06]" />
 
-        {/* User card */}
-        <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.03] p-4">
-          <p className="mb-3 text-[0.65rem] uppercase tracking-[0.28em] text-sand/40">
-            Masuk sebagai
-          </p>
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-copper/20 text-xs font-semibold text-copper">
-              {initials}
-            </div>
-            <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-cream">
-                {user.name}
-              </p>
-              <p className="truncate text-xs text-sand/55">{user.email}</p>
+          {/* User card */}
+          <div className="shrink-0 rounded-[1.4rem] border border-white/10 bg-white/[0.03] p-4">
+            <p className="mb-3 text-[0.65rem] uppercase tracking-[0.28em] text-sand/40">
+              Masuk sebagai
+            </p>
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-copper/20 text-xs font-semibold text-copper">
+                {initials}
+              </div>
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold text-cream">
+                  {user.name}
+                </p>
+                <p className="truncate text-xs text-sand/55">{user.email}</p>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Footer actions */}
-        <div className="mt-auto flex flex-col gap-2.5 pt-5">
+        <div className="mt-5 flex shrink-0 flex-col gap-2.5">
           <Link
             href="/"
             className="flex items-center justify-center gap-2 rounded-full border border-white/10 px-5 py-2.5 text-xs uppercase tracking-[0.22em] text-sand transition hover:border-copper/40 hover:text-white"

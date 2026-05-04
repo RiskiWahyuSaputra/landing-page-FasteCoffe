@@ -28,7 +28,7 @@ export default function AdminLogoutButton() {
       type="button"
       onClick={handleLogout}
       disabled={isSubmitting}
-      className="rounded-full border border-white/10 px-5 py-3 text-xs uppercase tracking-[0.24em] text-sand transition hover:border-copper/50 hover:text-white disabled:cursor-not-allowed disabled:opacity-70"
+      className="w-full rounded-full border border-white/10 px-5 py-3 text-center text-xs uppercase tracking-[0.24em] text-sand transition hover:border-copper/50 hover:text-white disabled:cursor-not-allowed disabled:opacity-70"
     >
       {isSubmitting ? "Keluar..." : "Keluar"}
     </button>
