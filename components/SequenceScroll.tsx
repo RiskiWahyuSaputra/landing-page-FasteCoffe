@@ -91,13 +91,13 @@ function StoryOverlay({
         : "left-1/2 -translate-x-1/2 items-center text-center";
 
   return (
-    <motion.div
-      style={{ opacity, y, filter }}
-      className={`absolute top-[20vh] flex max-w-[34rem] flex-col gap-4 ${alignmentClass}`}
-    >
+      <motion.div
+        style={{ opacity, y, filter }}
+        className={`absolute top-[20vh] flex max-w-[34rem] flex-col gap-4 ${alignmentClass}`}
+      >
       <motion.div
         style={{ y: badgeY }}
-        className="rounded-full border border-white/10 bg-black/20 px-4 py-2 text-[0.68rem] uppercase tracking-[0.3em] text-sand/82 backdrop-blur-md"
+        className="rounded-full border border-[rgba(243,234,216,0.12)] bg-[rgba(21,16,12,0.52)] px-4 py-2 text-[0.68rem] uppercase tracking-[0.3em] text-sand/84 backdrop-blur-md"
       >
         {t("scrollytelling_badge")}
       </motion.div>
@@ -162,7 +162,7 @@ export default function SequenceScroll() {
     }
 
     context.clearRect(0, 0, width, height);
-    context.fillStyle = "#17120e";
+    context.fillStyle = "#17130f";
     context.fillRect(0, 0, width, height);
 
     const scale = Math.max(
@@ -289,7 +289,7 @@ export default function SequenceScroll() {
   return (
     <section ref={sectionRef} className="relative h-[400vh] bg-page">
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(127,150,97,0.22),transparent_28%),radial-gradient(circle_at_85%_18%,rgba(91,63,42,0.18),transparent_24%),linear-gradient(180deg,rgba(23,18,14,0.18),rgba(23,18,14,0.84))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,147,82,0.22),transparent_28%),radial-gradient(circle_at_85%_18%,rgba(123,83,52,0.18),transparent_24%),linear-gradient(180deg,rgba(23,18,14,0.2),rgba(23,18,14,0.86))]" />
         <canvas ref={canvasRef} className="h-full w-full" />
 
         <div className="pointer-events-none absolute inset-0">
@@ -297,7 +297,7 @@ export default function SequenceScroll() {
             <div className="w-28">
               <motion.div
                 style={{ width: progressBar }}
-                className="h-px bg-copper shadow-[0_0_24px_rgba(127,150,97,0.65)]"
+                className="h-px bg-copper shadow-[0_0_24px_rgba(124,147,82,0.65)]"
               />
             </div>
           </div>

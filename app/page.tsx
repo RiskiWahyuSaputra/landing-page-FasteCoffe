@@ -29,8 +29,8 @@ export default async function HomePage() {
       <SequenceScroll />
 
       <div className="relative z-10 -mt-[100vh]">
-        <About />
         <Menu menuItems={menuItems} />
+        <About />
         <Stats />
         <Testimonials />
         <CTA />

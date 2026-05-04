@@ -52,11 +52,11 @@ export default function MagneticButton({
       <Link
         href={href}
         onClick={onClick}
-        className={`group relative inline-flex items-center gap-3 overflow-hidden rounded-full border border-white/10 bg-[rgba(246,239,228,0.08)] px-6 py-3 text-sm font-medium uppercase tracking-[0.24em] text-cream transition-colors duration-300 hover:border-copper/60 hover:text-white ${className}`}
+        className={`group relative inline-flex items-center gap-3 overflow-hidden rounded-full border border-[rgba(231,214,188,0.16)] bg-[rgba(243,234,216,0.07)] px-6 py-3 text-sm font-medium uppercase tracking-[0.24em] text-cream shadow-[0_12px_32px_rgba(7,5,3,0.16)] transition-colors duration-300 hover:border-copper/60 hover:text-cream ${className}`}
       >
-        <span className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(127,150,97,0.34),transparent_60%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        <span className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,147,82,0.3),transparent_58%),linear-gradient(90deg,rgba(123,83,52,0.12),transparent)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         <span className="relative">{children}</span>
-        <span className="relative text-base transition-transform duration-300 group-hover:translate-x-1">
+        <span className="relative text-base text-copper transition-transform duration-300 group-hover:translate-x-1">
           -&gt;
         </span>
       </Link>

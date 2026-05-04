@@ -39,9 +39,9 @@ export default function CartDrawer() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed right-0 top-0 z-[80] flex h-screen w-full max-w-xl flex-col overflow-hidden border-l border-white/10 bg-[linear-gradient(180deg,#18130f_0%,#100c09_100%)] shadow-[0_0_60px_rgba(0,0,0,0.45)]"
+            className="fixed right-0 top-0 z-[80] flex h-screen w-full max-w-xl flex-col overflow-hidden border-l border-[rgba(231,214,188,0.12)] bg-[linear-gradient(180deg,#1d1510_0%,#120d0a_100%)] shadow-[0_0_60px_rgba(0,0,0,0.45)]"
           >
-            <div className="flex items-center justify-between border-b border-white/10 px-6 py-5 md:px-8">
+            <div className="flex items-center justify-between border-b border-[rgba(231,214,188,0.12)] px-6 py-5 md:px-8">
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] text-sand/68">{t("cart")}</p>
                 <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-cream">
@@ -52,7 +52,7 @@ export default function CartDrawer() {
               <button
                 type="button"
                 onClick={closeCart}
-                className="rounded-full border border-white/10 px-4 py-2 text-xs uppercase tracking-[0.24em] text-sand transition hover:border-copper/50 hover:text-white"
+                className="theme-pill rounded-full border px-4 py-2 text-xs uppercase tracking-[0.24em] text-sand transition hover:border-copper/50 hover:text-cream"
               >
                 {t("close")}
               </button>
@@ -60,7 +60,7 @@ export default function CartDrawer() {
 
             <div className="flex-1 overflow-y-auto px-6 py-6 md:px-8">
               {items.length === 0 ? (
-                <div className="glass-panel rounded-[2rem] border border-white/10 p-8 text-center">
+                <div className="glass-panel rounded-[2rem] border p-8 text-center">
                   <p className="text-lg font-medium text-cream">{t("empty_cart")}</p>
                   <p className="mt-3 text-sm leading-6 text-sand/72">
                     {t("add_items")}
@@ -71,7 +71,7 @@ export default function CartDrawer() {
                   {items.map((item) => (
                     <div
                       key={item.name}
-                      className="glass-panel rounded-[1.8rem] border border-white/10 p-4"
+                      className="glass-panel rounded-[1.8rem] border p-4"
                     >
                       <div className="flex items-start gap-4">
                         <div
@@ -102,11 +102,11 @@ export default function CartDrawer() {
                           </div>
 
                           <div className="mt-4 flex items-center justify-between gap-4">
-                            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] p-1">
+                            <div className="theme-pill flex items-center gap-2 rounded-full border p-1">
                               <button
                                 type="button"
                                 onClick={() => decreaseItem(item.name)}
-                                className="h-8 w-8 rounded-full text-sm text-sand transition hover:bg-white/10 hover:text-white"
+                                className="h-8 w-8 rounded-full text-sm text-sand transition hover:bg-[rgba(243,234,216,0.08)] hover:text-cream"
                               >
                                 -
                               </button>
@@ -116,7 +116,7 @@ export default function CartDrawer() {
                               <button
                                 type="button"
                                 onClick={() => increaseItem(item.name)}
-                                className="h-8 w-8 rounded-full text-sm text-sand transition hover:bg-white/10 hover:text-white"
+                                className="h-8 w-8 rounded-full text-sm text-sand transition hover:bg-[rgba(243,234,216,0.08)] hover:text-cream"
                               >
                                 +
                               </button>
@@ -125,7 +125,7 @@ export default function CartDrawer() {
                             <button
                               type="button"
                               onClick={() => removeItem(item.name)}
-                              className="text-xs uppercase tracking-[0.24em] text-sand/68 transition hover:text-white"
+                              className="text-xs uppercase tracking-[0.24em] text-sand/68 transition hover:text-copper"
                             >
                               {t("remove")}
                             </button>
@@ -138,7 +138,7 @@ export default function CartDrawer() {
               )}
             </div>
 
-            <div className="border-t border-white/10 px-6 py-6 md:px-8">
+            <div className="border-t border-[rgba(231,214,188,0.12)] px-6 py-6 md:px-8">
               <div className="mb-5 flex items-center justify-between text-sm uppercase tracking-[0.24em] text-sand/68">
                 <span>{t("subtotal")}</span>
                 <span className="text-lg font-semibold tracking-[-0.03em] text-cream">

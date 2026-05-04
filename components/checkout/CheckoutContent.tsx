@@ -331,7 +331,7 @@ export default function CheckoutContent({
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-page px-6 py-24 md:px-10">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(127,150,97,0.2),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(91,63,42,0.28),transparent_34%),linear-gradient(180deg,#18130f_0%,#100c09_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(124,147,82,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(123,83,52,0.2),transparent_34%),linear-gradient(180deg,#1b1510_0%,#100c09_100%)]" />
 
       {showQrisModal ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 px-4 backdrop-blur-sm">
@@ -341,7 +341,7 @@ export default function CheckoutContent({
             className="absolute inset-0"
             onClick={() => setShowQrisModal(false)}
           />
-          <div className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-copper/25 bg-[#1a100c] p-6 shadow-[0_30px_90px_rgba(0,0,0,0.45)]">
+          <div className="theme-surface-strong relative w-full max-w-md overflow-hidden rounded-[2rem] border p-6 shadow-[0_30px_90px_rgba(0,0,0,0.45)]">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs uppercase tracking-[0.28em] text-sand/55">
@@ -354,7 +354,7 @@ export default function CheckoutContent({
               <button
                 type="button"
                 onClick={() => setShowQrisModal(false)}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-sand transition hover:border-copper/40 hover:text-white"
+                className="theme-pill flex h-9 w-9 items-center justify-center rounded-full border text-sand transition hover:border-copper/40 hover:text-cream"
               >
                 <svg
                   width="14"
@@ -371,7 +371,7 @@ export default function CheckoutContent({
               </button>
             </div>
 
-            <div className="mt-6 rounded-[1.6rem] border border-white/10 bg-[linear-gradient(180deg,#f8f2e8_0%,#e8dbc7_100%)] p-5 text-ink">
+            <div className="mt-6 rounded-[1.6rem] border border-[rgba(123,83,52,0.16)] bg-[linear-gradient(180deg,#f7efdf_0%,#e9dcc5_100%)] p-5 text-ink">
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <p className="text-xs uppercase tracking-[0.24em] text-[#7f6148]">
@@ -724,7 +724,7 @@ export default function CheckoutContent({
           <div className="flex flex-wrap gap-3">
             <Link
               href="/#menu"
-              className="rounded-full border border-white/10 px-5 py-3 text-xs uppercase tracking-[0.24em] text-sand transition hover:border-copper/50 hover:text-white"
+              className="theme-pill rounded-full border px-5 py-3 text-xs uppercase tracking-[0.24em] text-sand transition hover:border-copper/50 hover:text-cream"
             >
               {t("back_to_menu")}
             </Link>
@@ -738,7 +738,7 @@ export default function CheckoutContent({
         </header>
 
         {success && !items.length ? (
-          <section className="glass-panel mx-auto max-w-3xl rounded-[2rem] border border-white/10 p-8 text-center md:p-10">
+          <section className="glass-panel mx-auto max-w-3xl rounded-[2rem] border p-8 text-center md:p-10">
             <p className="text-xs uppercase tracking-[0.32em] text-sand/60">
               {t("order_created")}
             </p>
@@ -769,7 +769,7 @@ export default function CheckoutContent({
           </section>
         ) : showRestoredOrder && !items.length && restoredDisplayOrder ? (
           /* Tampilkan pesanan yang di-restore (dari localStorage) */
-          <section className="glass-panel mx-auto max-w-3xl rounded-[2rem] border border-white/10 p-8 text-center md:p-10">
+          <section className="glass-panel mx-auto max-w-3xl rounded-[2rem] border p-8 text-center md:p-10">
             <p className="text-xs uppercase tracking-[0.32em] text-sand/60">
               {t("my_order")}
             </p>
@@ -796,7 +796,7 @@ export default function CheckoutContent({
             <div className="flex flex-wrap justify-center gap-3">
               <button
                 onClick={handleDismissRestoredOrder}
-                className="mt-4 inline-flex rounded-full border border-white/10 px-5 py-3 text-sm font-medium uppercase tracking-[0.22em] text-sand transition hover:border-copper/30 hover:text-white"
+                className="theme-pill mt-4 inline-flex rounded-full border px-5 py-3 text-sm font-medium uppercase tracking-[0.22em] text-sand transition hover:border-copper/30 hover:text-cream"
               >
                 {t("buat_pesanan_baru")}
               </button>
@@ -809,7 +809,7 @@ export default function CheckoutContent({
             </div>
           </section>
         ) : !items.length ? (
-          <section className="glass-panel mx-auto max-w-3xl rounded-[2rem] border border-white/10 p-8 text-center md:p-10">
+          <section className="glass-panel mx-auto max-w-3xl rounded-[2rem] border p-8 text-center md:p-10">
             <p className="text-xs uppercase tracking-[0.32em] text-sand/60">
               {t("empty_cart")}
             </p>
@@ -829,7 +829,7 @@ export default function CheckoutContent({
         ) : (
           <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
             <div className="space-y-5">
-              <article className="glass-panel rounded-[2rem] border border-white/10 p-6 md:p-7">
+              <article className="glass-panel rounded-[2rem] border p-6 md:p-7">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                   <div>
                     <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
@@ -848,7 +848,7 @@ export default function CheckoutContent({
                   {items.map((item) => (
                     <div
                       key={item.name}
-                      className="rounded-[1.6rem] border border-white/10 bg-white/[0.03] p-4"
+                      className="theme-surface rounded-[1.6rem] border p-4"
                     >
                       <div className="flex gap-4">
                         <div
@@ -912,7 +912,7 @@ export default function CheckoutContent({
                               <button
                                 type="button"
                                 onClick={() => removeItem(item.name)}
-                                className="text-xs uppercase tracking-[0.24em] text-sand/64 transition hover:text-white"
+                                className="text-xs uppercase tracking-[0.24em] text-sand/64 transition hover:text-copper"
                               >
                                 {t("remove")}
                               </button>
@@ -927,7 +927,7 @@ export default function CheckoutContent({
             </div>
 
             <div className="space-y-5">
-              <article className="glass-panel rounded-[2rem] border border-white/10 p-6 md:p-7">
+              <article className="glass-panel rounded-[2rem] border p-6 md:p-7">
                 <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
                   {t("customer_details")}
                 </p>
@@ -945,7 +945,7 @@ export default function CheckoutContent({
                       value={customerName}
                       onChange={(event) => setCustomerName(event.target.value)}
                       placeholder={t("name_placeholder")}
-                      className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition placeholder:text-sand/35 focus:border-copper/50 focus:bg-white/[0.06]"
+                      className="theme-input w-full rounded-[1.2rem] border px-4 py-3 text-cream outline-none transition placeholder:text-sand/35"
                     />
                   </label>
 
@@ -958,7 +958,7 @@ export default function CheckoutContent({
                       value={customerPhone}
                       onChange={(event) => setCustomerPhone(event.target.value)}
                       placeholder={t("phone_placeholder")}
-                      className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition placeholder:text-sand/35 focus:border-copper/50 focus:bg-white/[0.06]"
+                      className="theme-input w-full rounded-[1.2rem] border px-4 py-3 text-cream outline-none transition placeholder:text-sand/35"
                     />
                   </label>
 
@@ -971,7 +971,7 @@ export default function CheckoutContent({
                       value={pickupNote}
                       onChange={(event) => setPickupNote(event.target.value)}
                       placeholder={t("pickup_placeholder")}
-                      className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition placeholder:text-sand/35 focus:border-copper/50 focus:bg-white/[0.06]"
+                      className="theme-input w-full rounded-[1.2rem] border px-4 py-3 text-cream outline-none transition placeholder:text-sand/35"
                     />
                   </label>
 
@@ -999,7 +999,7 @@ export default function CheckoutContent({
                             className={`rounded-[1.3rem] border px-4 py-4 text-left transition ${
                               isSelected
                                 ? "border-copper/40 bg-copper/12"
-                                : "border-white/10 bg-white/[0.03] hover:border-copper/25 hover:bg-white/[0.05]"
+                                : "theme-surface hover:border-copper/25 hover:bg-[rgba(243,234,216,0.06)]"
                             }`}
                           >
                             <div className="flex items-start justify-between gap-3">
@@ -1017,7 +1017,7 @@ export default function CheckoutContent({
                                 className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
                                   isSelected
                                     ? "border-copper bg-copper text-ink"
-                                    : "border-white/15 text-transparent"
+                                    : "border-[rgba(231,214,188,0.16)] text-transparent"
                                 }`}
                               >
                                 <svg
@@ -1062,12 +1062,12 @@ export default function CheckoutContent({
                     ) : null}
 
                     {paymentMethod === "bank_transfer" ? (
-                      <div className="mt-4 rounded-[1.2rem] border border-white/10 bg-white/[0.03] px-4 py-4">
+                      <div className="theme-surface mt-4 rounded-[1.2rem] border px-4 py-4">
                         <p className="text-sm font-semibold text-cream">
                           Transfer ke rekening admin
                         </p>
                         <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                          <div className="rounded-[1rem] border border-white/10 bg-white/[0.02] px-3 py-3">
+                          <div className="theme-surface rounded-[1rem] border px-3 py-3">
                             <p className="text-xs uppercase tracking-[0.18em] text-sand/50">
                               BCA
                             </p>
@@ -1078,7 +1078,7 @@ export default function CheckoutContent({
                               a.n. Faste Coffee
                             </p>
                           </div>
-                          <div className="rounded-[1rem] border border-white/10 bg-white/[0.02] px-3 py-3">
+                          <div className="theme-surface rounded-[1rem] border px-3 py-3">
                             <p className="text-xs uppercase tracking-[0.18em] text-sand/50">
                               Mandiri
                             </p>
@@ -1094,13 +1094,13 @@ export default function CheckoutContent({
                     ) : null}
 
                     {paymentMethod === "cash_on_pickup" ? (
-                      <div className="mt-4 rounded-[1.2rem] border border-white/10 bg-white/[0.03] px-4 py-4 text-sm leading-6 text-sand/68">
+                      <div className="theme-surface mt-4 rounded-[1.2rem] border px-4 py-4 text-sm leading-6 text-sand/68">
                         Pembayaran dilakukan saat pesanan diambil di Kasir.
                       </div>
                     ) : null}
 
                     {paymentMethod === "e_wallet" ? (
-                      <div className="mt-4 rounded-[1.2rem] border border-white/10 bg-white/[0.03] px-4 py-4 text-sm leading-6 text-sand/68">
+                      <div className="theme-surface mt-4 rounded-[1.2rem] border px-4 py-4 text-sm leading-6 text-sand/68">
                         Siapkan konfirmasi pembayaran dari e-wallet pilihanmu
                         sebelum mengambil pesanan.
                       </div>
@@ -1144,7 +1144,7 @@ export default function CheckoutContent({
                           setPaymentProofFile(file);
                           setPaymentProofPreview(URL.createObjectURL(file));
                         }}
-                        className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-cream outline-none file:mr-4 file:rounded-full file:border-0 file:bg-copper file:px-4 file:py-2 file:text-xs file:font-medium file:uppercase file:tracking-[0.18em] file:text-ink"
+                        className="theme-input w-full rounded-[1.2rem] border px-4 py-3 text-sm text-cream outline-none file:mr-4 file:rounded-full file:border-0 file:bg-copper file:px-4 file:py-2 file:text-xs file:font-medium file:uppercase file:tracking-[0.18em] file:text-ink"
                       />
                       <p className="mt-3 text-xs leading-6 text-sand/62">
                         Upload JPG, PNG, atau WEBP. Maksimal 4 MB.
@@ -1155,7 +1155,7 @@ export default function CheckoutContent({
                     </label>
 
                     {paymentProofPreview ? (
-                      <div className="overflow-hidden rounded-[1.4rem] border border-white/10 bg-white/[0.03] p-3">
+                      <div className="theme-surface overflow-hidden rounded-[1.4rem] border p-3">
                         <img
                           src={paymentProofPreview}
                           alt="Preview bukti pembayaran"
@@ -1167,7 +1167,7 @@ export default function CheckoutContent({
                 </div>
               </article>
 
-              <article className="glass-panel rounded-[2rem] border border-white/10 p-6 md:p-7">
+              <article className="glass-panel rounded-[2rem] border p-6 md:p-7">
                 <div className="flex items-end justify-between gap-4">
                   <div>
                     <p className="text-xs uppercase tracking-[0.28em] text-sand/60">
@@ -1177,7 +1177,7 @@ export default function CheckoutContent({
                       {t("order_recap")}
                     </h2>
                   </div>
-                  <div className="rounded-full border border-white/10 px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-sand/78">
+                  <div className="theme-pill rounded-full border px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-sand/78">
                     Live
                   </div>
                 </div>
@@ -1201,7 +1201,7 @@ export default function CheckoutContent({
                       {paymentProofFile ? paymentProofFile.name : "-"}
                     </span>
                   </div>
-                  <div className="h-px bg-white/10" />
+                  <div className="theme-divider h-px" />
                   <div className="flex items-center justify-between">
                     <span className="text-xs uppercase tracking-[0.24em] text-sand/65">
                       {t("total")}

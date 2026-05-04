@@ -19,11 +19,11 @@ const config: Config = {
         ink: "var(--ink)"
       },
       boxShadow: {
-        halo: "0 0 80px rgba(127, 150, 97, 0.2)"
+        halo: "0 0 80px rgba(124, 147, 82, 0.18)"
       },
       backgroundImage: {
         noise:
-          "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08), transparent 28%), radial-gradient(circle at 80% 0%, rgba(127,150,97,0.12), transparent 24%), radial-gradient(circle at 50% 100%, rgba(91,63,42,0.4), transparent 30%)"
+          "radial-gradient(circle at 20% 20%, rgba(255,248,237,0.08), transparent 28%), radial-gradient(circle at 80% 0%, rgba(124,147,82,0.12), transparent 24%), radial-gradient(circle at 50% 100%, rgba(123,83,52,0.32), transparent 30%)"
       }
     }
   },

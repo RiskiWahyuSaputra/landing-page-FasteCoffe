@@ -100,7 +100,7 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
                 className={`rounded-full border px-4 py-2 text-xs uppercase tracking-[0.22em] transition ${
                   isActive
                     ? "border-copper bg-copper text-ink"
-                    : "border-white/10 bg-white/[0.03] text-sand hover:border-copper/40 hover:text-white"
+                    : "theme-pill text-sand hover:border-copper/40 hover:text-cream"
                 }`}
               >
                 {option.label}
@@ -123,9 +123,9 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
                   key={item.name}
                   whileHover={{ y: -10, scale: 1.01 }}
                   transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                  className="group glass-panel grain-overlay relative overflow-hidden rounded-[2rem] border border-white/10 p-5 shadow-halo"
+                  className="group glass-panel grain-overlay relative overflow-hidden rounded-[2rem] border p-5 shadow-halo"
                 >
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(127,150,97,0.2),transparent_55%)] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,147,82,0.22),transparent_55%),radial-gradient(circle_at_bottom_right,rgba(123,83,52,0.18),transparent_38%)] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
 
                   <div
                     className={`relative aspect-[4/3] overflow-hidden rounded-[1.6rem] bg-gradient-to-br ${item.accent}`}
@@ -147,10 +147,10 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
                         <div className="absolute inset-x-[30%] bottom-12 top-[33%] rounded-b-[2.4rem] rounded-t-[1rem] border border-white/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),rgba(255,255,255,0.04))]" />
                       </>
                     ) : null}
-                    <div className="absolute bottom-4 left-4 rounded-full border border-white/10 bg-black/20 px-3 py-1 text-[0.68rem] uppercase tracking-[0.26em] text-sand/80">
+                    <div className="absolute bottom-4 left-4 rounded-full border border-[rgba(243,234,216,0.12)] bg-[rgba(22,17,12,0.56)] px-3 py-1 text-[0.68rem] uppercase tracking-[0.26em] text-sand/82 backdrop-blur-sm">
                       {t("menu_item")} {index + 1}
                     </div>
-                    <div className="absolute left-4 top-4 rounded-full border border-white/10 bg-black/30 px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-cream">
+                    <div className="absolute left-4 top-4 rounded-full border border-[rgba(243,234,216,0.12)] bg-[rgba(22,17,12,0.6)] px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-cream backdrop-blur-sm">
                       {categoryLabel}
                     </div>
                     {quantity ? (
@@ -169,7 +169,7 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
                         {item.description}
                       </p>
                     </div>
-                    <span className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.22em] text-copper">
+                    <span className="theme-pill rounded-full border px-3 py-1 text-xs uppercase tracking-[0.22em] text-copper">
                       {item.price}
                     </span>
                   </div>
@@ -210,7 +210,7 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
             )}
           </div>
         ) : (
-          <div className="glass-panel rounded-[2rem] border border-white/10 px-6 py-10 text-center">
+          <div className="glass-panel rounded-[2rem] border px-6 py-10 text-center">
             <p className="text-xs uppercase tracking-[0.28em] text-sand/58">
               {t("popular_menu")}
             </p>
@@ -243,7 +243,7 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
                 key={card.title}
                 whileHover={{ scale: 1.01 }}
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                className={`group relative overflow-hidden rounded-[2rem] border border-white/10 bg-page-soft p-6 ${card.size}`}
+                className={`group theme-surface-strong relative overflow-hidden rounded-[2rem] border p-6 ${card.size}`}
               >
                 <div className="absolute inset-0">
                   <Image

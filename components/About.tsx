@@ -19,7 +19,7 @@ export default function About() {
           </p>
         </div>
 
-        <div className="glass-panel grain-overlay rounded-[2.4rem] border border-white/10 p-8 md:p-12">
+        <div className="glass-panel grain-overlay rounded-[2.4rem] border p-8 md:p-12">
           <TextReveal
             text={t("about_reveal")}
             className="text-balance text-[clamp(1.5rem,3vw,2.7rem)] font-medium leading-[1.24] tracking-[-0.03em] text-cream"
@@ -33,7 +33,7 @@ export default function About() {
             ].map((item) => (
               <div
                 key={item}
-                className="rounded-[1.4rem] border border-white/10 bg-white/[0.025] px-5 py-6 text-sm uppercase tracking-[0.22em] text-sand/78"
+                className="theme-surface rounded-[1.4rem] border px-5 py-6 text-sm uppercase tracking-[0.22em] text-sand/82"
               >
                 {item}
               </div>

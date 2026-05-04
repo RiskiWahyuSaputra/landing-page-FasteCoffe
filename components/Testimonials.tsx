@@ -41,7 +41,7 @@ export default function Testimonials() {
 
   return (
     <section className="relative flex min-h-screen items-center overflow-hidden px-6 py-24 md:px-10">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(127,150,97,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(91,63,42,0.32),transparent_34%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(124,147,82,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(123,83,52,0.24),transparent_34%)]" />
 
       <div className="page-shell relative grid gap-10 lg:grid-cols-[0.38fr_0.62fr] lg:items-end">
         <div className="max-w-sm">
@@ -57,7 +57,7 @@ export default function Testimonials() {
                 type="button"
                 onClick={() => setActiveIndex(index)}
                 className={`h-1.5 rounded-full transition-all duration-300 ${
-                  index === activeIndex ? "w-14 bg-copper" : "w-8 bg-white/12"
+                  index === activeIndex ? "w-14 bg-copper" : "w-8 bg-[rgba(243,234,216,0.14)]"
                 }`}
                 aria-label={`${t("show_testimonial")} ${index + 1}`}
               />
@@ -65,7 +65,7 @@ export default function Testimonials() {
           </div>
         </div>
 
-        <div className="glass-panel min-h-[420px] rounded-[2.5rem] border border-white/10 p-8 md:p-12 lg:p-16">
+        <div className="glass-panel min-h-[420px] rounded-[2.5rem] border p-8 md:p-12 lg:p-16">
           <AnimatePresence mode="wait">
             <motion.div
               key={active.author}
@@ -79,7 +79,7 @@ export default function Testimonials() {
                 "{active.quote}"
               </p>
 
-              <div className="flex items-center justify-between gap-4 border-t border-white/10 pt-6">
+              <div className="flex items-center justify-between gap-4 border-t border-[rgba(231,214,188,0.12)] pt-6">
                 <div>
                   <p className="text-xl font-semibold text-cream">{active.author}</p>
                   <p className="mt-2 text-xs uppercase tracking-[0.24em] text-sand/68">

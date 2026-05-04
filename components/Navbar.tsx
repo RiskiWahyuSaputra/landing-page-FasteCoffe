@@ -47,13 +47,13 @@ export default function Navbar() {
         initial={false}
         animate={{
           backgroundColor: isScrolled
-            ? "rgba(21, 17, 13, 0.78)"
-            : "rgba(21, 17, 13, 0)",
+            ? "rgba(30, 21, 16, 0.84)"
+            : "rgba(30, 21, 16, 0.28)",
           borderColor: isScrolled
-            ? "rgba(246, 239, 228, 0.12)"
-            : "rgba(246, 239, 228, 0)",
+            ? "rgba(231, 214, 188, 0.15)"
+            : "rgba(231, 214, 188, 0.08)",
         }}
-        className="fixed inset-x-0 top-0 z-50 border-b backdrop-blur-xl"
+        className="fixed inset-x-3 top-3 z-50 rounded-full border backdrop-blur-xl sm:inset-x-4 sm:top-4"
       >
         <div className="page-shell flex h-16 items-center justify-between gap-2 sm:h-20 sm:gap-4">
           <a
@@ -65,12 +65,14 @@ export default function Navbar() {
 
           <div className="flex min-w-0 items-center justify-end gap-1.5 sm:gap-3">
             {/* Language Switcher */}
-            <div className="flex shrink-0 items-center gap-0.5 rounded-full border border-white/10 p-0.5 sm:gap-1 sm:p-1">
+            <div className="theme-pill flex shrink-0 items-center gap-0.5 rounded-full border p-0.5 sm:gap-1 sm:p-1">
               <button
                 type="button"
                 onClick={() => setLocale("id")}
-                className={`rounded-full px-2 py-1.5 text-[0.62rem] font-medium uppercase tracking-[0.16em] transition hover:bg-white/10 hover:text-white sm:px-2.5 sm:text-[0.65rem] sm:tracking-[0.2em] ${
-                  locale === "id" ? "bg-copper text-ink" : "text-sand"
+                className={`rounded-full px-2 py-1.5 text-[0.62rem] font-medium uppercase tracking-[0.16em] transition sm:px-2.5 sm:text-[0.65rem] sm:tracking-[0.2em] ${
+                  locale === "id"
+                    ? "bg-copper text-ink"
+                    : "text-sand hover:bg-[rgba(243,234,216,0.07)] hover:text-cream"
                 }`}
               >
                 ID
@@ -78,8 +80,10 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => setLocale("en")}
-                className={`rounded-full px-2 py-1.5 text-[0.62rem] font-medium uppercase tracking-[0.16em] transition hover:bg-white/10 hover:text-white sm:px-2.5 sm:text-[0.65rem] sm:tracking-[0.2em] ${
-                  locale === "en" ? "bg-copper text-ink" : "text-sand"
+                className={`rounded-full px-2 py-1.5 text-[0.62rem] font-medium uppercase tracking-[0.16em] transition sm:px-2.5 sm:text-[0.65rem] sm:tracking-[0.2em] ${
+                  locale === "en"
+                    ? "bg-copper text-ink"
+                    : "text-sand hover:bg-[rgba(243,234,216,0.07)] hover:text-cream"
                 }`}
               >
                 EN
@@ -90,9 +94,9 @@ export default function Navbar() {
               type="button"
               onClick={toggleCart}
               aria-label={t("open_cart")}
-              className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/10 px-2 py-1.5 text-xs uppercase tracking-[0.2em] text-sand transition-colors duration-300 hover:border-copper/50 hover:text-white sm:gap-2 sm:px-3 sm:py-2 sm:tracking-[0.24em]"
+              className="group theme-pill inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2 py-1.5 text-xs uppercase tracking-[0.2em] text-sand transition-colors duration-300 hover:border-copper/50 hover:text-cream sm:gap-2 sm:px-3 sm:py-2 sm:tracking-[0.24em]"
             >
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/6 transition-colors duration-300 group-hover:bg-copper/12 sm:h-9 sm:w-9">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[rgba(243,234,216,0.06)] transition-colors duration-300 group-hover:bg-copper/14 sm:h-9 sm:w-9">
                 <svg
                   aria-hidden="true"
                   viewBox="0 0 24 24"
@@ -108,7 +112,7 @@ export default function Navbar() {
                   <path d="M3 4h2.2l2.2 10.2a1 1 0 0 0 1 .8h8.9a1 1 0 0 0 1-.76L20 8H7.1" />
                 </svg>
               </span>
-              <span className="inline-flex min-w-7 items-center justify-center rounded-full bg-white/10 px-1.5 py-1 text-[0.64rem] text-cream sm:min-w-8 sm:px-2 sm:text-[0.68rem]">
+              <span className="inline-flex min-w-7 items-center justify-center rounded-full bg-[rgba(243,234,216,0.08)] px-1.5 py-1 text-[0.64rem] text-cream sm:min-w-8 sm:px-2 sm:text-[0.68rem]">
                 {String(itemCount).padStart(2, "0")}
               </span>
             </button>
@@ -116,7 +120,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setIsOpen((value) => !value)}
-              className="group inline-flex shrink-0 items-center gap-0 rounded-full border border-white/10 px-3 py-2 text-xs uppercase tracking-[0.2em] text-sand transition-colors duration-300 hover:border-copper/50 hover:text-white sm:gap-3 sm:px-5 sm:tracking-[0.28em]"
+              className="group theme-pill inline-flex shrink-0 items-center gap-0 rounded-full border px-3 py-2 text-xs uppercase tracking-[0.2em] text-sand transition-colors duration-300 hover:border-copper/50 hover:text-cream sm:gap-3 sm:px-5 sm:tracking-[0.28em]"
             >
               <span className="relative flex h-3.5 w-5 flex-col justify-between sm:mr-0">
                 <span className="block h-px w-full bg-current" />
@@ -138,7 +142,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-[60] bg-[rgba(18,14,11,0.94)] backdrop-blur-2xl"
+            className="fixed inset-0 z-[60] bg-[rgba(20,14,11,0.92)] backdrop-blur-2xl"
           >
             <div className="page-shell flex min-h-screen flex-col justify-between py-8">
               <div className="flex items-center justify-between">
@@ -148,7 +152,7 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="rounded-full border border-white/10 px-5 py-2 text-xs uppercase tracking-[0.28em] text-sand transition hover:border-copper/50 hover:text-white"
+                  className="theme-pill rounded-full border px-5 py-2 text-xs uppercase tracking-[0.28em] text-sand transition hover:border-copper/50 hover:text-cream"
                 >
                   {t("close")}
                 </button>
@@ -169,7 +173,7 @@ export default function Navbar() {
                         duration: 0.6,
                         ease: [0.22, 1, 0.36, 1],
                       }}
-                      className="block text-[clamp(2.6rem,10vw,7rem)] font-semibold leading-[0.9] tracking-[-0.05em] text-cream/88 transition hover:text-white"
+                      className="block text-[clamp(2.6rem,10vw,7rem)] font-semibold leading-[0.9] tracking-[-0.05em] text-cream/90 transition hover:text-copper"
                     >
                       {link.label}
                     </motion.a>

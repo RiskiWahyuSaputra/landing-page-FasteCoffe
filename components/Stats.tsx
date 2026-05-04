@@ -53,9 +53,9 @@ function CountCard({
   return (
     <div
       ref={ref}
-      className="glass-panel rounded-[2rem] border border-white/10 p-8 text-center"
+      className="glass-panel rounded-[2rem] border p-8 text-center"
     >
-      <div className="text-[clamp(2.5rem,6vw,4.8rem)] font-semibold leading-none tracking-[-0.06em] text-cream">
+      <div className="text-[clamp(2.5rem,6vw,4.8rem)] font-semibold leading-none tracking-[-0.06em] text-copper">
         {displayValue}
         {suffix}
       </div>

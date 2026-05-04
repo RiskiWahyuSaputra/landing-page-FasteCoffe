@@ -11,13 +11,13 @@ export default function CTA() {
   return (
     <section id="contact" className="relative overflow-hidden px-6 py-24 md:px-10 md:py-32">
       <div className="page-shell">
-        <div className="relative overflow-hidden rounded-[2.8rem] border border-white/10 bg-page-soft px-8 py-16 md:px-14 md:py-20">
+        <div className="theme-surface-strong relative overflow-hidden rounded-[2.8rem] border px-8 py-16 md:px-14 md:py-20">
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
             className="absolute left-1/2 top-1/2 h-[26rem] w-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-copper/20"
           />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(127,150,97,0.24),transparent_35%),radial-gradient(circle_at_12%_85%,rgba(91,63,42,0.2),transparent_30%),linear-gradient(135deg,rgba(255,255,255,0.04),transparent_40%,rgba(255,255,255,0.02))]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(124,147,82,0.24),transparent_35%),radial-gradient(circle_at_12%_85%,rgba(123,83,52,0.18),transparent_30%),linear-gradient(135deg,rgba(255,248,237,0.04),transparent_40%,rgba(255,248,237,0.02))]" />
           <div className="absolute -left-12 bottom-0 h-56 w-56 rounded-full bg-copper/10 blur-3xl" />
           <div className="absolute -right-10 top-0 h-72 w-72 rounded-full bg-mocha/20 blur-3xl" />
 
@@ -31,7 +31,7 @@ export default function CTA() {
             </p>
 
             <div className="mt-10">
-              <MagneticButton href="#top" className="bg-white/10">
+              <MagneticButton href="#top" className="bg-[rgba(243,234,216,0.09)]">
                 {t("cta_button")}
               </MagneticButton>
             </div>
