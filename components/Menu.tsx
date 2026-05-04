@@ -72,8 +72,9 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
   return (
     <section
       id="menu"
-      className="relative overflow-hidden px-6 py-28 md:px-10 md:py-40"
+      className="relative scroll-mt-24 overflow-hidden border-t border-[rgba(231,214,188,0.12)] px-6 pb-28 pt-10 md:px-10 md:pb-40 md:pt-14"
     >
+      <div className="absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(124,147,82,0.08),transparent_72%)]" />
       <div className="page-shell">
         <div className="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
