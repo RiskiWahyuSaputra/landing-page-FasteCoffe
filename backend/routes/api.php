@@ -27,3 +27,6 @@ Route::prefix('admin')->group(function (): void {
         Route::delete('/menu-items/{menuItem}', [MenuItemController::class, 'destroy']);
     });
 });
+Route::options('/{any}', function () {
+    return response()->json([], 204);
+})->where('any', '.*');
