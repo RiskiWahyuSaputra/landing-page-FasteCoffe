@@ -12,6 +12,9 @@ export default function AdminLoginForm() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    console.log("Form login dikirim", { email, password });
+
     setError("");
     setIsSubmitting(true);
 
@@ -65,6 +68,7 @@ export default function AdminLoginForm() {
           </span>
           <input
             type="email"
+            required
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition placeholder:text-sand/35 focus:border-copper/50 focus:bg-white/[0.06]"
@@ -79,6 +83,7 @@ export default function AdminLoginForm() {
           </span>
           <input
             type="password"
+            required
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition placeholder:text-sand/35 focus:border-copper/50 focus:bg-white/[0.06]"
