@@ -16,17 +16,24 @@ export default function AdminLoginForm() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/admin/login", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+      if (!apiUrl) {
+        setError("Konfigurasi API belum tersedia.");
+        return;
+      }
+
+      const response = await fetch(`${apiUrl}/api/admin/login`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       });
 
-      const payload = (await response.json().catch(() => null)) as
-        | { message?: string }
-        | null;
+      const payload = (await response.json().catch(() => null)) as {
+        message?: string;
+      } | null;
 
       if (!response.ok) {
         setError(payload?.message ?? "Login admin gagal.");
