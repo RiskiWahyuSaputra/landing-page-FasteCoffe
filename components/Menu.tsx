@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { type CartMenuItem, useCart } from "@/components/CartProvider";
 import { useLocale } from "@/components/LocaleProvider";
@@ -16,6 +16,28 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
   const { addItem, decreaseItem, increaseItem, items } = useCart();
   const { t } = useLocale();
   const [activeCategory, setActiveCategory] = useState<"all" | MenuCategory>("all");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const getItemsPerPage = useCallback(() => {
+    if (typeof window === "undefined") return 6;
+    if (window.innerWidth >= 1280) return 6; // xl: 3 col × 2 rows
+    if (window.innerWidth >= 768) return 4;  // md: 2 col × 2 rows
+    return 2;                                // mobile: 1 col × 2 rows
+  }, []);
+
+  const [itemsPerPage, setItemsPerPage] = useState(6);
+
+  useEffect(() => {
+    setItemsPerPage(getItemsPerPage());
+    const handleResize = () => setItemsPerPage(getItemsPerPage());
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [getItemsPerPage]);
+
+  const handleCategoryChange = (value: "all" | MenuCategory) => {
+    setActiveCategory(value);
+    setCurrentPage(1);
+  };
 
   const brandCards = [
     {
@@ -61,6 +83,12 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
       ? menuItems
       : menuItems.filter((item) => item.category === activeCategory);
 
+  const totalPages = Math.max(1, Math.ceil(filteredMenuItems.length / itemsPerPage));
+  const paginatedItems = filteredMenuItems.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage,
+  );
+
   const filterOptions = [
     { value: "all" as const, label: t("menu_filter_all") },
     ...MENU_CATEGORIES.map((category) => ({
@@ -97,7 +125,7 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
               <button
                 key={option.value}
                 type="button"
-                onClick={() => setActiveCategory(option.value)}
+                onClick={() => handleCategoryChange(option.value)}
                 className={`rounded-full border px-4 py-2 text-xs uppercase tracking-[0.22em] transition ${
                   isActive
                     ? "border-copper bg-copper text-ink"
@@ -111,105 +139,171 @@ export default function Menu({ menuItems }: { menuItems: CartMenuItem[] }) {
         </div>
 
         {filteredMenuItems.length ? (
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {filteredMenuItems.map((item, index) =>
-            (() => {
-              const quantity = quantitiesByName[item.name] ?? 0;
-              const categoryLabel = t(
-                getMenuCategoryTranslationKey(item.category),
-              );
+          <>
+            <motion.div
+              key={`page-${currentPage}-${activeCategory}`}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+              className="grid gap-5 md:grid-cols-2 xl:grid-cols-3"
+            >
+              {paginatedItems.map((item, index) =>
+              (() => {
+                const globalIndex = (currentPage - 1) * itemsPerPage + index;
+                const quantity = quantitiesByName[item.name] ?? 0;
+                const categoryLabel = t(
+                  getMenuCategoryTranslationKey(item.category),
+                );
 
-              return (
-                <motion.article
-                  key={item.name}
-                  whileHover={{ y: -10, scale: 1.01 }}
-                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                  className="group glass-panel grain-overlay relative overflow-hidden rounded-[2rem] border p-5 shadow-halo"
-                >
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,147,82,0.22),transparent_55%),radial-gradient(circle_at_bottom_right,rgba(123,83,52,0.18),transparent_38%)] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
-
-                  <div
-                    className={`relative aspect-[4/3] overflow-hidden rounded-[1.6rem] bg-gradient-to-br ${item.accent}`}
+                return (
+                  <motion.article
+                    key={item.name}
+                    whileHover={{ y: -10, scale: 1.01 }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className="group glass-panel grain-overlay relative overflow-hidden rounded-[2rem] border p-5 shadow-halo"
                   >
-                    {item.imageUrl ? (
-                      <img
-                        src={item.imageUrl}
-                        alt={item.name}
-                        className="absolute inset-0 h-full w-full object-cover"
-                      />
-                    ) : null}
-                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,5,3,0.1),rgba(9,5,3,0.34))]" />
-                    {!item.imageUrl ? (
-                      <>
-                        <div className="absolute inset-x-8 bottom-6 top-8 rounded-[40%] border border-white/12 bg-white/[0.04] blur-[1px]" />
-                        <div className="absolute left-1/2 top-[18%] h-28 w-28 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
-                        <div className="absolute inset-x-12 bottom-10 h-12 rounded-full border border-white/15 bg-black/20 blur-sm" />
-                        <div className="absolute left-1/2 top-10 h-28 w-28 -translate-x-1/2 rounded-full border border-white/15 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.22),rgba(255,255,255,0.05)_40%,transparent_70%)]" />
-                        <div className="absolute inset-x-[30%] bottom-12 top-[33%] rounded-b-[2.4rem] rounded-t-[1rem] border border-white/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),rgba(255,255,255,0.04))]" />
-                      </>
-                    ) : null}
-                    <div className="absolute bottom-4 left-4 rounded-full border border-[rgba(243,234,216,0.12)] bg-[rgba(22,17,12,0.56)] px-3 py-1 text-[0.68rem] uppercase tracking-[0.26em] text-sand/82 backdrop-blur-sm">
-                      {t("menu_item")} {index + 1}
-                    </div>
-                    <div className="absolute left-4 top-4 rounded-full border border-[rgba(243,234,216,0.12)] bg-[rgba(22,17,12,0.6)] px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-cream backdrop-blur-sm">
-                      {categoryLabel}
-                    </div>
-                    {quantity ? (
-                      <div className="absolute right-4 top-4 rounded-full border border-copper/30 bg-copper/16 px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-copper">
-                        {t("in_cart")} x{quantity}
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,147,82,0.22),transparent_55%),radial-gradient(circle_at_bottom_right,rgba(123,83,52,0.18),transparent_38%)] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
+
+                    <div
+                      className={`relative aspect-[4/3] overflow-hidden rounded-[1.6rem] bg-gradient-to-br ${item.accent}`}
+                    >
+                      {item.imageUrl ? (
+                        <img
+                          src={item.imageUrl}
+                          alt={item.name}
+                          className="absolute inset-0 h-full w-full object-cover"
+                        />
+                      ) : null}
+                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,5,3,0.1),rgba(9,5,3,0.34))]" />
+                      {!item.imageUrl ? (
+                        <>
+                          <div className="absolute inset-x-8 bottom-6 top-8 rounded-[40%] border border-white/12 bg-white/[0.04] blur-[1px]" />
+                          <div className="absolute left-1/2 top-[18%] h-28 w-28 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
+                          <div className="absolute inset-x-12 bottom-10 h-12 rounded-full border border-white/15 bg-black/20 blur-sm" />
+                          <div className="absolute left-1/2 top-10 h-28 w-28 -translate-x-1/2 rounded-full border border-white/15 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.22),rgba(255,255,255,0.05)_40%,transparent_70%)]" />
+                          <div className="absolute inset-x-[30%] bottom-12 top-[33%] rounded-b-[2.4rem] rounded-t-[1rem] border border-white/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),rgba(255,255,255,0.04))]" />
+                        </>
+                      ) : null}
+                      <div className="absolute bottom-4 left-4 rounded-full border border-[rgba(243,234,216,0.12)] bg-[rgba(22,17,12,0.56)] px-3 py-1 text-[0.68rem] uppercase tracking-[0.26em] text-sand/82 backdrop-blur-sm">
+                        {t("menu_item")} {globalIndex + 1}
                       </div>
-                    ) : null}
-                  </div>
-
-                  <div className="relative mt-5 flex items-start justify-between gap-4">
-                    <div>
-                      <h3 className="text-2xl font-semibold tracking-[-0.03em] text-cream">
-                        {item.name}
-                      </h3>
-                      <p className="mt-2 max-w-xs text-sm leading-6 text-sand/72">
-                        {item.description}
-                      </p>
+                      <div className="absolute left-4 top-4 rounded-full border border-[rgba(243,234,216,0.12)] bg-[rgba(22,17,12,0.6)] px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-cream backdrop-blur-sm">
+                        {categoryLabel}
+                      </div>
+                      {quantity ? (
+                        <div className="absolute right-4 top-4 rounded-full border border-copper/30 bg-copper/16 px-3 py-1 text-[0.68rem] uppercase tracking-[0.24em] text-copper">
+                          {t("in_cart")} x{quantity}
+                        </div>
+                      ) : null}
                     </div>
-                    <span className="theme-pill rounded-full border px-3 py-1 text-xs uppercase tracking-[0.22em] text-copper">
-                      {item.price}
-                    </span>
-                  </div>
 
-                  <div className="relative mt-6 flex items-center justify-between gap-4">
-                    <p className="text-xs uppercase tracking-[0.22em] text-sand/64">
-                      {categoryLabel}
-                    </p>
-
-                    <div className="flex items-center gap-2 rounded-full border border-copper/30 bg-copper/12 p-1">
-                      <button
-                        type="button"
-                        onClick={() => decreaseItem(item.name)}
-                        disabled={!quantity}
-                        className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-copper transition hover:bg-copper hover:text-ink disabled:cursor-not-allowed disabled:opacity-35"
-                        aria-label={t("decrease")}
-                      >
-                        -
-                      </button>
-                      <span className="min-w-8 text-center text-sm font-medium text-cream">
-                        {quantity}
+                    <div className="relative mt-5 flex items-start justify-between gap-4">
+                      <div>
+                        <h3 className="text-2xl font-semibold tracking-[-0.03em] text-cream">
+                          {item.name}
+                        </h3>
+                        <p className="mt-2 max-w-xs text-sm leading-6 text-sand/72">
+                          {item.description}
+                        </p>
+                      </div>
+                      <span className="theme-pill rounded-full border px-3 py-1 text-xs uppercase tracking-[0.22em] text-copper">
+                        {item.price}
                       </span>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          quantity ? increaseItem(item.name) : addItem(item)
-                        }
-                        className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-copper transition hover:bg-copper hover:text-ink"
-                        aria-label={t("increase")}
-                      >
-                        +
-                      </button>
                     </div>
-                  </div>
-                </motion.article>
-              );
-            })(),
+
+                    <div className="relative mt-6 flex items-center justify-between gap-4">
+                      <p className="text-xs uppercase tracking-[0.22em] text-sand/64">
+                        {categoryLabel}
+                      </p>
+
+                      <div className="flex items-center gap-2 rounded-full border border-copper/30 bg-copper/12 p-1">
+                        <button
+                          type="button"
+                          onClick={() => decreaseItem(item.name)}
+                          disabled={!quantity}
+                          className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-copper transition hover:bg-copper hover:text-ink disabled:cursor-not-allowed disabled:opacity-35"
+                          aria-label={t("decrease")}
+                        >
+                          -
+                        </button>
+                        <span className="min-w-8 text-center text-sm font-medium text-cream">
+                          {quantity}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            quantity ? increaseItem(item.name) : addItem(item)
+                          }
+                          className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-copper transition hover:bg-copper hover:text-ink"
+                          aria-label={t("increase")}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </motion.article>
+                );
+              })(),
+              )}
+            </motion.div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="mt-10 flex items-center justify-between gap-4">
+                {/* Info */}
+                <p className="text-xs uppercase tracking-[0.22em] text-sand/54">
+                  {t("menu_item")} {(currentPage - 1) * itemsPerPage + 1}–{Math.min(currentPage * itemsPerPage, filteredMenuItems.length)} / {filteredMenuItems.length}
+                </p>
+
+                {/* Controls */}
+                <div className="flex items-center gap-2">
+                  {/* Prev */}
+                  <button
+                    type="button"
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-copper/30 bg-copper/10 text-copper transition hover:bg-copper hover:text-ink disabled:cursor-not-allowed disabled:opacity-30"
+                    aria-label="Previous page"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M10 12L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+
+                  {/* Page dots */}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <button
+                      key={page}
+                      type="button"
+                      onClick={() => setCurrentPage(page)}
+                      className={`flex h-10 w-10 items-center justify-center rounded-full border text-xs font-medium tracking-wider transition ${
+                        page === currentPage
+                          ? "border-copper bg-copper text-ink"
+                          : "border-copper/25 bg-transparent text-sand/70 hover:border-copper/50 hover:text-cream"
+                      }`}
+                      aria-label={`Page ${page}`}
+                      aria-current={page === currentPage ? "page" : undefined}
+                    >
+                      {page}
+                    </button>
+                  ))}
+
+                  {/* Next */}
+                  <button
+                    type="button"
+                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-copper/30 bg-copper/10 text-copper transition hover:bg-copper hover:text-ink disabled:cursor-not-allowed disabled:opacity-30"
+                    aria-label="Next page"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
             )}
-          </div>
+          </>
         ) : (
           <div className="glass-panel rounded-[2rem] border px-6 py-10 text-center">
             <p className="text-xs uppercase tracking-[0.28em] text-sand/58">
