@@ -3,6 +3,14 @@
 import { startTransition, useState } from "react";
 import { useRouter } from "next/navigation";
 
+type LoginPayload = {
+  message?: string;
+  token?: string;
+  admin?: unknown;
+  backendStatus?: number;
+  backendResponsePreview?: string;
+};
+
 export default function AdminLoginForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -31,15 +39,22 @@ export default function AdminLoginForm() {
 
       console.log("3. Setelah fetch, status:", response.status);
 
-      const payload = (await response.json().catch(() => null)) as {
-        message?: string;
-        token?: string;
-        admin?: unknown;
-      } | null;
+      const payload = (await response
+        .json()
+        .catch(() => null)) as LoginPayload | null;
 
       console.log("4. Payload login:", payload);
 
       if (!response.ok) {
+        console.log("Login error payload:", payload);
+
+        if (payload?.backendResponsePreview) {
+          console.log(
+            "Backend response preview:",
+            payload.backendResponsePreview,
+          );
+        }
+
         setError(payload?.message ?? "Login admin gagal.");
         return;
       }
@@ -54,8 +69,10 @@ export default function AdminLoginForm() {
 
       console.log("5. Redirect ke dashboard");
 
-      router.replace("/admin/dashboard");
-      router.refresh();
+      startTransition(() => {
+        router.replace("/admin/dashboard");
+        router.refresh();
+      });
     } catch (error) {
       console.error("6. Login error:", error);
       setError("Backend Laravel belum bisa dijangkau dari frontend.");
