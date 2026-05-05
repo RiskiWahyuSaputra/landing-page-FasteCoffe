@@ -16,14 +16,7 @@ export default function AdminLoginForm() {
     setIsSubmitting(true);
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
-      if (!apiUrl) {
-        setError("Konfigurasi API belum tersedia.");
-        return;
-      }
-
-      const response = await fetch(`${apiUrl}/api/admin/login`, {
+      const response = await fetch("/api/admin/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
