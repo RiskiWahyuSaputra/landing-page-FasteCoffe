@@ -13,12 +13,14 @@ export default function AdminLoginForm() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    console.log("Form login dikirim", { email, password });
+    console.log("1. Form login dikirim", { email, password });
 
     setError("");
     setIsSubmitting(true);
 
     try {
+      console.log("2. Sebelum fetch ke /api/admin/login");
+
       const response = await fetch("/api/admin/login", {
         method: "POST",
         headers: {
@@ -27,20 +29,35 @@ export default function AdminLoginForm() {
         body: JSON.stringify({ email, password }),
       });
 
+      console.log("3. Setelah fetch, status:", response.status);
+
       const payload = (await response.json().catch(() => null)) as {
         message?: string;
+        token?: string;
+        admin?: unknown;
       } | null;
+
+      console.log("4. Payload login:", payload);
 
       if (!response.ok) {
         setError(payload?.message ?? "Login admin gagal.");
         return;
       }
 
-      startTransition(() => {
-        router.replace("/admin/dashboard");
-        router.refresh();
-      });
-    } catch {
+      if (payload?.token) {
+        localStorage.setItem("admin_token", payload.token);
+      }
+
+      if (payload?.admin) {
+        localStorage.setItem("admin_user", JSON.stringify(payload.admin));
+      }
+
+      console.log("5. Redirect ke dashboard");
+
+      router.replace("/admin/dashboard");
+      router.refresh();
+    } catch (error) {
+      console.error("6. Login error:", error);
       setError("Backend Laravel belum bisa dijangkau dari frontend.");
     } finally {
       setIsSubmitting(false);
