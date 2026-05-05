@@ -1,59 +1,52 @@
 import { NextResponse } from "next/server";
 
-const API_URL = process.env.LARAVEL_API_URL ?? "https://coffeshop-ki.fwh.is";
-
-export async function GET() {
-  return NextResponse.json({
-    message: "Proxy login route aktif. Gunakan POST untuk login.",
-    backend: `${API_URL}/api/admin/login`,
-  });
-}
+import { ADMIN_AUTH_COOKIE, getAdminCookieOptions } from "@/lib/admin-auth";
+import { LaravelApiError, loginAdmin } from "@/lib/laravel-admin-api";
 
 export async function POST(request: Request) {
-  try {
-    const body = await request.json();
+  const body = (await request.json().catch(() => null)) as {
+    email?: unknown;
+    password?: unknown;
+  } | null;
 
-    const response = await fetch(`${API_URL}/api/admin/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(body),
-      cache: "no-store",
+  if (
+    !body ||
+    typeof body.email !== "string" ||
+    typeof body.password !== "string" ||
+    !body.email ||
+    !body.password
+  ) {
+    return NextResponse.json(
+      { message: "Email dan password wajib diisi." },
+      { status: 400 },
+    );
+  }
+
+  try {
+    const response = await loginAdmin(body.email, body.password);
+    const nextResponse = NextResponse.json({
+      message: response.message,
+      user: response.user,
     });
 
-    const text = await response.text();
+    nextResponse.cookies.set(
+      ADMIN_AUTH_COOKIE,
+      response.token,
+      getAdminCookieOptions(),
+    );
 
-    let data: unknown;
-
-    try {
-      data = JSON.parse(text);
-    } catch {
+    return nextResponse;
+  } catch (error) {
+    if (error instanceof LaravelApiError) {
       return NextResponse.json(
-        {
-          message: "Backend Laravel membalas bukan JSON.",
-          backendStatus: response.status,
-          backendResponsePreview: text.slice(0, 1000),
-        },
-        {
-          status: 502,
-        },
+        { message: error.message },
+        { status: error.status },
       );
     }
 
-    return NextResponse.json(data, {
-      status: response.status,
-    });
-  } catch (error) {
     return NextResponse.json(
-      {
-        message: "Gagal terhubung ke backend Laravel.",
-        error: error instanceof Error ? error.message : String(error),
-      },
-      {
-        status: 500,
-      },
+      { message: "Gagal terhubung ke backend Laravel." },
+      { status: 500 },
     );
   }
 }

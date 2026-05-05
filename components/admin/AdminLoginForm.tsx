@@ -3,14 +3,6 @@
 import { startTransition, useState } from "react";
 import { useRouter } from "next/navigation";
 
-type LoginPayload = {
-  message?: string;
-  token?: string;
-  admin?: unknown;
-  backendStatus?: number;
-  backendResponsePreview?: string;
-};
-
 export default function AdminLoginForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -20,15 +12,10 @@ export default function AdminLoginForm() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    console.log("1. Form login dikirim", { email, password });
-
     setError("");
     setIsSubmitting(true);
 
     try {
-      console.log("2. Sebelum fetch ke /api/admin/login");
-
       const response = await fetch("/api/admin/login", {
         method: "POST",
         headers: {
@@ -37,44 +24,20 @@ export default function AdminLoginForm() {
         body: JSON.stringify({ email, password }),
       });
 
-      console.log("3. Setelah fetch, status:", response.status);
-
-      const payload = (await response
-        .json()
-        .catch(() => null)) as LoginPayload | null;
-
-      console.log("4. Payload login:", payload);
+      const payload = (await response.json().catch(() => null)) as {
+        message?: string;
+      } | null;
 
       if (!response.ok) {
-        console.log("Login error payload:", payload);
-
-        if (payload?.backendResponsePreview) {
-          console.log(
-            "Backend response preview:",
-            payload.backendResponsePreview,
-          );
-        }
-
         setError(payload?.message ?? "Login admin gagal.");
         return;
       }
-
-      if (payload?.token) {
-        localStorage.setItem("admin_token", payload.token);
-      }
-
-      if (payload?.admin) {
-        localStorage.setItem("admin_user", JSON.stringify(payload.admin));
-      }
-
-      console.log("5. Redirect ke dashboard");
 
       startTransition(() => {
         router.replace("/admin/dashboard");
         router.refresh();
       });
-    } catch (error) {
-      console.error("6. Login error:", error);
+    } catch {
       setError("Backend Laravel belum bisa dijangkau dari frontend.");
     } finally {
       setIsSubmitting(false);
@@ -102,7 +65,6 @@ export default function AdminLoginForm() {
           </span>
           <input
             type="email"
-            required
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition placeholder:text-sand/35 focus:border-copper/50 focus:bg-white/[0.06]"
@@ -117,7 +79,6 @@ export default function AdminLoginForm() {
           </span>
           <input
             type="password"
-            required
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             className="w-full rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-cream outline-none transition placeholder:text-sand/35 focus:border-copper/50 focus:bg-white/[0.06]"
