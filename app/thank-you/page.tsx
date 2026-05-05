@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { useLocale } from "@/components/LocaleProvider";
+import { useOrderReadyNotification } from "@/hooks/useOrderReadyNotification";
+import { getCurrentOrderId } from "@/lib/active-order-storage";
 
 type SavedFeedback = {
   note: string;
@@ -51,6 +54,23 @@ export default function ThankYouPage() {
   const [rating, setRating] = useState(0);
   const [note, setNote] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showReadyBanner, setShowReadyBanner] = useState(false);
+  const [readyOrderNumber, setReadyOrderNumber] = useState("");
+
+  // Retrieve order numeric ID from localStorage (set during checkout)
+  const [orderId, setOrderId] = useState<number | null>(null);
+  useEffect(() => {
+    const stored = getCurrentOrderId();
+    if (stored) setOrderId(Number(stored));
+  }, []);
+
+  useOrderReadyNotification({
+    orderId,
+    onReady: (event) => {
+      setReadyOrderNumber(event.order.order_number);
+      setShowReadyBanner(true);
+    },
+  });
 
   useEffect(() => {
     if (!orderRef) {
@@ -118,6 +138,58 @@ export default function ThankYouPage() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-page px-4 py-16 sm:px-6 md:px-10 md:py-24">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(127,150,97,0.22),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(91,63,42,0.28),transparent_34%),linear-gradient(180deg,#18130f_0%,#100c09_100%)]" />
+
+      {/* Ready-for-pickup notification banner */}
+      <AnimatePresence>
+        {showReadyBanner && (
+          <motion.div
+            key="ready-banner"
+            initial={{ y: -120, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -120, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 340, damping: 28 }}
+            className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4"
+          >
+            <div className="relative flex w-full max-w-lg items-center gap-4 overflow-hidden rounded-[1.6rem] border border-forest/50 bg-[rgba(18,30,14,0.94)] px-5 py-4 shadow-[0_8px_40px_rgba(124,147,82,0.38)] backdrop-blur-xl">
+              {/* Animated glow pulse */}
+              <motion.div
+                className="absolute inset-0 rounded-[1.6rem] bg-[radial-gradient(circle_at_center,rgba(124,147,82,0.18),transparent_70%)]"
+                animate={{ opacity: [0.4, 1, 0.4] }}
+                transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+              />
+              {/* Bell icon */}
+              <motion.div
+                className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-forest/60 bg-forest/20 text-forest"
+                animate={{ rotate: [0, -15, 15, -10, 10, 0] }}
+                transition={{ duration: 0.7, delay: 0.3, repeat: Infinity, repeatDelay: 3 }}
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
+              </motion.div>
+              {/* Text */}
+              <div className="relative flex-1">
+                <p className="text-xs uppercase tracking-[0.26em] text-forest/80">Pesanan Siap!</p>
+                <p className="mt-0.5 text-base font-semibold text-cream">
+                  {readyOrderNumber || orderRef} — Silakan diambil ke kasir ☕
+                </p>
+              </div>
+              {/* Dismiss */}
+              <button
+                type="button"
+                onClick={() => setShowReadyBanner(false)}
+                className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/12 text-sand/60 transition hover:border-white/28 hover:text-cream"
+                aria-label="Tutup notifikasi"
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="page-shell relative">
         <section className="grid gap-6 lg:grid-cols-[1.08fr_0.92fr]">
